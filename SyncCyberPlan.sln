@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Console\Console.csproj", "{9FFDCF74-085A-41E9-A456-43333FB1A362}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyncCyberPlan_lib", "SyncCyberPlan_lib\SyncCyberPlan_lib.csproj", "{6389AC85-3BC7-4B2B-B6C2-C60D3CFB054E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9FFDCF74-085A-41E9-A456-43333FB1A362}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FFDCF74-085A-41E9-A456-43333FB1A362}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FFDCF74-085A-41E9-A456-43333FB1A362}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FFDCF74-085A-41E9-A456-43333FB1A362}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6389AC85-3BC7-4B2B-B6C2-C60D3CFB054E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6389AC85-3BC7-4B2B-B6C2-C60D3CFB054E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6389AC85-3BC7-4B2B-B6C2-C60D3CFB054E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6389AC85-3BC7-4B2B-B6C2-C60D3CFB054E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
