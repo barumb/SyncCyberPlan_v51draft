@@ -282,7 +282,7 @@ namespace SyncCyberPlan_lib
             C_USER_INT08                         = 0;                                // int	
             C_USER_INT09                         = 0;                                // int	
             C_USER_INT10                         = 0;                                // int	
-            C_USER_REAL01                        = (float)ITMWEI_0;                  // float	
+            C_USER_REAL01                        = getPeso(TCLCOD_0, ITMREF_0, ITMWEI_0, WEU_0);                  // float	
             C_USER_REAL02                        = (float)YPESMAT_0;                 // float	
             C_USER_REAL03                        = 0;                                // float	
             C_USER_REAL04                        = 0;                                // float	
@@ -532,7 +532,33 @@ namespace SyncCyberPlan_lib
         }
 
 
-
+        protected float getPeso(string categoria,string articolo, decimal peso, string udm)
+        {
+            if (categoria == "3PLA")
+            {
+                if (udm == "GR")
+                {
+                    return (float)peso;
+                }
+                else
+                {
+                    __bulk_message += articolo + " (corpo plastico) non ha il peso espresso in grammi; sistema anagrafica in sage";
+                    return 0;
+                }
+            }
+            else
+            {
+                if (udm == "GR")
+                {
+                    return (float)peso;
+                }
+                else if (udm == "KG")
+                {
+                    return (float)peso*1000;
+                }
+            }
+            return (float)peso;
+        }
         protected int getMarchio(string tagoem)
         {
             //1 Sauro
@@ -591,11 +617,25 @@ namespace SyncCyberPlan_lib
                 return "PLAS";
             else if (categoria.Trim() == "3MET")
                 return "MORS";
+            else if (categoria.Trim() == "3SEM")
+                return "ASSE";
             else if(!int.TryParse(categoria.Substring(0,1), out i))  //se non inizia con un numero
                 return "ASSE";
 
-            return "ERROR";
+            return categoria.Substring(0,4);
             
+        }
+
+        public override void LastAction(ref DBHelper2 cm)
+        {
+            if (!string.IsNullOrWhiteSpace(__bulk_message))
+            {
+                string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net,francesco.chiminazzo@sauro.net";
+#if DEBUG
+                destinatari = "francesco.chiminazzo@sauro.net";
+#endif
+                Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", __bulk_message);
+            }
         }
         static public string SelectQuery(bool mode, string dossier, string codice_like, string tipo)
         {
@@ -677,7 +717,7 @@ namespace SyncCyberPlan_lib
  ,Y.YCORPOALT_0
  ,Y.YMRPTAG1_0
 
- ,Y.YCORPOALT_0
+ ,Y.YCORPOLUN_0
  ,Y.YCORPOPRO_0
  ,Y.YMAT_0           
  ,Y.YTAGOEM_0

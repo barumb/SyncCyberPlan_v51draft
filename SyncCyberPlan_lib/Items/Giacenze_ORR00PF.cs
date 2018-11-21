@@ -35,25 +35,25 @@ namespace SyncCyberPlan_lib
 
 
             C_CODE = EscapeSQL(ORRTORD + ORRANNO.ToString("00") + ORRPROG.ToString("000000") + ORRNRIG.ToString("0000"), 30);                          //varchar  30
-            C_ITEM_CODE = EscapeSQL(ORRCART, 50);                          //varchar  50
-            C_ITEM_PLANT = EscapeSQL("ITS01", 20);                          //varchar  20
-            C_WAREHOUSE_CODE = EscapeSQL(__MAGAZZINO_INTERNO, 20);          //varchar  20
-            C_DESCR = EscapeSQL("", 30);                          //varchar  30
-            C_CORDER_CODE = EscapeSQL(C_CODE, 30);                           //varchar  30
-            C_QTY = ORRQACA;                                        //numeric  
-            C_WDW_QTY = 0;                                        //numeric  
-            C_EFFECTIVE_DATE = null;                                     //datetime 
-            C_EXPIRE_DATE = null;                                     //datetime 
-            C_USER_INT01 = 0;                                        //int
-            C_USER_INT02 = 0;                                        //int
-            C_USER_REAL01 = 0;                                        //float
-            C_USER_REAL02 = 0;                                        //float
-            C_USER_REAL03 = 0;                                        //float
-            C_USER_STRING01 = EscapeSQL("", 29);                         //varchar  29
-            C_USER_STRING02 = EscapeSQL("", 29);                         //varchar  29
-            C_USER_DATE01 = null;                                     //datetime
-            C_USER_DATE02 = null;                                     //datetime
-            C_USER_DATE03 = null;                                     //datetime
+            C_ITEM_CODE = EscapeSQL(ORRCART, 50);                         //varchar  50
+            C_ITEM_PLANT = EscapeSQL("ITS01", 20);                        //varchar  20
+            C_WAREHOUSE_CODE = EscapeSQL(__MAGAZZINO_INTERNO, 20);        //varchar  20
+            C_DESCR = EscapeSQL("", 30);                                  //varchar  30
+            C_CORDER_CODE = EscapeSQL(C_CODE, 30);                        //varchar  30
+            C_QTY = ORRQACA;                                              //numeric  
+            C_WDW_QTY = 0;                                                //numeric  
+            C_EFFECTIVE_DATE = null;                                      //datetime 
+            C_EXPIRE_DATE = null;                                         //datetime 
+            C_USER_INT01 = 0;                                             //int
+            C_USER_INT02 = 0;                                             //int
+            C_USER_REAL01 = 0;                                            //float
+            C_USER_REAL02 = 0;                                            //float
+            C_USER_REAL03 = 0;                                            //float
+            C_USER_STRING01 = EscapeSQL("", 29);                          //varchar  29
+            C_USER_STRING02 = EscapeSQL("", 29);                          //varchar  29
+            C_USER_DATE01 = null;                                         //datetime
+            C_USER_DATE02 = null;                                         //datetime
+            C_USER_DATE03 = null;                                         //datetime
         }        
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string filtro)
         {

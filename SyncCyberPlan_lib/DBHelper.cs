@@ -116,11 +116,10 @@ namespace SyncCyberPlan_lib
         {
             string startedAt = DateTime.Now.ToString();
             string message_error = "Command started at " + startedAt + "  " +
-                "\n Parameters: mode_all=" + mode_all + ", codice_like=" + codice_like + ", filtro=" + filtro + ", delete=" + delete + ", option=" + option + "\n\n";
-
+                "\n Parameters: mode_all=" + mode_all + ", codice_like=" + codice_like + ", filtro=" + filtro + ", delete=" + delete + ", option=" + option + "\n\n";            
             _logger.Debug("--- started at " + startedAt);
             T tmp = new T();
-
+            _logger.Info("Oggetto: " + typeof(T).ToString().PadRight(60) + " su tabella " + tmp._CP_tabella);
             DBHelper2 cm = DBHelper2.getCyberDBHelper();
             if (delete)
             {

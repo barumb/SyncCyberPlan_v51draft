@@ -19,17 +19,17 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            Esegui("SAURO MBM41LIB_M DELETE POH-OPR".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME POH-OPR".Split(' '));
-            return;
-            Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
-            return; 
-
             Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME ITM COD=MSB02005-0%".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
+            
+            Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
+            return;
+            Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
+            return; 
 
             Esegui("SAURO MBM41LIB_M DELETE GIAC-ALL".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME GIAC-ALL".Split(' '));
@@ -264,7 +264,7 @@ namespace Console
 
                         //da as400                    
                         case "SOH": am.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "POH-OPR":
+                        case "OPR":
                             am.WriteToCyberPlan<OrdiniAcq_As400_OPR>(_mode_all, codicelike, "", _delete, "");
                             am.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
                         break;
@@ -282,6 +282,7 @@ namespace Console
                 {
 
                     _logger.Error(_cur_arg + "\n" + ex.ToString());
+                    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", ex.ToString());
                 }
 #endif
             }

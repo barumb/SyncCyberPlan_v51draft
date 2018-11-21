@@ -14,9 +14,9 @@ namespace SyncCyberPlan_lib
         public string POHFCY_0;
         public decimal QTYSTU_0;
         public decimal RCPQTYSTU_0;
-        public DateTime CREDAT_0;
-        public DateTime ORDDAT_0;
-        public DateTime EXTRCPDAT_0;
+        public DateTime? CREDAT_0;
+        public DateTime? ORDDAT_0;
+        public DateTime? EXTRCPDAT_0;
         public int LINCLEFLG_0;
         public float LINAMT_0;
         public string BPSNUM_0;
@@ -36,9 +36,9 @@ namespace SyncCyberPlan_lib
             POHFCY_0 = getDBV<string>(row[4]);
             QTYSTU_0 = getDBV<decimal>(row[5]);
             RCPQTYSTU_0 = getDBV<decimal>(row[6]);
-            CREDAT_0 = (DateTime)row[7];
-            ORDDAT_0 = (DateTime)row[8];
-            EXTRCPDAT_0 = (DateTime)row[9];
+            CREDAT_0 = getSageDate((DateTime)row[7]);
+            ORDDAT_0 = getSageDate((DateTime)row[8]);
+            EXTRCPDAT_0 = getSageDate((DateTime)row[9]);
             LINCLEFLG_0 = getDBV<byte>(row[10]);
             LINAMT_0 = (float)getDBV<decimal>(row[11]);
             BPSNUM_0 = getDBV<string>(row[12]);

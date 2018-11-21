@@ -21,6 +21,9 @@ namespace SyncCyberPlan_lib
         public byte _YATTMARHAR_0;        //Flag Marchio (PLAS)
         public short _YATTQUA_0; //livello qualità (PLAS numero stampo)
         public string _YATTTYP_0; //livello qualità (PLAS numero stampo)
+        public DateTime? _YATTDATSAU_0;  //data riattivazione MArchio Sauro
+        public DateTime? _YATTDATTYC_0;  //data riattivazione MArchio Tyco
+        public DateTime? _YATTDATHAR_0;  //data riattivazione MArchio Harting
 
         public Attrezzature( )//: base("CYB_TOOL")
         {
@@ -29,25 +32,29 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            _YATTCOD_0  = getDBV<string>(row[0]);
-            _YATTDES_0 = getDBV<string>(row[1]);
+            _YATTCOD_0    = getDBV<string>(row[0]);
+            _YATTDES_0    = getDBV<string>(row[1]);
             _QTY          = getDBV<short>(row[2]);
             _YATTVIN_0    = getDBV<string>(row[3]);
 
-            _YATTLOT_0 = getDBV<decimal>(row[4]);               //standard lot size
-            _YATTMAT_0 = getDBV<decimal>(row[5]);             //peso materozzza (PLAS)
-            _YATTFLGPA66_0 = getDBV<byte>(row[6]);           //flag pa66 (PLAS)
-            _YATTFLGSTH_0 = getDBV<byte>(row[7]);            //flag STH (PLAS)
-            _YATTMARSAU_0 = getDBV<byte>(row[8]);            //Flag Marchio (PLAS)
-            _YATTMARTYC_0 = getDBV<byte>(row[9]);            //Flag Marchio (PLAS)
-            _YATTMARHAR_0 = getDBV<byte>(row[10]);            //Flag Marchio (PLAS)
-            _YATTQUA_0 = getDBV<short>(row[11]);            //livello qualità
-            _YATTTYP_0 = getDBV<string>(row[12]);            //tipo attrezzatura
+            _YATTLOT_0     = getDBV<decimal>(row[4]);       //standard lot size
+            _YATTMAT_0     = getDBV<decimal>(row[5]);       //peso materozzza (PLAS)
+            _YATTFLGPA66_0 = getDBV<byte>(row[6]);          //flag pa66 (PLAS)
+            _YATTFLGSTH_0  = getDBV<byte>(row[7]);          //flag STH (PLAS)
+            _YATTMARSAU_0  = getDBV<byte>(row[8]);          //Flag Marchio (PLAS)
+            _YATTMARTYC_0  = getDBV<byte>(row[9]);          //Flag Marchio (PLAS)
+            _YATTMARHAR_0  = getDBV<byte>(row[10]);         //Flag Marchio (PLAS)
+            _YATTQUA_0     = getDBV<short>(row[11]);        //livello qualità
+            _YATTTYP_0     = getDBV<string>(row[12]);       //tipo attrezzatura
+
+            _YATTDATSAU_0 = getSageDate((DateTime)row[13]);
+            _YATTDATTYC_0 = getSageDate((DateTime)row[14]);
+            _YATTDATHAR_0 = getSageDate((DateTime)row[15]);
 
 
 
 
-                        C_CODE                               = EscapeSQL(_YATTCOD_0, 50);      // varchar 50
+            C_CODE                               = EscapeSQL(_YATTCOD_0, 50);      // varchar 50
             C_PLANT_CODE                         = "ITS01";                          // varchar 20
             C_DESCR                              = EscapeSQL(_YATTDES_0, 50);     // varchar 50
             C_M_B                                = ' ';                              // char 1  o APPROVIGIONAMENTO?
@@ -121,9 +128,9 @@ namespace SyncCyberPlan_lib
             C_USER_NOTE01                        = "";                               // varchar 99
             C_USER_COLOR01                       = 0;                                // int	
             C_USER_COLOR02                       = 0;                                // int	
-            C_USER_DATE01                        = null;                             // datetime	
-            C_USER_DATE02                        = null;                             // datetime	
-            C_USER_DATE05                        = null;                             // datetime	
+            C_USER_DATE01                        = _YATTDATSAU_0;                             // datetime	
+            C_USER_DATE02                        = _YATTDATTYC_0;                             // datetime	
+            C_USER_DATE05                        = _YATTDATHAR_0;                             // datetime	
             C_USER_DATE03                        = null;                             // datetime	
             C_USER_DATE04                        = null;                             // datetime	
         }
@@ -159,6 +166,9 @@ namespace SyncCyberPlan_lib
                      ,S.YATTMARHAR_0                     
                      ,S.YATTQUA_0     
                      ,S.YATTTYP_0
+                     ,S.YATTDATSAU_0
+                     ,S.YATTDATTYC_0
+                     ,S.YATTDATHAR_0                     
                       from " + db + ".YPRDATT S \n" +
                       " where S.YATTENAFLG_0=2 "
               ;

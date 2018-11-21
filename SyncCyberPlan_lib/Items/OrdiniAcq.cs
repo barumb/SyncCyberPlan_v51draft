@@ -112,9 +112,9 @@ namespace SyncCyberPlan_lib
             _tablerow[7] = C_COMPL_QTY;                                    //C_COMPL_QTY                  numeric            
             _tablerow[8] = 0;                                              //C_SCRAP_QTY                  numeric            
             _tablerow[9] = 0;                                              //C_HOST_QTY                   numeric            
-            _tablerow[10] = C_INSERT_DATE ;                                //C_INSERT_DATE                datetime           
-            _tablerow[11] = C_HOST_STDATE ;                                //C_HOST_STDATE                datetime           
-            _tablerow[12] = C_HOST_DUEDATE;                                //C_HOST_DUEDATE               datetime           
+            _tablerow[10] = DateTime_toCyb(C_INSERT_DATE );                                //C_INSERT_DATE                datetime           
+            _tablerow[11] = DateTime_toCyb(C_HOST_STDATE );                                //C_HOST_STDATE                datetime           
+            _tablerow[12] = DateTime_toCyb(C_HOST_DUEDATE);                                //C_HOST_DUEDATE               datetime           
             _tablerow[13] = DateTime_toCyb(C_PROMISE_DATE);                //C_PROMISE_DATE               datetime           
             _tablerow[14] = DateTime_toCyb(C_ACT_STDATE );                 //C_ACT_STDATE                 datetime           
             _tablerow[15] = DateTime_toCyb(C_ACT_DUEDATE );                //C_ACT_DUEDATE                datetime           

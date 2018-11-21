@@ -79,7 +79,7 @@ namespace SyncCyberPlan_lib
             IPHostEntry hostInfo = new IPHostEntry();
             String strHostName = "";
 
-
+//#if !DEBUG
             try
             {
                 // Get the local computer info.
@@ -128,7 +128,7 @@ namespace SyncCyberPlan_lib
                 //ToLog(true, "MAIL", "---" + " Exception From:" + e.Source + " Message:" + e.Message + "\n Messaggio CAMM : " + Msg);//e.ToString()
                 EventLog.WriteEntry("Exception Sync CyberPlan ", Msg);
             }
-
+//#endif
         }
     }
 }

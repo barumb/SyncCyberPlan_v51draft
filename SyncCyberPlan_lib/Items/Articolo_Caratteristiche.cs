@@ -5,6 +5,9 @@ using System.Data;
 
 namespace SyncCyberPlan_lib
 {
+    /// <summary>
+    /// usato in particolare per FAMP
+    /// </summary>
     public class Articolo_Caratteristiche : Item
     {
         public static long _ID_COUNTER=0;
@@ -167,7 +170,15 @@ order by a.itmref,a.valcod desc
                         --order by a.itmref,a.valcod desc
                         ) C
 
-                        where C_CODE = C.ITMREF";
+                        where C_CODE = C.ITMREF;
+
+
+
+            update CyberPlanFrontiera.dbo.CYB_ITEM 
+            set [C_USER_CHAR03 ]='X'
+            where [C_USER_CHAR03 ] =' 'and  [C_USER_STRING01 ]  like 'PLAS'
+
+";
 
 
 

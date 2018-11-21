@@ -380,13 +380,15 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm)
         {
-            //ThreadPool.QueueUserWorkItem(sendmail);
-            Utils.SendMail("it@sauro.it", "francesco.chiminazzo@sauro.net", "mail.sauro.net", __bulk_message);
-
+            if (!string.IsNullOrWhiteSpace(__bulk_message))
+            { 
+                //ThreadPool.QueueUserWorkItem(sendmail);
+                Utils.SendMail("it@sauro.it", "francesco.chiminazzo@sauro.net", "mail.sauro.net", __bulk_message);
+            }
         }
-        void sendmail(Object threadContext)
-        {
-            Utils.SendMail("it@sauro.it", "francesco.chiminazzo@sauro.net", "mail.sauro.net", __bulk_message);
-        }
+        //void sendmail(Object threadContext)
+        //{
+        //    Utils.SendMail("it@sauro.it", "francesco.chiminazzo@sauro.net", "mail.sauro.net", __bulk_message);
+        //}
     }
 }
