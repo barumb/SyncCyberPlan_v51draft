@@ -19,7 +19,13 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            
+
+            Esegui("SAURO MBM41LIB_M DELETE POH-OFA".Split(' '));
+            //Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM COD=IT001-ODM180062%".Split(' '));
+            //Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA COD=IT001-OFA180063%".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM ".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA ".Split(' '));
+            return;
             Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME ITM COD=MSB02005-0%".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
@@ -71,13 +77,7 @@ namespace Console
             Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME DISBAS COD=MSB02005-0%".Split(' '));
             Esegui("SAURO MBM41LIB_M LAST=20 DISBAS".Split(' '));
-           
-            
-            Esegui("SAURO MBM41LIB_M DELETE POH-OFA".Split(' '));
-            //Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM COD=IT001-ODM180062%".Split(' '));
-            //Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA COD=IT001-OFA180063%".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM ".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA ".Split(' '));
+          
             
             Esegui("SAURO MBM41LIB_M DELETE SOH".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));          
