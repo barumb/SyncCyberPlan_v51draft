@@ -572,10 +572,10 @@ namespace SyncCyberPlan_lib
         }
         protected char getMrpType(string articolo,string categoria, string YLIVTRAS_0)
         {
-            char ret = 'F';
+            char ret = 'F'; //a fabbisogno
             if (YLIVTRAS_0 == "PF")
             {
-                ret = 'C';
+                ret = 'C'; // a Commessa
             }
             return ret;
         }
