@@ -30,6 +30,7 @@ namespace SyncCyberPlan_lib
         public string YTAGOEM_0;          //Marchio
         public string YCOLORE_0;          //Marchio
         public decimal YPESMAT_0;         //peso materozza/impronta
+        public string YPASSOVIE_0;        //passo
 
 
         //tabella ITMFACILIT
@@ -229,7 +230,7 @@ namespace SyncCyberPlan_lib
             YCOLORE_0   = getDBV<string>(row[77]);
             BPSNUM_0    = getDBV<string>(row[78]);
             YPESMAT_0   = getDBV<decimal>(row[79]);        //peso materozza/impronta
-
+            YPASSOVIE_0 = getDBV<string>(row[80]);
 
 
 
@@ -298,7 +299,7 @@ namespace SyncCyberPlan_lib
             C_USER_STRING01                      = getReparto(TCLCOD_0);             // varchar 29
             C_USER_STRING02                      = EscapeSQL(YCOLORE_0, 29);         // varchar 29
             C_USER_STRING03                      = EscapeSQL("", 29);                // varchar 29  SEZIONE per FILO
-            C_USER_STRING04                      = EscapeSQL("", 29);                // varchar 29
+            C_USER_STRING04                      = EscapeSQL(YPASSOVIE_0, 29);       // varchar 29  passo
             C_USER_STRING05                      = EscapeSQL("", 29);                // varchar 29
             C_USER_STRING06                      = EscapeSQL("", 29);                // varchar 29
             C_USER_STRING07                      = EscapeSQL("", 29);                // varchar 29
@@ -773,6 +774,7 @@ namespace SyncCyberPlan_lib
  ,Y.YCOLORE_0
  ,B.BPSNUM_0
  ,Y.YPESMAT_0
+ ,Y.YPASSOVIE_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +

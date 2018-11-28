@@ -267,7 +267,6 @@ namespace SyncCyberPlan_lib
         }
         static int EseguiSuDBCyberPlan_Bulk(ref DBHelper2 cm, string tableName, DataTable dataTable)
         {
-            return -1;
             if (cm._connection.State != ConnectionState.Open)
             {
                 cm._connection.Open();
