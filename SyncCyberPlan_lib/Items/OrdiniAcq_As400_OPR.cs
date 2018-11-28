@@ -117,8 +117,8 @@ namespace SyncCyberPlan_lib
             C_CORDER_CODE         = EscapeSQL(MFHTCOM + MFHACOM.ToString("00") + MFHPCOM.ToString("000000"), 30);                                             //varchar         30                      
             C_ITEM_CODE           = EscapeSQL(MFHCART, 50);                                        //varchar         50                      
             C_ITEM_PLANT          = EscapeSQL("ITS01", 20);                                        //varchar         20                      
-            C_M_B                 = 'M';                                                           //char             1                       
-            C_MRP_TYPE            = getMRP_type(MFHTCOM);                                          //char             1                       
+            C_M_B                 = 'M';                                                           //char             1     // B=buy D=decentrato M = make                
+            C_MRP_TYPE            = getMRP_type(MFHTCOM);                                          //char             1     //F=MTS make to stock (a fabbisogno)  C= MTO make to order (a commessa)                     
             C_QTY                 = MFHQTRC;                                                       //numeric            
             C_COMPL_QTY           = MFHQTPR;                                                       //numeric            
             C_SCRAP_QTY           = MFVQTSC;                                                       //numeric            qta scartata
@@ -191,6 +191,7 @@ namespace SyncCyberPlan_lib
         
         char getMRP_type(string MFHTCOM)
         {
+            //F=MTS make to stock (a fabbisogno)  C= MTO make to order (a commessa)  
             if (MFHTCOM.Trim() !=  "")
             {
                 return 'C'; //ordine a commessa

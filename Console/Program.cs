@@ -19,11 +19,15 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
+            
             Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME ITM COD=MSB02005-0%".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
             
+            Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
+            return;
+
             Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
             return;
@@ -100,6 +104,11 @@ namespace Console
 
             //_logger.Info("START at " + DateTime.Now.ToString() + " ----------------argomenti: " + string.Join(" ", args) + " ------------------");
             _logger.Info("START - argomenti: " + string.Join(" ", args) + " ------------------");
+            if (args[0].ToUpper() == "INIT_ECYB")
+            {   
+                    ECYB_init.Action();
+                    return;   
+            }
             if (args.Length < 4)
             {
                 _logger.Info("\n\n\nSintassi:\n" +
@@ -126,7 +135,9 @@ namespace Console
                     "      GIAC-ALL giacenze allocate ORR00PF  da as400 a cyb\n" +
                     "      DISBAS distinta base SPR00PF        da as400 a cyb\n" +
                     "      DEM Fabbisogni OPR in corso MFC00PF da as400 a cyb\n" +
+                    
                     "\n" +
+                    "SyncCyberPlan INIT_ECYB  per inizializzare tabelle CyberPlan\n" +
 
                     "COD = WP%  per ottenere un filtro sui codici\n"
                 );
@@ -188,7 +199,7 @@ namespace Console
                     || oggetto == "SOH" 
                     || oggetto == "POH-ODM" 
                     || oggetto == "POH-OFA"
-                    || oggetto == "POH-OPR"
+                    || oggetto == "OPR"
                     || oggetto == "GIAC" 
                     || oggetto == "GIAC-ALL"
                     || oggetto == "DISBAS"

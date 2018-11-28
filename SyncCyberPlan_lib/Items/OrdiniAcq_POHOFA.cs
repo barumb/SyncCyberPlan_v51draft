@@ -16,8 +16,8 @@ namespace SyncCyberPlan_lib
         {
             DataRow _tablerow = base.GetCyberRow();
 
-            C_M_B = 'D'; //char             1                       //decentrato
-            C_MRP_TYPE = 'C'; //char             1                       //F=MTS   C= MTO
+            C_M_B = 'D'; //char             1                       //D=decentrato
+            C_MRP_TYPE = 'C'; //char             1                  //F=MTS make to stock (a fabbisogno)  C= MTO make to order (a commessa)
 
             //DataRow _tablerow = _dataTable.Rows[_dataTable.Rows.Count - 1];
             _tablerow[4] = C_M_B;                              //C_M_B                        char             1                       

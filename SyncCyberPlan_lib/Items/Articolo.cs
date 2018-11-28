@@ -260,13 +260,13 @@ namespace SyncCyberPlan_lib
             C_ABC_CLASS                          = ' ';                              // char 1
             C_VALUE                              = 0;                                // float	
             C_COST                               = 0;                                // float	
-            C_MRP_TYPE                           = 'F';                              // char 1
+            C_MRP_TYPE                           = getMrpType(ITMREF_0, TCLCOD_0, YLIVTRAS_0);                              // char 1
             C_POQ_DAYS                           = 0;                                // int	
             C_POQ_HOURS                          = 0;                                // int	
             C_DTF                                = 0;                                // int	
-            C_LOT_SIZE                           = YQTAMUL_0;                        // numeric	
-            C_MIN_ORDER_QTY                      = YQTAMIN_0;                        // numeric	
-            C_MAX_ORDER_QTY                      = YQTAMAX_0;                        // numeric	
+            C_LOT_SIZE                           = getQtaLOT(ITMREF_0, TCLCOD_0, YLIVTRAS_0,YQTAMUL_0);                        // numeric	
+            C_MIN_ORDER_QTY                      = getQtaMIN(ITMREF_0, TCLCOD_0, YLIVTRAS_0,YQTAMIN_0);                        // numeric	
+            C_MAX_ORDER_QTY                      = getQtaMAX(ITMREF_0, TCLCOD_0, YLIVTRAS_0,YQTAMAX_0);                        // numeric	
             C_DEM_GROUPING_QTY                   = 0;                                // numeric	
             C_DEM_GROUPING_MAX_QTY               = 0;                                // numeric	
             C_ROP_QTY                            = REOTSD_0;                         // numeric	
@@ -418,6 +418,10 @@ namespace SyncCyberPlan_lib
 
         private string get_MagazzinoRicevimento()
         {
+            if (C_CODE == "WP6775-0NH")
+            {
+                ;
+            }
             string ret = "";
             for (int i = 0; i < DEFLOC.Length; i++)
             {
@@ -429,10 +433,18 @@ namespace SyncCyberPlan_lib
                     break;
                 }
             }
-            if (ret == "" && TCLCOD_0 != "0PHA")
+            if (ret == "")
             {
-                //per adesso forziamo sempre il magazzino interno, a meno che non siano phantom
-                ret = __MAGAZZINO_INTERNO;
+                if (TCLCOD_0 != "0PHA")
+                {
+                    //per adesso forziamo sempre il magazzino interno, a meno che non siano phantom
+                    ret = __MAGAZZINO_INTERNO;
+                }
+                else
+                {
+                    ret = __MAGAZZINO_INTERNO;
+                    // __bulk_message += "Articolo " + C_CODE + " non ha magazzino di ricevimento (vedi articolo sito)" + System.Environment.NewLine;
+                }
             }
             return ret;
         }
@@ -531,7 +543,42 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_USER_DATE04",  typeof(DateTime));          // datetime	
         }
 
-
+        protected decimal getQtaMIN(string articolo, string categoria, string YLIVTRAS_0, decimal QTAMIN)
+        {
+            decimal ret = QTAMIN;
+            if (YLIVTRAS_0 == "PF")
+            {
+                ret = 0;
+            }
+            return ret;
+        }
+        protected decimal getQtaMAX(string articolo, string categoria, string YLIVTRAS_0, decimal QTAMAX)
+        {
+            decimal ret = QTAMAX;
+            if (YLIVTRAS_0 == "PF")
+            {
+                ret = 0;
+            }
+            return ret;
+        }
+        protected decimal getQtaLOT(string articolo, string categoria, string YLIVTRAS_0, decimal QTALOT)
+        {
+            decimal ret = QTALOT;
+            if (YLIVTRAS_0 == "PF")
+            {
+                ret = 1;
+            }
+            return ret;
+        }
+        protected char getMrpType(string articolo,string categoria, string YLIVTRAS_0)
+        {
+            char ret = 'F';
+            if (YLIVTRAS_0 == "PF")
+            {
+                ret = 'C';
+            }
+            return ret;
+        }
         protected float getPeso(string categoria,string articolo, decimal peso, string udm)
         {
             if (categoria == "3PLA")
@@ -613,7 +660,7 @@ namespace SyncCyberPlan_lib
         protected string getReparto(string categoria)
         {
             int i;
-            if (categoria.Trim()=="3PLA")
+            if (categoria.Trim()=="3PLA" || categoria.Trim() == "WP")
                 return "PLAS";
             else if (categoria.Trim() == "3MET")
                 return "MORS";

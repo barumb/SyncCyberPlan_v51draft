@@ -14,7 +14,8 @@ namespace SyncCyberPlan_lib
         public string  _MFCCOMP;
         public decimal _MFCQTRC;
         public string  _MFCSTAT;
-        
+        public string  _MFVWKCT; // I interno E esterno (conto lavoro)
+
         #region tabella output [CYB_DEMAND]
         public string   C_CORDER_CODE;                  //string
         public string   C_ORDER_CODE;                   //string
@@ -52,6 +53,7 @@ namespace SyncCyberPlan_lib
         {
             string __libreriaAs400 = dossier;
 
+            string _tabMFV = __libreriaAs400 + ".MFV00PF";
             string _tabMFC = __libreriaAs400 + ".MFC00PF";
 
             string query = "SELECT " + "\n"
@@ -62,7 +64,13 @@ namespace SyncCyberPlan_lib
                 + ",  " + _tabMFC + ".MFCCOMP" + "\n"
                 + ",  " + _tabMFC + ".MFCQTRC" + "\n"
                 + ",  " + _tabMFC + ".MFCSTAT" + "\n"
-                + " FROM " + _tabMFC + "\n"
+                + ",  " + _tabMFV + ".MFVWKCT" + "\n"
+                + " FROM " + _tabMFC + "\n" 
+
+                + "join " + _tabMFV + " on " 
+                + "     " + _tabMFV + ".MFVTORD = " + _tabMFC + ".MFCTORD = " + "\n" 
+                + "and  " + _tabMFV + ".MFVAORD = " + _tabMFC + ".MFCAORD = "+ "\n" 
+                + "and  " + _tabMFV + ".MFVPORD = " + _tabMFC + ".MFCPORD = "+ "\n" 
                 + " WHERE " + _tabMFC + ".MFCSTAT = 'RI' " + "\n"
                 ;
 
@@ -88,6 +96,7 @@ namespace SyncCyberPlan_lib
             _MFCCOMP = getDBV<string>(row[4]);
             _MFCQTRC = getDBV<decimal>(row[5]);
             _MFCSTAT = getDBV<string>(row[6]);
+            _MFVWKCT = getDBV<string>(row[7]);
 
 
 

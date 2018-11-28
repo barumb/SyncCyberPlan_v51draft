@@ -81,11 +81,19 @@ namespace SyncCyberPlan_lib
 		}
         public int ExecuteCommand(string command)
         {
+            return ExecuteCommand(command, -1);
+        }
+        public int ExecuteCommand(string command, int timeout)
+        {
             int res =-2;
             _logger.Debug("---start---");
             OpenConnection();
 
             _cmdSql = _connection.CreateCommand();
+            if (timeout >= 0)
+            {
+                _cmdSql.CommandTimeout = timeout;
+            }
             _cmdSql.CommandType = CommandType.Text;
             _cmdSql.CommandText = command;
             _logger.Debug("Command created : " + command);
@@ -242,20 +250,24 @@ namespace SyncCyberPlan_lib
             _logger.Debug("---   ended at " + DateTime.Now.ToString());
             return ret;
         }
-
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query)
+        {
+            return EseguiSuDBCyberPlan(ref cm, query, -1);
+        }
+        static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query, int timeout)
         {
             if (cm._connection.State != ConnectionState.Open)
             {
                 cm._connection.Open();
             }
-            int ret= cm.ExecuteCommand(query);
+            int ret= cm.ExecuteCommand(query, timeout);
 
             cm._connection.Close();
             return ret;
         }
         static int EseguiSuDBCyberPlan_Bulk(ref DBHelper2 cm, string tableName, DataTable dataTable)
         {
+            return -1;
             if (cm._connection.State != ConnectionState.Open)
             {
                 cm._connection.Open();
