@@ -143,7 +143,7 @@ namespace SyncCyberPlan_lib
             }
             return ret;
         }
-        public string GetDeletedAllQuery()
+        public virtual string GetDeletedAllQuery()
         {
             return "DELETE FROM [CyberPlanFrontiera].[dbo].[" + _CP_tabella + "] where 1=1 ";
         }

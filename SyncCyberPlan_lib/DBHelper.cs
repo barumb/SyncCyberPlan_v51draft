@@ -256,13 +256,17 @@ namespace SyncCyberPlan_lib
         }
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query, int timeout)
         {
-            if (cm._connection.State != ConnectionState.Open)
+            int ret = -99;
+            if (!string.IsNullOrWhiteSpace(query))
             {
-                cm._connection.Open();
-            }
-            int ret= cm.ExecuteCommand(query, timeout);
+                if (cm._connection.State != ConnectionState.Open)
+                {
+                    cm._connection.Open();
+                }
+                ret = cm.ExecuteCommand(query, timeout);
 
-            cm._connection.Close();
+                cm._connection.Close();
+            }
             return ret;
         }
         static int EseguiSuDBCyberPlan_Bulk(ref DBHelper2 cm, string tableName, DataTable dataTable)

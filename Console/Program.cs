@@ -19,6 +19,9 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
+            Esegui("SAURO MBM41LIB_M DELETE DEM".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME DEM".Split(' '));
+            return;
 
             Esegui("SAURO MBM41LIB_M DELETE POH-OFA".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM COD=IT001-ODM180062%".Split(' '));
@@ -53,11 +56,7 @@ namespace Console
             Esegui("SAURO MBM41LIB_M DELETE SOH".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));    
             //return;
-           
-
-            Esegui("SAURO MBM41LIB_M DELETE DEM".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME DEM".Split(' '));
-            
+                     
 
             Esegui("SAURO MBM41LIB_M DELETE MAC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));

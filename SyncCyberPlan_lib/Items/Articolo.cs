@@ -240,10 +240,10 @@ namespace SyncCyberPlan_lib
             C_DESCR                              = EscapeSQL(ITMDES1_0, 50);         // varchar 50
             C_M_B                                = getTipoProposta(REOCOD_0);        // char 1  o APPROVIGIONAMENTO?  MAKE or BUY
             C_PHANTOM                            = YLIVTRAS_0 == "SF" ? 1 : 0;       // bit 
-            C_FIXED_LEAD_TIME                    = (int)MFGLTI_0;                    // int 
+            C_FIXED_LEAD_TIME                    = (C_M_B=='M'?(int)MFGLTI_0: (int)OFS_0) ;                    // int  lead time di produzione o di acquisto in base al Tipo proposta
             C_VAR_LEAD_TIME                      = -1;                               // real 
             C_BUY_PREPROC_LT                     = -1;                               // real 
-            C_BUY_PROC_LT                        = (int)OFS_0;                       // real 
+            C_BUY_PROC_LT                        = -1;                       // real 
             C_BUY_POSTPROC_LT                    = -1;                               // real 
             C_UNAVAIL_TIME                       = (int)PRPLTI_0;                    // real 
             C_PROTECTION_TIME                    = 0;                                // real 

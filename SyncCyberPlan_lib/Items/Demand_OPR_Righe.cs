@@ -67,16 +67,18 @@ namespace SyncCyberPlan_lib
                 + ",  " + _tabMFV + ".MFVWKCT" + "\n"
                 + " FROM " + _tabMFC + "\n" 
 
-                + "join " + _tabMFV + " on " 
-                + "     " + _tabMFV + ".MFVTORD = " + _tabMFC + ".MFCTORD = " + "\n" 
-                + "and  " + _tabMFV + ".MFVAORD = " + _tabMFC + ".MFCAORD = "+ "\n" 
-                + "and  " + _tabMFV + ".MFVPORD = " + _tabMFC + ".MFCPORD = "+ "\n" 
+                + " join " + _tabMFV + " on " 
+                + "      " + _tabMFV + ".MFVTORD = " + _tabMFC + ".MFCTORD " + "\n" 
+                + " and  " + _tabMFV + ".MFVAORD = " + _tabMFC + ".MFCAORD " + "\n" 
+                + " and  " + _tabMFV + ".MFVPORD = " + _tabMFC + ".MFCPORD " + "\n"
                 + " WHERE " + _tabMFC + ".MFCSTAT = 'RI' " + "\n"
+                + " and  " + _tabMFV + ".MFVSTAT = 'RI' " + "\n"     //sempre RI testata OPR
+                //+ " and MFCCOMP like  'WN0028-03' "
                 ;
 
             if (!string.IsNullOrWhiteSpace(codice_like))
             {
-                query += " and " + _tabMFC + ".MFCCART like '" + codice_like.Trim() + "'";
+                //query += " and " + _tabMFC + ".MFCCART like '" + codice_like.Trim() + "'";
             }
 
             query += " ORDER BY " 
