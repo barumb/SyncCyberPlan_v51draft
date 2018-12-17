@@ -56,9 +56,8 @@ namespace SyncCyberPlan_lib
         public override string GetSelectQuery(bool mode, string libreria, string codice_like, string tipo)
         {
             //string libreria = "MBM41LIB_M";  //libreria = "MBM41LIBMT"  TRAC;  //libreria = "MBM41LIB_M";  
-            string __libreriaAs400 = libreria;  
-            
-
+            string __libreriaAs400 = libreria;            
+            string _tabPQM = __libreriaAs400 + ".PQM00PF";
             string _tabTAB = __libreriaAs400 + ".TAB00PF";
 
             string query = "SELECT " 
@@ -76,8 +75,25 @@ namespace SyncCyberPlan_lib
                     + " ORDER BY " + _tabTAB + ".TABSTAB "
                     ;
 
-            query = @" SELECT 'TABTAB' AS TABCTAB, '"+ __MAGAZZINO_INTERNO + @"' AS CODE, 'Magazzini interni' AS DESCR UNION
-                    SELECT 'TABTAB' AS TABCTAB, '"+ __MAGAZZINO_ESTERNO + "' AS CODE, 'Magazzini esterni' AS DESCR ";
+            query = @" SELECT 'TABTAB' AS TABCTAB, '"+ __MAGAZZINO_INTERNO + @"' AS CODE, 'Magazzini interni' AS DESCR from " + _tabTAB 
+                +  " UNION "
+                + @" SELECT 'TABTAB' AS TABCTAB, '"+ __MAGAZZINO_ESTERNO + "' AS CODE, 'Magazzini esterni' AS DESCR from " + _tabTAB;
+
+
+            query = @" SELECT 'TABTAB' AS TABCTAB, '" + __MAGAZZINO_INTERNO + @"' AS CODE, 'Magazzini interni' AS DESCR from " + _tabTAB
+
+                + " UNION "
+
+                + " SELECT DISTINCT " 
+                + @" 'TABTAB' AS TABCTAB "
+                + ", " + _tabPQM + ".PQMLOCZ AS CODE"
+                + @", 'Magazzino esterno' AS DESCR " 
+                + " FROM " + _tabPQM + "\n"
+                + " WHERE " + _tabPQM + ".PQMTIFI<>'S' and " + _tabPQM + ".PQMTILO='E' \n"
+                + " and " + _tabPQM + ".PQMCART not like 'WU%'    \n"
+                + " and " + _tabPQM + ".PQMCART not like 'DAI%'   \n"
+                + " and " + _tabPQM + ".PQMCART not like 'DPI%'   \n"
+            ;
 
             //if (!string.IsNullOrWhiteSpace(codice_like))
             //{

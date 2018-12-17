@@ -8,7 +8,6 @@ namespace SyncCyberPlan_lib
 {
     public abstract class Giacenze : Item
     {
-
         #region tabella output CYB_MATERIAL_LOT
         public string C_CODE;                                  //varchar  30
         public string C_ITEM_CODE;                             //varchar  50

@@ -47,7 +47,7 @@ namespace SyncCyberPlan_lib
             C_USER_REAL01 = 0;                                  //float
             C_USER_REAL02 = 0;                                  //float
             C_USER_REAL03 = 0;                                  //float
-            C_USER_STRING01 = EscapeSQL("", 29);                //varchar  29
+            C_USER_STRING01 = EscapeSQL(__MAGAZZINO_INTERNO, 29);                //varchar  29
             C_USER_STRING02 = EscapeSQL("", 29);                //varchar  29
             C_USER_DATE01 = null;                               //datetime
             C_USER_DATE02 = null;                               //datetime
@@ -144,19 +144,19 @@ order by PQMCART
                     + " GROUP BY " + _tabPQM + ".PQMCART \n"
                     + " HAVING SUM(" + _tabPQM + ".PQMQGIA" + ") <> 0" + "\n\n"
 
-                    + " UNION " + "\n\n"
-
-                    + " SELECT " + "\n"
-                    + "  " + _tabPQM + ".PQMCART" + "\n"
-                    + ", " + "'"+ __MAGAZZINO_ESTERNO + "' AS LocCyber" + "\n"
-                    + ",  SUM(" + _tabPQM + ".PQMQGIA" + ")" + "\n"
-                    + " FROM " + _tabPQM + "\n"
-                    + " WHERE " + _tabPQM + ".PQMTIFI<>'S' and " + _tabPQM + ".PQMTILO='E' \n"
-                    + " and " + _tabPQM + ".PQMCART not like 'WU%'    \n"
-                    + " and " + _tabPQM + ".PQMCART not like 'DAI%'   \n"
-                    + " and " + _tabPQM + ".PQMCART not like 'DPI%'   \n"
-                    + " GROUP BY " + _tabPQM + ".PQMCART \n"
-                    + " HAVING SUM(" + _tabPQM + ".PQMQGIA" + ") <> 0" + "\n\n"
+                   // + " UNION " + "\n\n"
+                   //
+                   // + " SELECT " + "\n"
+                   // + "  " + _tabPQM + ".PQMCART" + "\n"
+                   // + ", " + "'"+ __MAGAZZINO_ESTERNO + "' AS LocCyber" + "\n"
+                   // + ",  SUM(" + _tabPQM + ".PQMQGIA" + ")" + "\n"
+                   // + " FROM " + _tabPQM + "\n"
+                   // + " WHERE " + _tabPQM + ".PQMTIFI<>'S' and " + _tabPQM + ".PQMTILO='E' \n"
+                   // + " and " + _tabPQM + ".PQMCART not like 'WU%'    \n"
+                   // + " and " + _tabPQM + ".PQMCART not like 'DAI%'   \n"
+                   // + " and " + _tabPQM + ".PQMCART not like 'DPI%'   \n"
+                   // + " GROUP BY " + _tabPQM + ".PQMCART \n"
+                   // + " HAVING SUM(" + _tabPQM + ".PQMQGIA" + ") <> 0" + "\n\n"
                     ;
 
             

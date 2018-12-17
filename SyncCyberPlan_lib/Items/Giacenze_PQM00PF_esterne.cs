@@ -8,11 +8,11 @@ namespace SyncCyberPlan_lib
 {
     public class Giacenze_PQM00PF_esterne : Giacenze
     {
-        static Dictionary<string, decimal> __accantonamenti = null;
-
-        public string  PQMCART; //Articolo
-        public string  PQMLocCyber;
-        public decimal PQMQGIA_Sum; //giacenza
+        public string  PQMCART; //Articolo                        
+        public decimal PQMQGIA;  //qta giacenza
+        public string PQMLOCZ;  //locazione per Esterno in As400 = fornitore
+        public string PQMSUBL;  //sublocazione (vuota per esterni in as400)
+        public string PQMTDLO;  //lotto
         
         //public decimal PQMTIFI; //<>'S'
         //public decimal PQMTILO; // S o I -> interno   E -> Esterno
@@ -28,17 +28,18 @@ namespace SyncCyberPlan_lib
         public override void Init(object[] row)
         {
             PQMCART = ((string)row[0]).Trim().ToUpper();
-            PQMLocCyber = (string)row[1];
-            PQMQGIA_Sum = (decimal)row[2];
+            PQMQGIA = (decimal)row[1];
+            PQMLOCZ = ((string)row[2]).Trim().ToUpper();
+            PQMSUBL = ((string)row[3]).Trim().ToUpper();
+            PQMTDLO = ((string)row[4]).Trim().ToUpper();
 
-
-            C_CODE = EscapeSQL(PQMLocCyber, 30);                //varchar  30
+            C_CODE = EscapeSQL(PQMTDLO, 30);                //varchar  30     //LOTTO
             C_ITEM_CODE = EscapeSQL(PQMCART, 50);               //varchar  50
             C_ITEM_PLANT = EscapeSQL("ITS01", 20);              //varchar  20
-            C_WAREHOUSE_CODE = EscapeSQL(PQMLocCyber, 20);      //varchar  20
+            C_WAREHOUSE_CODE = EscapeSQL(PQMLOCZ, 20);      //varchar  20  //CODICE TERZO
             C_DESCR = EscapeSQL("", 30);                        //varchar  30
             C_CORDER_CODE = EscapeSQL("", 30);                  //varchar  30
-            C_QTY = GetQTY(PQMCART, PQMQGIA_Sum, PQMLocCyber);  //numeric  
+            C_QTY = GetQTY(PQMCART, PQMQGIA, "E " + C_WAREHOUSE_CODE+"-"+C_CODE);  //numeric  
             C_WDW_QTY = 0;                                      //numeric  
             C_EFFECTIVE_DATE = null;                            //datetime 
             C_EXPIRE_DATE = null;                               //datetime 
@@ -47,21 +48,17 @@ namespace SyncCyberPlan_lib
             C_USER_REAL01 = 0;                                  //float
             C_USER_REAL02 = 0;                                  //float
             C_USER_REAL03 = 0;                                  //float
-            C_USER_STRING01 = EscapeSQL("", 29);                //varchar  29
+            C_USER_STRING01 = EscapeSQL(__MAGAZZINO_ESTERNO, 29);                //varchar  29
             C_USER_STRING02 = EscapeSQL("", 29);                //varchar  29
             C_USER_DATE01 = null;                               //datetime
             C_USER_DATE02 = null;                               //datetime
             C_USER_DATE03 = null;                               //datetime
         }
-        protected decimal GetQTY(string ART, decimal PQMQGIA_Sum, string magazzino)
+        protected decimal GetQTY(string ART, decimal PQMQGIA, string magazzino)
         {
             decimal ret;
-            decimal tmp = PQMQGIA_Sum;
+            decimal tmp = PQMQGIA;
 
-            if (__accantonamenti.ContainsKey(ART) == true)
-            {
-                tmp = PQMQGIA_Sum - __accantonamenti[ART];
-            }
             if (tmp < 0)
                 ret = 0;
             else
@@ -71,7 +68,7 @@ namespace SyncCyberPlan_lib
             //gestione avvisi mail
 
 
-            if (PQMQGIA_Sum < 0)
+            if (PQMQGIA < 0)
             {
                 int soglia;
                 string message_error = "";
@@ -87,38 +84,18 @@ namespace SyncCyberPlan_lib
                     default: soglia = -500; break;
                 }
 
-                if ( PQMQGIA_Sum < soglia)
+                if ( PQMQGIA < soglia)
                 {
-                    message_error = ART + " ha giacenza totale negativa (magazzino " + magazzino + "): " + PQMQGIA_Sum + System.Environment.NewLine;
+                    message_error = ART + " ha giacenza totale negativa (magazzino " + magazzino + "): " + PQMQGIA + System.Environment.NewLine;
                     __bulk_message += System.Environment.NewLine + message_error;
                     //Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", message_error);
 
-                }
-
-                if (PQMQGIA_Sum > 0 && tmp < 0)
-                {
-                    message_error += ART + ": giacenza MINORE degli accantonamenti " + System.Environment.NewLine + System.Environment.NewLine
-                   + "GIACENZA TOTALE (sommatoria di PQMQGIA, magazzino " + magazzino + ") = " + PQMQGIA_Sum + System.Environment.NewLine + System.Environment.NewLine
-                   + "ACCANTONAMENTI TOTALI (sommatoria di ORR00PF.ORRQACA) = " + __accantonamenti[ART] + System.Environment.NewLine + System.Environment.NewLine;
-                    __bulk_message += System.Environment.NewLine + message_error;
-
-                    //Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", message_error);
-                }
-                
-            }
-
-
-
- 
+                }                
+            } 
             return ret;
         }
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string filtro)
         {
-            if (__accantonamenti == null)
-            {
-                __accantonamenti = Init_List_AccantonamentiRigheORV(dossier);
-            }
-
             //string libreria = "MBM41LIB_M";  //libreria = "MBM41LIBMT"  TRAC;  //libreria = "MBM41LIB_M";  
             string __libreriaAs400 = dossier;
 
@@ -132,31 +109,17 @@ WHERE PQMTIFI<>'S'
 order by PQMCART
 */
             string sage_query = 
-                    "SELECT " + "\n"
-                    + "  " + _tabPQM + ".PQMCART" + "\n"
-                    + ", " + "'"+ __MAGAZZINO_INTERNO + "' AS LocCyber" + "\n"
-                    + ",  SUM(" + _tabPQM + ".PQMQGIA" + ")" + "\n"
-                    + " FROM " + _tabPQM + "\n"
-                    + " WHERE " + _tabPQM + ".PQMTIFI<>'S' and " +_tabPQM +".PQMTILO<>'E' \n"
-                    + " and " + _tabPQM + ".PQMCART not like 'WU%'    \n"
-                    + " and " + _tabPQM + ".PQMCART not like 'DAI%'   \n"
-                    + " and " + _tabPQM + ".PQMCART not like 'DPI%'   \n"
-                    + " GROUP BY " + _tabPQM + ".PQMCART \n"
-                    + " HAVING SUM(" + _tabPQM + ".PQMQGIA" + ") <> 0" + "\n\n"
-
-                    + " UNION " + "\n\n"
-
-                    + " SELECT " + "\n"
-                    + "  " + _tabPQM + ".PQMCART" + "\n"
-                    + ", " + "'"+ __MAGAZZINO_ESTERNO + "' AS LocCyber" + "\n"
-                    + ",  SUM(" + _tabPQM + ".PQMQGIA" + ")" + "\n"
+                      " SELECT " + "\n"
+                    + "  " + _tabPQM + ".PQMCART" + "\n"                    
+                    + ", " + _tabPQM + ".PQMQGIA"  + "\n"
+                    + ", " + _tabPQM + ".PQMLOCZ" + "\n"
+                    + ", " + _tabPQM + ".PQMSUBL" + "\n"
+                    + ", " + _tabPQM + ".PQMTDLO" + "\n"
                     + " FROM " + _tabPQM + "\n"
                     + " WHERE " + _tabPQM + ".PQMTIFI<>'S' and " + _tabPQM + ".PQMTILO='E' \n"
                     + " and " + _tabPQM + ".PQMCART not like 'WU%'    \n"
                     + " and " + _tabPQM + ".PQMCART not like 'DAI%'   \n"
-                    + " and " + _tabPQM + ".PQMCART not like 'DPI%'   \n"
-                    + " GROUP BY " + _tabPQM + ".PQMCART \n"
-                    + " HAVING SUM(" + _tabPQM + ".PQMQGIA" + ") <> 0" + "\n\n"
+                    + " and " + _tabPQM + ".PQMCART not like 'DPI%'   \n"                    
                     ;
 
             

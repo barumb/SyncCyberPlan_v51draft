@@ -19,6 +19,13 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
+            Esegui("SAURO MBM41LIB_M DELETE LOC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));
+            return;
+
+            Esegui("SAURO MBM41LIB_M DELETE GIAC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME GIAC".Split(' '));
+            return;
 
             Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
@@ -52,15 +59,6 @@ namespace Console
             Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
             return; 
-
-            Esegui("SAURO MBM41LIB_M DELETE GIAC-ALL".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME GIAC-ALL".Split(' '));
-
-            Esegui("SAURO MBM41LIB_M DELETE GIAC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME GIAC".Split(' '));
-            return;
-
-
             
             Esegui("SAURO MBM41LIB_M DELETE SOH".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));    
@@ -214,7 +212,6 @@ namespace Console
                     || oggetto == "POH-OFA"
                     || oggetto == "OPR"
                     || oggetto == "GIAC" 
-                    || oggetto == "GIAC-ALL"
                     || oggetto == "DISBAS"
                     || oggetto == "DEM"
                     )
@@ -279,7 +276,6 @@ namespace Console
                         case "BPR": sm.WriteToCyberPlan<Terzo>(_mode_all, codicelike, "", _delete, ""); break;
                         case "POH-ODM": sm.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;
                         case "POH-OFA": sm.WriteToCyberPlan<OrdiniAcq_OFA>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "LOC": sm.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
                         case "MAC": sm.WriteToCyberPlan<Macchina>(_mode_all, codicelike, "", _delete, ""); break;
                         case "ATT": sm.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
                                     sm.WriteToCyberPlan<Attrezzature_Plas>(_mode_all, codicelike, "", _delete, ""); 
@@ -287,13 +283,16 @@ namespace Console
 
 
                         //da as400                    
+                        case "LOC": am.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
                         case "SOH": am.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
                         case "OPR":
                             am.WriteToCyberPlan<OrdiniAcq_As400_OPR>(_mode_all, codicelike, "", _delete, "");
                             am.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
                         break;
-                        case "GIAC-ALL": am.WriteToCyberPlan<Giacenze_ORR00PF>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "GIAC": am.WriteToCyberPlan<Giacenze_PQM00PF>(_mode_all, codicelike, "", _delete, ""); break;
+                        case "GIAC": am.WriteToCyberPlan<Giacenze_ORR00PF>(_mode_all, codicelike, "", _delete, ""); 
+                                     am.WriteToCyberPlan<Giacenze_PQM00PF>(_mode_all, codicelike, "", _delete, ""); //interne
+                                     am.WriteToCyberPlan<Giacenze_PQM00PF_esterne>(_mode_all, codicelike, "", _delete, "");
+                        break;
                         case "DISBAS": am.WriteToCyberPlan<DistintaBase>(_mode_all, codicelike, "", _delete, ""); break;
                         case "DEM": am.WriteToCyberPlan<Demand_OPR_RIGHE>(_mode_all, codicelike, "", _delete, ""); break;
 
