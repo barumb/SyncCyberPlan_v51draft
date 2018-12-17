@@ -1,4 +1,6 @@
 rem azzera DB...
+Console START
+
 Console SAURO MBM41LIB_M DELETE LOC
 Console SAURO MBM41LIB_M DELETE MAC
 Console SAURO MBM41LIB_M DELETE ATT
@@ -41,5 +43,6 @@ Console SAURO MBM41LIB_M ALLTIME CIC
 
 
 
-Console INIT_ECYB
+Console INIT_CYB
+Console STOP
 rem fine

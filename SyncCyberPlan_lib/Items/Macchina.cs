@@ -21,6 +21,7 @@ namespace SyncCyberPlan_lib
         public decimal _YPLAGRMAX_0; //grammmatura  PLAS
         public int     _YCAD_0;      //cadenza
         public int     _YCADTEM_0;    //cadenza tempo in secondi
+        public byte    _WSTTYP_0; //tipo macchina  1 macchina  2= manuale  
 
         #region tabella output CYB_MACHINE
         public string C_CODE         ;             //varchar](30) NOT NULL,
@@ -67,6 +68,7 @@ namespace SyncCyberPlan_lib
             _YPLAGRMAX_0  = getDBV<decimal>(row[10]);
             _YCAD_0       = getDBV<int>(row[11]);
             _YCADTEM_0    = getDBV<int>(row[12]);
+            _WSTTYP_0     = getDBV<byte>(row[13]);
 
 
             C_CODE = _WST_0;           //varchar](30) NOT NULL,
@@ -75,7 +77,7 @@ namespace SyncCyberPlan_lib
             C_USER_CHAR01 = ' ';         //char](1) NULL,
             C_USER_CHAR02 = ' ';         //char](1) NULL,
             C_USER_FLAG01 = (byte)(_YPLADIV_0 == 2 ? 1 : 0);  //bit] NULL,
-            C_USER_FLAG02 = 0;            //bit] NULL,
+            C_USER_FLAG02 = (byte)(_WSTTYP_0==2? 1 : 0);    //bit] NULL,   se manuale (WSSTYP=2) metto true
             C_USER_INT01 = _YCAD_0;             //int] NULL,
             C_USER_INT02 = _YCADTEM_0;          //int] NULL,
             C_USER_REAL01 = (float)_YPLAGRMIN_0;            //float] NULL,
@@ -138,6 +140,7 @@ namespace SyncCyberPlan_lib
                 , W.YPLAGRMAX_0
                 , W.YCAD_0
                 , W.YCADTEM_0
+                , W.WSTTYP_0
                 from x3.SAURO.WORKSTATIO W 
                 join x3.SAURO.ATEXTRA A on A.CODFIC_0 = 'WORKSTATIO' 
                 and A.ZONE_0 ='WSTDESAXX' and A.LANGUE_0='ITA' and A.IDENT1_0 = W.WST_0

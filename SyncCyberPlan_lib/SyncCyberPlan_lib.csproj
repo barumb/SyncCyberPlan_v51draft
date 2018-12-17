@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="DBHelper.cs" />
     <Compile Include="Item.cs" />
+    <Compile Include="Items\Giacenze_PQM00PF_esterne.cs" />
     <Compile Include="Items\Operations.cs" />
     <Compile Include="Items\Demand_OPR_Righe.cs" />
     <Compile Include="Items\Articolo_Caratteristiche.cs" />
@@ -65,7 +66,7 @@
     <Compile Include="Items\OrdiniVen_as400.cs" />
     <Compile Include="Items\OrdiniVen.cs" />
     <Compile Include="Items\OrdiniAcq_POHOFA.cs" />
-    <Compile Include="Items\ECYB_init.cs" />
+    <Compile Include="Items\CYBER_utils.cs" />
     <Compile Include="Items\OrdiniAcq_POH.cs" />
     <Compile Include="Items\Macchina.cs" />
     <Compile Include="Items\Attrezzature_Plas.cs" />

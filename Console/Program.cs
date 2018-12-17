@@ -19,6 +19,15 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
+
+            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
+            return;
+
+            Esegui("SAURO MBM41LIB_M DELETE MAC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));
+            return;
+
             Esegui("SAURO MBM41LIB_M DELETE DEM".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME DEM".Split(' '));
             return;
@@ -56,14 +65,6 @@ namespace Console
             Esegui("SAURO MBM41LIB_M DELETE SOH".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));    
             //return;
-                     
-
-            Esegui("SAURO MBM41LIB_M DELETE MAC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));
-                        
-            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
-
             
             Esegui("SAURO MBM41LIB_M DELETE LOC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));
@@ -103,10 +104,20 @@ namespace Console
 
             //_logger.Info("START at " + DateTime.Now.ToString() + " ----------------argomenti: " + string.Join(" ", args) + " ------------------");
             _logger.Info("START - argomenti: " + string.Join(" ", args) + " ------------------");
-            if (args[0].ToUpper() == "INIT_ECYB")
+            if (args[0].ToUpper() == "INIT_CYB")
             {   
-                    ECYB_init.Action();
+                    CYBER_utils.Init();
                     return;   
+            }
+            else if (args[0].ToUpper() == "START")
+            {
+                CYBER_utils.SetStatus("Running");
+                return;
+            }
+            else if (args[0].ToUpper() == "STOP")
+            {
+                CYBER_utils.SetStatus("Completed");
+                return;
             }
             if (args.Length < 4)
             {
@@ -136,7 +147,10 @@ namespace Console
                     "      DEM Fabbisogni OPR in corso MFC00PF da as400 a cyb\n" +
                     
                     "\n" +
-                    "SyncCyberPlan INIT_ECYB  per inizializzare tabelle CyberPlan\n" +
+                    "SyncCyberPlan START     prima di iniziare sync tabelle CyberPlan\n" +
+                    "SyncCyberPlan STOP      alla fine del     sync tabelle CyberPlan\n" +
+                    "SyncCyberPlan INIT_CYB  per inizializzare tabelle CyberPlan\n" +
+                    "SyncCyberPlan INIT_CYB  per inizializzare tabelle CyberPlan\n" +
 
                     "COD = WP%  per ottenere un filtro sui codici\n"
                 );

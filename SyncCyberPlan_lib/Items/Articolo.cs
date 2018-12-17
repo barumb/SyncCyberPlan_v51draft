@@ -419,7 +419,7 @@ namespace SyncCyberPlan_lib
 
         private string get_MagazzinoRicevimento()
         {
-            if (C_CODE == "WP6775-0NH")
+            if (C_CODE == "SRC3500000-G" || C_CODE == "BKI" || C_CODE == "WB0021" || C_CODE == "WM0539")
             {
                 ;
             }
@@ -434,7 +434,7 @@ namespace SyncCyberPlan_lib
                     break;
                 }
             }
-            if (ret == "")
+            if (ret.Trim() == "")
             {
                 if (TCLCOD_0 != "0PHA")
                 {
@@ -447,7 +447,7 @@ namespace SyncCyberPlan_lib
                     // __bulk_message += "Articolo " + C_CODE + " non ha magazzino di ricevimento (vedi articolo sito)" + System.Environment.NewLine;
                 }
             }
-            return ret;
+            return ret.Trim();
         }
 
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string tipo)

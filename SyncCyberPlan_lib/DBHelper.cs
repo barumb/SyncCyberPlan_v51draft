@@ -256,6 +256,9 @@ namespace SyncCyberPlan_lib
         }
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query, int timeout)
         {
+#if DEBUG
+            return 1;
+#endif
             int ret = -99;
             if (!string.IsNullOrWhiteSpace(query))
             {
@@ -271,6 +274,9 @@ namespace SyncCyberPlan_lib
         }
         static int EseguiSuDBCyberPlan_Bulk(ref DBHelper2 cm, string tableName, DataTable dataTable)
         {
+#if DEBUG
+            return 1;
+#endif
             if (cm._connection.State != ConnectionState.Open)
             {
                 cm._connection.Open();
