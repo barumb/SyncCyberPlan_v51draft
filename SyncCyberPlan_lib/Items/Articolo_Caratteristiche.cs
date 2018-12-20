@@ -50,19 +50,22 @@ namespace SyncCyberPlan_lib
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string tipo)
         {
             string db = "x3." + dossier;
+            db = dossier;
             //string sage_query = "SELECT A.ITMREF_0, ITMSTA_0 from " + dossier + ".[ITMMASTER] A join " + dossier + ".[YITMINF] B on A.ITMREF_0=B.ITMREF_0" +
             //    " WHERE YLIVTRAS_0='" + tipo + "' and ITMSTA=1 ";
 
+            //recupero caratteristiche codice e 
+            //caratteristiche famiglia versione, con 2 priorità diverse 
             string sage_query = @"SELECT ITMREF, VALCOD, VALVAL, VALTXT, PRIORITA FROM
                         (
 	                        select M.ITMREF_0 as ITMREF, YFVVALCOD_0 AS VALCOD, YFVVALVAL_0 AS VALVAL, YFVVALTXT_0 AS VALTXT, 50 AS PRIORITA
-	                        from SAUROTEST.ITMMASTER M
-	                        join SAUROTEST.YITMINF F on M.ITMREF_0 = F.ITMREF_0
-	                        join SAUROTEST.YFAMVERD D on F.YFAMVER_0 = D.YFVFAMVER_0 
+	                        from " + db + @".ITMMASTER M
+	                        join " + db + @".YITMINF F on M.ITMREF_0 = F.ITMREF_0
+	                        join " + db + @".YFAMVERD D on F.YFAMVER_0 = D.YFVFAMVER_0 
                         UNION
 	                        select ITMREF_0 as ITMREF, YVALCOD_0 AS VALCOD, YVALVAL_0 AS VALVAL, YVALTXT_0 AS VALTXT, 100 AS PRIORITA
-	                        From SAUROTEST.ITMMASTER M
-	                        join SAUROTEST.YITMVAL Y on Y.YVALITMREF_0 = M.ITMREF_0  
+	                        From " + db + @".ITMMASTER M
+	                        join " + db + @".YITMVAL Y on Y.YVALITMREF_0 = M.ITMREF_0  
                         ) U
             ";
 
@@ -141,8 +144,12 @@ order by a.itmref,a.valcod desc
 
              */
 
-            //query che prende le caratt FAMP e aggiorna gli articoli
+            //query che prende le caratt FAMP (articlo e famiglia versione) e aggiorna gli articoli
             //nei casi ci siano caratt multiple ne viene presa una a caso (l'ultima nell'ordine di sql)
+            /*
+             Con una query grop by seleziono per ogni articolo/caratteristica la MAX priorità
+             Poi con un join recupero valore con priorità massima ed eventuale valore TESTO (per plurime)
+             */
             string upd_query = @"update [CyberPlanFrontiera].dbo.CYB_ITEM 
                         set C_USER_CHAR03  = C.FAMP
 
@@ -155,6 +162,7 @@ order by a.itmref,a.valcod desc
                         when '006' then 'A'
                         when '038' then 'M'
                         when '051' then 'P'
+                        when '150' then a.VALTXT
                         end AS FAMP
                         FROM [CyberPlanFrontiera].[dbo].[YITMCAR] a
                         INNER JOIN (
@@ -166,7 +174,8 @@ order by a.itmref,a.valcod desc
                         a.valcod = '028' or              
                         a.valcod = '006' or               
                         a.valcod = '038' or               
-                        a.valcod = '051'                  
+                        a.valcod = '051' or 
+                        a.valcod = '150'                 
                         --order by a.itmref,a.valcod desc
                         ) C
 

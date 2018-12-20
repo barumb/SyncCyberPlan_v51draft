@@ -19,6 +19,11 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
+            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
+            //Esegui("SAURO MBM41LIB_M ALLTIME ITM COD=MSB02005-0%".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+            return;
+
             Esegui("SAURO MBM41LIB_M DELETE LOC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));
             return;
@@ -44,10 +49,6 @@ namespace Console
             //Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA COD=IT001-OFA180063%".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM ".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA ".Split(' '));
-            return;
-            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-            //Esegui("SAURO MBM41LIB_M ALLTIME ITM COD=MSB02005-0%".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
             
             Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
@@ -130,7 +131,7 @@ namespace Console
                     "OGG= \n" +
                     "      BPR terzi                           da sage a cyb\n" +
                     "      POH-ODM ordini di acquisto          da sage a cyb\n" +
-                    "      POH-OFA ordini di acquisto          da sage a cyb\n" +
+                    //"      POH-OFA ordini di acquisto          da sage a cyb\n" +
                     "      ITM articolo                        da sage a cyb\n" +
                     "      MAC macchine                        da sage a cyb\n" +
                     "      ATT attrezzature                    da sage a cyb\n" +
@@ -209,7 +210,7 @@ namespace Console
                     || oggetto == "BPR" 
                     || oggetto == "SOH" 
                     || oggetto == "POH-ODM" 
-                    || oggetto == "POH-OFA"
+                    //|| oggetto == "POH-OFA"
                     || oggetto == "OPR"
                     || oggetto == "GIAC" 
                     || oggetto == "DISBAS"
@@ -275,7 +276,7 @@ namespace Console
                             break;
                         case "BPR": sm.WriteToCyberPlan<Terzo>(_mode_all, codicelike, "", _delete, ""); break;
                         case "POH-ODM": sm.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "POH-OFA": sm.WriteToCyberPlan<OrdiniAcq_OFA>(_mode_all, codicelike, "", _delete, ""); break;
+                        //case "POH-OFA": sm.WriteToCyberPlan<OrdiniAcq_OFA>(_mode_all, codicelike, "", _delete, ""); break;
                         case "MAC": sm.WriteToCyberPlan<Macchina>(_mode_all, codicelike, "", _delete, ""); break;
                         case "ATT": sm.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
                                     sm.WriteToCyberPlan<Attrezzature_Plas>(_mode_all, codicelike, "", _delete, ""); 
