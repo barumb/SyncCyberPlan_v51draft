@@ -22,7 +22,7 @@ namespace SyncCyberPlan_lib
         public string YFAMCOM_0;   //famiglia commerciale
         public int YNUMVIE_0;      //num vie totali
         public decimal YALTEZZA_0; //altezza Per MORSETTI
-        public string YMRPTAG1_0;  //
+        public string YMRPTAG1_0;  //tag mrp: per WP deve contenere F se è il WP da far cambiare il meno possibile, il WP su cui basare il raggruppamento degli ordini 
 
         public decimal YCORPOLUN_0;       //lunghezza x WP (?)
         public decimal YCORPOPRO_0;       //profodità...
@@ -30,7 +30,7 @@ namespace SyncCyberPlan_lib
         public string YTAGOEM_0;          //Marchio
         public string YCOLORE_0;          //Marchio
         public decimal YPESMAT_0;         //peso materozza/impronta
-        public string YPASSOVIE_0;        //passo
+        public string YPASSOVIE_0;        //passo        
 
 
         //tabella ITMFACILIT
@@ -775,6 +775,7 @@ namespace SyncCyberPlan_lib
  ,B.BPSNUM_0
  ,Y.YPESMAT_0
  ,Y.YPASSOVIE_0
+ 
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +

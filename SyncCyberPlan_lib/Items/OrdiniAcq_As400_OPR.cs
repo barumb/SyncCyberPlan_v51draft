@@ -11,9 +11,9 @@ namespace SyncCyberPlan_lib
         public decimal MFHAORD;
         public decimal MFHPORD;
         public string  MFHTCOM;
-        public decimal MFHACOM;
-        public decimal MFHPCOM;
-        public decimal MFHSCOM;
+        public decimal MFHACOM;//anno ODV
+        public decimal MFHPCOM;//progressivo ODV
+        public decimal MFHSCOM; //riga ODV
         public string  MFHCART;
         public decimal MFHQTRC;
         public decimal MFHDCRE; //DATA
@@ -114,7 +114,7 @@ namespace SyncCyberPlan_lib
 
 
             C_CODE                = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30);        //varchar         30                      
-            C_CORDER_CODE         = EscapeSQL(MFHTCOM + MFHACOM.ToString("00") + MFHPCOM.ToString("000000"), 30);                                             //varchar         30                      
+            C_CORDER_CODE         = EscapeSQL(MFHTCOM + MFHACOM.ToString("00") + MFHPCOM.ToString("000000") + MFHSCOM.ToString("0000"), 30);                                             //varchar         30                      
             C_ITEM_CODE           = EscapeSQL(MFHCART, 50);                                        //varchar         50                      
             C_ITEM_PLANT          = EscapeSQL("ITS01", 20);                                        //varchar         20                      
             C_M_B                 = 'M';                                                           //char             1     // B=buy D=decentrato M = make                
