@@ -74,7 +74,7 @@ namespace SyncCyberPlan_lib
             C_VAR_QTY               = (double)SPRQIMP;          // real           
             C_SCRAP_TYPE            = ' ';                      // char        1
             C_PCT_SCRAP             = 0;                        // real           
-            C_WAREHOUSE_CODE        = "";                       // varchar     20
+            C_WAREHOUSE_CODE        = __MAGAZZINO_INTERNO;      // varchar     20
             C_EFFECTIVE_DATE        = null;                     // datetime           
             C_EXPIRE_DATE           = null;                     // datetime           
             C_USER_STRING01         = "";                       // varchar     30
@@ -193,24 +193,92 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_USER_CHAR02",           typeof(char));                   // char 1
         }
 
-
-        static private List<string> Get_Lista_Articoli_RI_Sage(bool mode, string dossier, string codice_like)
+        public override void LastAction(ref DBHelper2 cm)
         {
-            List<string> _lista_articoli_rilasciati_in_sage = new List<string>(30000);
+            _logger.Info("Inizio inserimento distinte base fornitori");
+            Dictionary<string, string> lista = Get_Lista_Articoli_Fornitori_Sage("SAURO");
 
-            //recupero totali accantonamenti per ogni articolo presente in ORR
-            string query = Articolo.SelectQuery(true, dossier, codice_like, null);
+            //per ogni fornitore/articolo inserisco una nuova distinta base con magazzino diverso
 
-            DBHelper2 db = DBHelper2.getSageDBHelper(dossier);
-            DbDataReader dtr = db.GetReaderSelectCommand(query);
+            string query = @" INSERT INTO CYB_COMPONENT  (
+ c2.C_BOM_CODE        
+,c2.C_BOM_ALT         
+,c2.C_COMPONENT_CODE  
+,c2.C_COMPONENT_PLANT 
+,c2.C_OPNUM           
+,c2.C_NSEQ            
+,c2.C_PHANTOM         
+,c2.C_VAR_QTY         
+,c2.C_SCRAP_TYPE      
+,c2.C_PCT_SCRAP       
+,c2.C_WAREHOUSE_CODE
+,c2.C_EFFECTIVE_DATE  
+,c2.C_EXPIRE_DATE     
+,c2.C_USER_STRING01   
+,c2.C_USER_INT01      
+,c2.C_USER_INT02      
+,c2.C_USER_CHAR01     
+,c2.C_USER_CHAR02     
+)
+SELECT 
+C_BOM_CODE
+,C_BOM_ALT         
+,C_COMPONENT_CODE  
+,C_COMPONENT_PLANT 
+,C_OPNUM           
+,C_NSEQ            
+,C_PHANTOM         
+,C_VAR_QTY         
+,C_SCRAP_TYPE      
+,C_PCT_SCRAP       
+,'%%1%%'  as C_WAREHOUSE_CODE
+,C_EFFECTIVE_DATE  
+,C_EXPIRE_DATE     
+,C_USER_STRING01   
+,C_USER_INT01      
+,C_USER_INT02      
+,C_USER_CHAR01     
+,C_USER_CHAR02     
+FROM CYB_COMPONENT c2
+WHERE 
+C_WAREHOUSE_CODE = '" + __MAGAZZINO_INTERNO + @"' and C_BOM_CODE ='%%2%%' ";
+            foreach (KeyValuePair<string, string> itm in lista)
+            {
+                string ins_query = query.Replace("%%1%%", itm.Value);  //fornitore
+                ins_query = ins_query.Replace("%%2%%", itm.Key);    //articolo
+
+                int i = DBHelper2.EseguiSuDBCyberPlan(ref cm, ins_query);
+
+            }
+
+            _logger.Info("Fine inserimento distinte base fornitori");
+
+
+             
+        }
+
+
+        static private Dictionary<string, string> Get_Lista_Articoli_Fornitori_Sage(string dossier)
+        {
+            string db = "x3." + dossier;
+
+            Dictionary<string, string> _lista_articoli_fornitori_sage = new Dictionary<string, string>(1500);
+
+            //questa query va bene anche se non filtro gli articoli RILASCIATI
+            //perchè poi duplico solo le distinte base già filtrate per articoli rilasciati
+            string query = "select ITMREF_0, BPSNUM_0 from " + db + ".ITMBPS where BPSNUM_0 <> 'A000818' ";
+
+            DBHelper2 dbh = DBHelper2.getSageDBHelper(dossier);
+            DbDataReader dtr = dbh.GetReaderSelectCommand(query);
             object[] row = new object[dtr.FieldCount];
 
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                _lista_articoli_rilasciati_in_sage.Add(Item.GetDBV<string>(row[0]));
+                _lista_articoli_fornitori_sage.Add(Item.GetDBV<string>(row[0]), Item.GetDBV<string>(row[1]));
             }
-            return _lista_articoli_rilasciati_in_sage;
+            return _lista_articoli_fornitori_sage;
         }
+
     }
 }
