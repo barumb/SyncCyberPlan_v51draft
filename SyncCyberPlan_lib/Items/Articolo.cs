@@ -16,6 +16,7 @@ namespace SyncCyberPlan_lib
         public string TCLCOD_0;  //categoria len 5
         public string WEU_0;     //deve essere "GR" per WP
         public decimal ITMWEI_0; //peso per PLASTICA WP
+        public int STDFLG_0; //Modalità gestione (stock=3 a cmomessa=4)
 
         //tabella YITMINF
         public string YLIVTRAS_0;  //tipo articolo
@@ -231,6 +232,7 @@ namespace SyncCyberPlan_lib
             BPSNUM_0    = getDBV<string>(row[78]);
             YPESMAT_0   = getDBV<decimal>(row[79]);        //peso materozza/impronta
             YPASSOVIE_0 = getDBV<string>(row[80]);
+            STDFLG_0    = getDBV<int>(row[81]);            //gestione a stock/commessa
 
 
 
@@ -261,7 +263,7 @@ namespace SyncCyberPlan_lib
             C_ABC_CLASS                          = ' ';                              // char 1
             C_VALUE                              = 0;                                // float	
             C_COST                               = 0;                                // float	
-            C_MRP_TYPE                           = getMrpType(ITMREF_0, TCLCOD_0, YLIVTRAS_0);                              // char 1
+            C_MRP_TYPE                           = getMrpType(ITMREF_0, TCLCOD_0, STDFLG_0);      // char 1
             C_POQ_DAYS                           = 0;                                // int	
             C_POQ_HOURS                          = 0;                                // int	
             C_DTF                                = 0;                                // int	
@@ -571,10 +573,10 @@ namespace SyncCyberPlan_lib
             }
             return ret;
         }
-        protected char getMrpType(string articolo,string categoria, string YLIVTRAS_0)
+        protected char getMrpType(string articolo,string categoria, int GestioneSage)
         {
             char ret = 'F'; //a fabbisogno
-            if (YLIVTRAS_0 == "PF")
+            if (GestioneSage == 4) //a commessa
             {
                 ret = 'C'; // a Commessa
             }
@@ -775,7 +777,7 @@ namespace SyncCyberPlan_lib
  ,B.BPSNUM_0
  ,Y.YPESMAT_0
  ,Y.YPASSOVIE_0
- 
+ ,I.STDFLG_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +

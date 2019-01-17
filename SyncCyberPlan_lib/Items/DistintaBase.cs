@@ -195,6 +195,7 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm)
         {
+            return;
             _logger.Info("Inizio inserimento distinte base fornitori");
             Dictionary<string, string> lista = Get_Lista_Articoli_Fornitori_Sage("SAURO");
 
@@ -257,7 +258,24 @@ C_WAREHOUSE_CODE = '" + __MAGAZZINO_INTERNO + @"' and C_BOM_CODE ='%%2%%' ";
              
         }
 
+        static private List<string> Get_Lista_Articoli_RI_Sage(bool mode, string dossier, string codice_like)
+        {
+            List<string> _lista_articoli_rilasciati_in_sage = new List<string>(30000);
 
+            //recupero totali accantonamenti per ogni articolo presente in ORR
+            string query = Articolo.SelectQuery(true, dossier, codice_like, null);
+
+            DBHelper2 db = DBHelper2.getSageDBHelper(dossier);
+            DbDataReader dtr = db.GetReaderSelectCommand(query);
+            object[] row = new object[dtr.FieldCount];
+
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                _lista_articoli_rilasciati_in_sage.Add(Item.GetDBV<string>(row[0]));
+            }
+            return _lista_articoli_rilasciati_in_sage;
+        }
         static private Dictionary<string, string> Get_Lista_Articoli_Fornitori_Sage(string dossier)
         {
             string db = "x3." + dossier;
