@@ -16,7 +16,7 @@ namespace SyncCyberPlan_lib
         public string TCLCOD_0;  //categoria len 5
         public string WEU_0;     //deve essere "GR" per WP
         public decimal ITMWEI_0; //peso per PLASTICA WP
-        public int STDFLG_0; //Modalità gestione (stock=3 a cmomessa=4)
+        public byte STDFLG_0; //Modalità gestione (stock=3 a cmomessa=4)
 
         //tabella YITMINF
         public string YLIVTRAS_0;  //tipo articolo
@@ -232,7 +232,7 @@ namespace SyncCyberPlan_lib
             BPSNUM_0    = getDBV<string>(row[78]);
             YPESMAT_0   = getDBV<decimal>(row[79]);        //peso materozza/impronta
             YPASSOVIE_0 = getDBV<string>(row[80]);
-            STDFLG_0    = getDBV<int>(row[81]);            //gestione a stock/commessa
+            STDFLG_0    = getDBV<byte>(row[81]);            //gestione a stock/commessa
 
 
 
@@ -548,6 +548,9 @@ namespace SyncCyberPlan_lib
 
         protected decimal getQtaMIN(string articolo, string categoria, string YLIVTRAS_0, decimal QTAMIN)
         {
+            if (getMrpType(ITMREF_0, TCLCOD_0, STDFLG_0) == 'C')
+                return 0;   //se l'articolo è a commessa va lasciato a zero
+
             decimal ret = QTAMIN;
             if (YLIVTRAS_0 == "PF")
             {
@@ -557,6 +560,9 @@ namespace SyncCyberPlan_lib
         }
         protected decimal getQtaMAX(string articolo, string categoria, string YLIVTRAS_0, decimal QTAMAX)
         {
+            if (getMrpType(ITMREF_0, TCLCOD_0, STDFLG_0) == 'C')
+                return 0;   //se l'articolo è a commessa va lasciato a zero
+
             decimal ret = QTAMAX;
             if (YLIVTRAS_0 == "PF")
             {
@@ -566,6 +572,9 @@ namespace SyncCyberPlan_lib
         }
         protected decimal getQtaLOT(string articolo, string categoria, string YLIVTRAS_0, decimal QTALOT)
         {
+            if (getMrpType(ITMREF_0, TCLCOD_0, STDFLG_0)=='C')
+                return 0;   //se l'articolo è a commessa va lasciato a zero
+
             decimal ret = QTALOT;
             if (YLIVTRAS_0 == "PF")
             {
