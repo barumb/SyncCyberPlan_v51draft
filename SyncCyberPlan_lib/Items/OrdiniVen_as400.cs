@@ -159,7 +159,7 @@ namespace SyncCyberPlan_lib
             + " WHERE " + _tabORR + ".ORRSTAT ='RI' "
                       + " and " + _tabORR + ".ORRSWBL <> 'S' "             //se = 'S' la riga è bloccata e non deve girarci l'MRP
                       + " and " + _tabORV + ".ORVSTAT ='RI' "
-                      + " and " + _tabORR + ".ORRTORD <> 'ORC' "                      
+                      //+ " and " + _tabORR + ".ORRTORD <> 'ORC' "                      
                     ;
 
 

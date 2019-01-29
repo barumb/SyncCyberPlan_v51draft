@@ -146,7 +146,8 @@ order by PQMCART
             string query = "SELECT " 
                 + _tabORR + ".ORRCART, Sum( " + _tabORR + ".ORRQACA) AS QTAALLOC " 
                 + " FROM "  + _tabORR 
-                + " WHERE " + _tabORR + ".ORRSTAT ='RI'  and "+ _tabORR + ".ORRTORD<>'ORC' "
+                + " WHERE " + _tabORR + ".ORRSTAT ='RI' " 
+                //+ " and " + _tabORR + ".ORRTORD<>'ORC' "
                 + " and " + _tabORR + ".ORRCART not like 'WU%'    \n"
                 + " GROUP BY ORRCART "
                 + " HAVING Sum(" + _tabORR + ".ORRQACA)<>0 "

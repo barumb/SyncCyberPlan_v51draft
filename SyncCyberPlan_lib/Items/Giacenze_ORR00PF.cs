@@ -80,7 +80,7 @@ namespace SyncCyberPlan_lib
                         + " AND " + _tabORV + ".ORVPROG = " + _tabORR + ".ORRPROG " + "\n"
                     + " WHERE " + _tabORR + ".ORRSTAT ='RI' "
                       //+ " and " + _tabORV + ".ORVSTAT ='RI' "
-                      + " and " + _tabORR + ".ORRTORD <> 'ORC' \n"
+                      //+ " and " + _tabORR + ".ORRTORD <> 'ORC' \n"
                       + " and " + _tabORR + ".ORRQACA <> 0     \n"
                       + " and " + _tabORR + ".ORRCART not like 'WU%'    \n"
                     ;
