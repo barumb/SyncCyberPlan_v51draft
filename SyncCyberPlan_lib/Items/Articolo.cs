@@ -33,6 +33,9 @@ namespace SyncCyberPlan_lib
         public string YCOLORE_0;          //Marchio
         public decimal YPESMAT_0;         //peso materozza/impronta
         public string YPASSOVIE_0;        //passo        
+        public int   YCONFQTA_0;         //qta per confezione
+        public int   YQTADECIMI_0;         //qta per confezione
+
 
 
         //tabella ITMFACILIT
@@ -229,20 +232,19 @@ namespace SyncCyberPlan_lib
             YALTEZZA_0 = getDBV<decimal>(row[69]);
             YMRPTAG1_0 = getDBV<string>(row[70]);
 
- 
-            YCORPOLUN_0 = getDBV<decimal>(row[71]);        //lunghezza x WP (?)
-            YCORPOPRO_0 = getDBV<decimal>(row[72]);        //profodità...
-            YMAT_0      = getDBV<string>(row[73]);         //per capire se è sth il WG
-            YTAGOEM_0   = getDBV<string>(row[74]);         //MArchio
-            WEU_0       = getDBV<string>(row[75]);         //deve essere GR per WP
-            ITMWEI_0    = getDBV<decimal>(row[76]);        //peso WP
-            YCOLORE_0   = getDBV<string>(row[77]);
-            BPSNUM_0    = getDBV<string>(row[78]);
-            YPESMAT_0   = getDBV<decimal>(row[79]);        //peso materozza/impronta
-            YPASSOVIE_0 = getDBV<string>(row[80]);
-            STDFLG_0    = getDBV<byte>(row[81]);            //gestione a stock/commessa
-
-
+            YCORPOLUN_0  = getDBV<decimal>(row[71]);        //lunghezza x WP (?)
+            YCORPOPRO_0  = getDBV<decimal>(row[72]);        //profodità...
+            YMAT_0       = getDBV<string>(row[73]);         //per capire se è sth il WG
+            YTAGOEM_0    = getDBV<string>(row[74]);         //MArchio
+            WEU_0        = getDBV<string>(row[75]);         //deve essere GR per WP
+            ITMWEI_0     = getDBV<decimal>(row[76]);        //peso WP
+            YCOLORE_0    = getDBV<string>(row[77]);
+            BPSNUM_0     = getDBV<string>(row[78]);
+            YPESMAT_0    = getDBV<decimal>(row[79]);        //peso materozza/impronta
+            YPASSOVIE_0  = getDBV<string>(row[80]);
+            STDFLG_0     = getDBV<byte>(row[81]);            //gestione a stock/commessa
+            YCONFQTA_0   = getDBV<int>(row[82]);
+            YQTADECIMI_0 = getDBV<int>(row[83]);
 
 
             C_CODE                               = EscapeSQL(ITMREF_0, 50);          // varchar 50
@@ -284,9 +286,9 @@ namespace SyncCyberPlan_lib
             C_SS_QTY                             = SAFSTO_0;                         // numeric	
             C_USE_UNPEGGED_QTY                   = 0;                                // bit	
             C_USER_INT01                         = YNUMVIE_0;                        // int	
-            C_USER_INT02                         = getMarchio(YTAGOEM_0);             // int	
-            C_USER_INT03                         = 0;                                // int	
-            C_USER_INT04                         = 0;                                // int	
+            C_USER_INT02                         = getMarchio(YTAGOEM_0);            // int	
+            C_USER_INT03                         = YCONFQTA_0;                       // int	Confez QTA
+            C_USER_INT04                         = YQTADECIMI_0;                     // int	Decimo di confezione
             C_USER_INT05                         = 0;                                // int	
             C_USER_INT06                         = 0;                                // int	
             C_USER_INT07                         = 0;                                // int	
@@ -1085,6 +1087,8 @@ namespace SyncCyberPlan_lib
  ,Y.YPESMAT_0
  ,Y.YPASSOVIE_0
  ,I.STDFLG_0
+ ,Y.YCONFQTA_0
+ ,Y.YQTADECIMI_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +

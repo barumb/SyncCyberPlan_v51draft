@@ -24,6 +24,7 @@ namespace SyncCyberPlan_lib
         public DateTime? _YATTDATSAU_0;  //data riattivazione MArchio Sauro
         public DateTime? _YATTDATTYC_0;  //data riattivazione MArchio Tyco
         public DateTime? _YATTDATHAR_0;  //data riattivazione MArchio Harting
+        public char _YATTVP_0;  //flag vie/pezzi
 
         public Attrezzature( )//: base("CYB_TOOL")
         {
@@ -50,7 +51,7 @@ namespace SyncCyberPlan_lib
             _YATTDATSAU_0 = getSageDate((DateTime)row[13]);
             _YATTDATTYC_0 = getSageDate((DateTime)row[14]);
             _YATTDATHAR_0 = getSageDate((DateTime)row[15]);
-
+            _YATTVP_0     = (row[16] == System.DBNull.Value) ? ' ' : getDBV<string>(row[16])[0];
 
 
 
@@ -107,8 +108,8 @@ namespace SyncCyberPlan_lib
             C_USER_REAL03                        = 0;                                // float	
             C_USER_REAL04                        = 0;                                // float	
             C_USER_REAL05                        = 0;                                // float	
-            C_USER_CHAR01                        = ' ';                              // char 1  Categoria pe morsetti 
-            C_USER_CHAR02                        = ' ';                              // char 1  Piega o non pieag per FILO
+            C_USER_CHAR01                        = _YATTVP_0;                        // char 1  Flag Vie/Pezzi       ///////mai fatto -> Categoria pe morsetti 
+            C_USER_CHAR02                        = ' ';                              // char 1  ////////Piega o non pieag per FILO
             C_USER_CHAR03                        = ' ';                              // char 1
             C_USER_CHAR04                        = ' ';                              // char 1
             C_USER_CHAR05                        = ' ';                              // char 1
@@ -169,6 +170,7 @@ namespace SyncCyberPlan_lib
                      ,S.YATTDATSAU_0
                      ,S.YATTDATTYC_0
                      ,S.YATTDATHAR_0                     
+                     ,S.YATTVP_0
                       from " + db + ".YPRDATT S \n" +
                       " where S.YATTENAFLG_0=2 "
               ;
