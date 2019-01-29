@@ -17,7 +17,8 @@ namespace SyncCyberPlan_lib
         {
             DBHelper2 db = DBHelper2.getCyberDBHelper();
             string command = "UPDATE [CyberPlanFrontiera].[dbo].[TRANSFER_STATUS] " 
-                                          + " SET [STATUS] = '" + stato + "'" 
+                                          + " SET [STATUS] = '" + stato + "' ,"
+                                          + " TIMESTAMP = '" + System.DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "'"
                                           + " WHERE ID='TR_STATUS'  ";
             _logger.Info("start execution");
 

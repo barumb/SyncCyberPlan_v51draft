@@ -72,7 +72,7 @@ namespace SyncCyberPlan_lib
             C_WIDTH                              = 0;                                // real 
             C_SCRAP_TYPE                         = ' ';                              // char 1
             C_PROCESS_SCRAP                      = (double)0;                        // real 
-            C_STD_WAREHOUSE_CODE                 = EscapeSQL("", 20);                // varchar 20
+            C_STD_WAREHOUSE_CODE                 = EscapeSQL(__MAGAZZINO_INTERNO, 20);                // varchar 20
             C_ITEM_GROUP                         = "__TOOL__";                           // varchar 8
             C_MANAGER                            = "";                               // varchar 20
             C_HOST_CODE                          = "";                               // varchar 50

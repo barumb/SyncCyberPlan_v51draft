@@ -7,6 +7,7 @@ namespace SyncCyberPlan_lib
 {
     public class Articolo: Item
     {
+        protected string __TRASH__ = "TRASH";
         //tabella ITMMASTER
         public string ITMREF_0;  //codice articolo
         public string ITMDES1_0;
@@ -150,6 +151,13 @@ namespace SyncCyberPlan_lib
         public override void Init(object[] row)
         {
             ITMREF_0 = getDBV<string>(row[0]);
+
+            if (ITMREF_0 == "MSG20091-00001")
+            {
+                ;
+            }
+
+
             ITMDES1_0 = getDBV<string>(row[1]);
             STU_0 = getDBV<string>(row[2]);
             PUU_0 = getDBV<string>(row[3]);
@@ -318,7 +326,13 @@ namespace SyncCyberPlan_lib
             C_USER_DATE04                        = null;                             // datetime	
         }
         public override DataRow GetCyberRow()
-        {  
+        {
+            if (REOCOD_0 == 0)
+            {
+                //se REOCOD_0==0 (Tipo proposta dell'articolo sito, significa che NON c'è l'articolo sito ITALIA
+                __bulk_message += System.Environment.NewLine + System.Environment.NewLine + "articolo " + ITMREF_0 + " senza Articolo-sito ITALIA";
+                return null;
+            }
             DataRow _tablerow = _dataTable.NewRow();
 
             _tablerow[0]  = C_CODE              ;              // varchar 50		 C_CODE 
@@ -681,8 +695,10 @@ namespace SyncCyberPlan_lib
             else if(!int.TryParse(categoria.Substring(0,1), out i))  //se non inizia con un numero
                 return "ASSE";
 
-            return categoria.Substring(0,4);
-            
+            //return categoria.Substring(0,4);
+            return __TRASH__;
+
+
         }
 
         public override void LastAction(ref DBHelper2 cm)
