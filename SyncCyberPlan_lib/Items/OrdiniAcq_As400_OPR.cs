@@ -18,8 +18,8 @@ namespace SyncCyberPlan_lib
         public decimal MFHQTRC;
         public decimal MFHDCRE; //DATA
         public string  MFHSTAT;
-        public decimal MFVDINI;  //DATA
-        public decimal MFVDEND;  //DATA
+        public decimal MFVDINI; // DATA
+        public decimal MFVDEND; // DATA
         public string  MFVSTAV; // stato riga  MFVSTAV  se =ST ordine in corso, se vuoto ordine in attesa
         public decimal MFHQTPR; // qta prodotta
         public decimal MFVQTSC; //qta scartata

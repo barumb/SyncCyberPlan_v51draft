@@ -19,6 +19,13 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
+            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
+            return;
+
+            EseguiTutto();
+            return;
+
             Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME ITM COD=MSB02005-0%".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
@@ -313,7 +320,21 @@ namespace Console
             //_logger.Info("END at   " + DateTime.Now.ToString() + " ----------------");
             _logger.Info("END ---------------------------------");
         }
-
+        static void EseguiTutto()
+        {
+            Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ITM ".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME BPR".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM ".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME OPR ".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME GIAC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME DISBAS".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME DEM".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
+        }
 
         static public bool SetLASTDAYS(string numstr)
         {

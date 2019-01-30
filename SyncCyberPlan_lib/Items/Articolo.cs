@@ -58,6 +58,7 @@ namespace SyncCyberPlan_lib
         public decimal QUALTI_0;    // Lead time controllo qualità
         public decimal OFS_0;       // Lead time Acquisto
         public int[] LOCNUM = new int[15]; // descrizione locazione
+        public string YWCR_0;   //Reparto (centro di carico)
 
         //tabella ITMBPS
         public string BPSNUM_0;
@@ -245,6 +246,7 @@ namespace SyncCyberPlan_lib
             STDFLG_0     = getDBV<byte>(row[81]);            //gestione a stock/commessa
             YCONFQTA_0   = getDBV<int>(row[82]);
             YQTADECIMI_0 = getDBV<int>(row[83]);
+            YWCR_0       = getDBV<string>(row[84]);   //reaprto (CdC)
 
 
             C_CODE                               = EscapeSQL(ITMREF_0, 50);          // varchar 50
@@ -308,7 +310,7 @@ namespace SyncCyberPlan_lib
             C_USER_FLAG01                        = 0;                                // bit	
             C_USER_FLAG02                        = 0;                                // bit	
             C_USER_FLAG03                        = 0;                                // bit	
-            C_USER_STRING01                      = getReparto(TCLCOD_0);             // varchar 29
+            C_USER_STRING01                      = getReparto(YWCR_0);             // varchar 29
             C_USER_STRING02                      = EscapeSQL(YCOLORE_0, 29);         // varchar 29
             C_USER_STRING03                      = EscapeSQL("", 29);                // varchar 29  SEZIONE per FILO
             C_USER_STRING04                      = EscapeSQL(YPASSOVIE_0, 29);       // varchar 29  passo
@@ -329,7 +331,7 @@ namespace SyncCyberPlan_lib
         }
         public override DataRow GetCyberRow()
         {
-            if (REOCOD_0 == 0)
+            if (REOCOD_0 == 0 && C_ITEM_GROUP != Attrezzature.__TOOL)
             {
                 //se REOCOD_0==0 (Tipo proposta dell'articolo sito, significa che NON c'è l'articolo sito ITALIA
                 __bulk_message += System.Environment.NewLine + System.Environment.NewLine + "articolo " + ITMREF_0 + " senza Articolo-sito ITALIA";
@@ -685,304 +687,28 @@ namespace SyncCyberPlan_lib
             }
             return ret;
         }
-        protected string getReparto(string categoria)
+        protected string getReparto(string YWCR)
         {
-            if (
- ITMREF_0 == "WP5382-VVH"
-|| ITMREF_0 == "WP5659-MVH"
-|| ITMREF_0 == "WP5660-MVH"
-|| ITMREF_0 == "WP5661-MVH"
-|| ITMREF_0 == "WP5662-MVH"
-|| ITMREF_0 == "WP5663-MVH"
-|| ITMREF_0 == "WP5664-MVH"
-|| ITMREF_0 == "WP5665-MVH"
-|| ITMREF_0 == "WP5666-MVH"
-|| ITMREF_0 == "WP5667-MVH"
-|| ITMREF_0 == "WP5668-MVH"
-|| ITMREF_0 == "WP5669-MVH"
-|| ITMREF_0 == "WP5670-MVH"
-|| ITMREF_0 == "WP5671-MVH"
-|| ITMREF_0 == "WP5672-MVH"
-|| ITMREF_0 == "WP5673-MVH"
-|| ITMREF_0 == "WP5674-MVH"
-|| ITMREF_0 == "WP5680-MVH"
-|| ITMREF_0 == "WP5681-MNH"
-|| ITMREF_0 == "WP5681-MVH"
-|| ITMREF_0 == "WP5682-MVH"
-|| ITMREF_0 == "WP5683-MVH"
-|| ITMREF_0 == "WP5684-MVH"
-|| ITMREF_0 == "WP5685-MVH"
-|| ITMREF_0 == "WP5686-MVH"
-|| ITMREF_0 == "WP5687-MVH"
-|| ITMREF_0 == "WP5688-MVH"
-|| ITMREF_0 == "WP5689-MVH"
-|| ITMREF_0 == "WP5690-MVH"
-|| ITMREF_0 == "WP5691-MVH"
-|| ITMREF_0 == "WP5692-MVH"
-|| ITMREF_0 == "WP5693-MVH"
-|| ITMREF_0 == "WP5694-MVH"
-|| ITMREF_0 == "WP9517-MV"
-|| ITMREF_0 == "WP9518-MV"
-|| ITMREF_0 == "WP9519-MV"
-|| ITMREF_0 == "WP9520-MV"
-|| ITMREF_0 == "WP9521-MV"
-|| ITMREF_0 == "WP9522-MV"
-|| ITMREF_0 == "WP9523-MV"
-|| ITMREF_0 == "WP9524-MV"
-|| ITMREF_0 == "WP9525-MV"
-|| ITMREF_0 == "WP9526-MV"
-|| ITMREF_0 == "WP9527-MV"
-|| ITMREF_0 == "WP9528-MV"
-|| ITMREF_0 == "WP9529-MV"
-|| ITMREF_0 == "WP9530-MV"
-|| ITMREF_0 == "WP9531-MV"
-|| ITMREF_0 == "WP9532-MV"
-|| ITMREF_0 == "WP9694-MVH"
-|| ITMREF_0 == "WP9695-MVH"
-|| ITMREF_0 == "WP9696-MVH"
-|| ITMREF_0 == "WP9697-MVH"
-|| ITMREF_0 == "WP6108-MVH"
-|| ITMREF_0 == "WP6109-MVH"
-|| ITMREF_0 == "WP6110-MVH"
-|| ITMREF_0 == "WP6111-MVH"
-|| ITMREF_0 == "WP5909-ANH"
-|| ITMREF_0 == "WP5910-ANH"
-|| ITMREF_0 == "WP5911-ANH"
-|| ITMREF_0 == "WP5912-ANH"
-|| ITMREF_0 == "WP5909-MNH"
-|| ITMREF_0 == "WP5910-MNH"
-|| ITMREF_0 == "WP5911-MNH"
-|| ITMREF_0 == "WP5912-MNH"
-|| ITMREF_0 == "WP5382-MVH"
-|| ITMREF_0 == "WP5383-MVH"
-|| ITMREF_0 == "WP5384-MVH"
-|| ITMREF_0 == "WP5385-MVH"
-|| ITMREF_0 == "WP5395-MVH"
-|| ITMREF_0 == "WP5396-MVH"
-|| ITMREF_0 == "WP9816-MVH"
-|| ITMREF_0 == "WP9817-MVH"
-|| ITMREF_0 == "WP9818-MVH"
-|| ITMREF_0 == "WP9816-VVH"
-|| ITMREF_0 == "WP9817-VVH"
-|| ITMREF_0 == "WP9818-VVH"
-|| ITMREF_0 == "WP9819-VVH"
-|| ITMREF_0 == "WP9817-PVH"
-|| ITMREF_0 == "WP9818-PVH"
-|| ITMREF_0 == "WP9819-PVH"
-|| ITMREF_0 == "WP6343-MNH"
-|| ITMREF_0 == "WP6344-MNH"
-|| ITMREF_0 == "WPH0730-ANH"
-|| ITMREF_0 == "WPH0731-ANH"
-|| ITMREF_0 == "WPH0732-ANH"
-|| ITMREF_0 == "WPH0733-ANH"
-|| ITMREF_0 == "WP5394-AVH"
-|| ITMREF_0 == "WP5395-AVH"
-|| ITMREF_0 == "WP5396-AVH"
-|| ITMREF_0 == "WP5397-AVH"
-|| ITMREF_0 == "WP5394-MVH"
-|| ITMREF_0 == "WP5397-MVH"
-|| ITMREF_0 == "WP5397-PVH"
-|| ITMREF_0 == "WP5397-VVH"
-|| ITMREF_0 == "WP9816-PVH"
-|| ITMREF_0 == "WP9819-MVH"
-|| ITMREF_0 == "WPSB150H0-0001"
-|| ITMREF_0 == "WP5457-ANH"
-|| ITMREF_0 == "WP5654-MVH"
-|| ITMREF_0 == "WP5655-MVH"
-|| ITMREF_0 == "WP5656-MVH"
-|| ITMREF_0 == "WP5657-MVH"
-|| ITMREF_0 == "WP5658-MVH"
-|| ITMREF_0 == "WP5675-MA"
-|| ITMREF_0 == "WP5676-MAH"
-|| ITMREF_0 == "WP5676-MNH"
-|| ITMREF_0 == "WP5676-MVH"
-|| ITMREF_0 == "WP5677-MVH"
-|| ITMREF_0 == "WP5678-MVH"
-|| ITMREF_0 == "WP5679-MVH"
-|| ITMREF_0 == "WP9533-MV"
-|| ITMREF_0 == "WP9554-MV"
-|| ITMREF_0 == "WP9555-MV"
-|| ITMREF_0 == "WP9556-MV"
-|| ITMREF_0 == "WP9557-MV"
-|| ITMREF_0 == "WP9558-MV"
-|| ITMREF_0 == "WP9559-MV"
-|| ITMREF_0 == "WP9560-MV"
-|| ITMREF_0 == "WP9561-MV"
-|| ITMREF_0 == "WP9562-MV"
-|| ITMREF_0 == "WP9563-MV"
-|| ITMREF_0 == "WP5695-MVH"
-|| ITMREF_0 == "WP5696-MVH"
-|| ITMREF_0 == "WP5697-MVH"
-|| ITMREF_0 == "WP5698-MVH"
-|| ITMREF_0 == "WP5699-MVH"
-|| ITMREF_0 == "WP5700-MVH"
-|| ITMREF_0 == "WP5702-MAH"
-|| ITMREF_0 == "WP5702-MNH"
-|| ITMREF_0 == "WP5702-MVH"
-|| ITMREF_0 == "WP5703-MVH"
-|| ITMREF_0 == "WP5704-MVH"
-|| ITMREF_0 == "WP5705-MVH"
-|| ITMREF_0 == "WP6106-MVH"
-|| ITMREF_0 == "WP6107-MVH"
-|| ITMREF_0 == "WP9692-MVH"
-|| ITMREF_0 == "WP9693-MVH"
-|| ITMREF_0 == "WP9512-MV"
-|| ITMREF_0 == "WP9514-MV"
-|| ITMREF_0 == "WP9515-MV"
-|| ITMREF_0 == "WP9516-MV"
-|| ITMREF_0 == "WP6472-MVH"
-|| ITMREF_0 == "WP4886-MV"
-|| ITMREF_0 == "WP5381-YVH"
-|| ITMREF_0 == "WPH0739-MNH"
-|| ITMREF_0 == "WPH0740-MNH"
-|| ITMREF_0 == "WPH0741-MNH"
-|| ITMREF_0 == "WPH0742-MNH"
-|| ITMREF_0 == "WPH0743-MNH"
-|| ITMREF_0 == "WPH0744-MNH"
-|| ITMREF_0 == "WP6370-MV"
-|| ITMREF_0 == "WP6371-MV"
-|| ITMREF_0 == "WP6372-MV"
-|| ITMREF_0 == "WP6374-MV"
-|| ITMREF_0 == "WP6375-MV"
-|| ITMREF_0 == "WP6379-MV"
-|| ITMREF_0 == "WP6382-MV"
-|| ITMREF_0 == "WP6383-MV"
-|| ITMREF_0 == "WP6384-MV"
-|| ITMREF_0 == "WP6385-MV"
-|| ITMREF_0 == "WP6387-MV"
-|| ITMREF_0 == "WP6388-MV"
-|| ITMREF_0 == "WP6389-MV"
-|| ITMREF_0 == "WP6390-MV"
-|| ITMREF_0 == "WP6391-MV"
-|| ITMREF_0 == "WP6392-MV"
-|| ITMREF_0 == "WP6393-MV"
-|| ITMREF_0 == "WP9536-MVH"
-|| ITMREF_0 == "WP9535-MVH"
-|| ITMREF_0 == "WP9538-MVH"
-|| ITMREF_0 == "WP9539-MVH"
-|| ITMREF_0 == "WP9540-MVH"
-|| ITMREF_0 == "WP9541-MVH"
-|| ITMREF_0 == "WP9542-MVH"
-|| ITMREF_0 == "WP9543-MVH"
-|| ITMREF_0 == "WP9544-MVH"
-|| ITMREF_0 == "WP9545-MVH"
-|| ITMREF_0 == "WP9546-MVH"
-|| ITMREF_0 == "WP9547-MVH"
-|| ITMREF_0 == "WP9548-MVH"
-|| ITMREF_0 == "WP9549-MVH"
-|| ITMREF_0 == "WP9550-MVH"
-|| ITMREF_0 == "WP9551-MVH"
-|| ITMREF_0 == "WP9552-MVH"
-|| ITMREF_0 == "WP9553-MVH"
-|| ITMREF_0 == "WP6458-MVH"
-|| ITMREF_0 == "WP6461-MVH"
-|| ITMREF_0 == "WP6463-MVH"
-|| ITMREF_0 == "WP6464-MVH"
-|| ITMREF_0 == "WP6465-MVH"
-|| ITMREF_0 == "WP6467-MVH"
-|| ITMREF_0 == "WP6468-MVH"
-|| ITMREF_0 == "WP6469-MVH"
-|| ITMREF_0 == "WP6470-MVH"
-|| ITMREF_0 == "WP6471-MVH"
-|| ITMREF_0 == "WP6473-MVH"
-|| ITMREF_0 == "WP6474-MVH"
-|| ITMREF_0 == "WP6486-MVH"
-|| ITMREF_0 == "WP6487-MVH"
-|| ITMREF_0 == "WP6488-MVH"
-|| ITMREF_0 == "WP6489-MVH"
-|| ITMREF_0 == "WP6490-MVH"
-|| ITMREF_0 == "WP6491-MVH"
-|| ITMREF_0 == "WP6492-MVH"
-|| ITMREF_0 == "WP6493-MVH"
-|| ITMREF_0 == "WP6494-MVH"
-|| ITMREF_0 == "WP6495-MVH"
-|| ITMREF_0 == "WP6496-MVH"
-|| ITMREF_0 == "WP6497-MVH"
-|| ITMREF_0 == "WP6504-MVH"
-|| ITMREF_0 == "WP6511-MVH"
-|| ITMREF_0 == "WP6369-MN"
-|| ITMREF_0 == "WP6369-MV"
-|| ITMREF_0 == "WP6370-MN"
-|| ITMREF_0 == "WP6371-MS"
-|| ITMREF_0 == "WP6376-MN"
-|| ITMREF_0 == "WP6376-MS"
-|| ITMREF_0 == "WP6376-MV"
-|| ITMREF_0 == "WP6377-MN"
-|| ITMREF_0 == "WP6377-MV"
-|| ITMREF_0 == "WP6378-MV"
-|| ITMREF_0 == "WP6380-MV"
-|| ITMREF_0 == "WP6381-MV"
-|| ITMREF_0 == "WP6386-MV"
-|| ITMREF_0 == "WP5380-MVH"
-|| ITMREF_0 == "WP5381-MVH"
-|| ITMREF_0 == "WP6373-MV"
-|| ITMREF_0 == "WP9513-MV"
-|| ITMREF_0 == "WP9534-MV"
-|| ITMREF_0 == "WP9537-MV"
-|| ITMREF_0 == "WP6373-MN"
-|| ITMREF_0 == "WP6457-MVH"
-|| ITMREF_0 == "WP6459-MVH"
-|| ITMREF_0 == "WP6460-MVH"
-|| ITMREF_0 == "WP6462-MVH"
-|| ITMREF_0 == "WP6466-MVH"
-|| ITMREF_0 == "WP6510-MVH"
-|| ITMREF_0 == "WP6478-MVH"
-|| ITMREF_0 == "WP6479-MVH"
-|| ITMREF_0 == "WP6480-MVH"
-|| ITMREF_0 == "WP6481-MVH"
-|| ITMREF_0 == "WP6482-MVH"
-|| ITMREF_0 == "WP6483-MVH"
-|| ITMREF_0 == "WP6484-MVH"
-|| ITMREF_0 == "WP6485-MVH"
-|| ITMREF_0 == "WP6508-MVH"
-|| ITMREF_0 == "WP6509-MVH"
-|| ITMREF_0 == "WP9513-MVH"
-|| ITMREF_0 == "WP9534-MVH"
-|| ITMREF_0 == "WP6501-MVH"
-|| ITMREF_0 == "WP6502-MVH"
-|| ITMREF_0 == "WP6503-MVH"
-|| ITMREF_0 == "WP6478-MNH"
-|| ITMREF_0 == "WP6478-MAH"
-|| ITMREF_0 == "WP6508-MNH"
-|| ITMREF_0 == "WP6508-MAH"
-|| ITMREF_0 == "WP9537-MVH"
-|| ITMREF_0 == "WP4886-MV01"
-|| ITMREF_0 == "WP2969-0NH01"
-|| ITMREF_0 == "WP2969-0NH02"
-|| ITMREF_0 == "WP4959-VNH01"
-|| ITMREF_0 == "WP4285-MV01"
-|| ITMREF_0 == "WP2381-MV01"
-|| ITMREF_0 == "WP4260-MNH02"
-|| ITMREF_0 == "WP5132-ANH02"
-|| ITMREF_0 == "WP2260-MN01"
-|| ITMREF_0 == "WP2262-MN01"
-|| ITMREF_0 == "WP6369-MV01"
-|| ITMREF_0 == "WP3727-MG01"
-|| ITMREF_0 == "WP3727-MG02"
-|| ITMREF_0 == "WP3727-MG03"
-|| ITMREF_0 == "WP3727-MG04"
-|| ITMREF_0 == "WP2381-MS01"
-|| ITMREF_0 == "WP2381-MV02"
-|| ITMREF_0 == "WP4292-ANH02"
-|| ITMREF_0 == "WP5132-ANH01"
-|| ITMREF_0 == "WP4292-ANH01"
-|| ITMREF_0 == "WP4260-MNH01"
-) return "ASSE";
+            if (string.IsNullOrWhiteSpace(YWCR))
+            {
+                return __TRASH__;
+            }
+            else
+            {
+                return YWCR;
+            }
 
-            int i;
-            if (categoria.Trim()=="3PLA" || categoria.Trim() == "WP")
-                return "PLAS";
-            else if (categoria.Trim() == "3MET" || categoria.Trim() == "WM")
-                return "MORS";
-            else if (categoria.Trim() == "3SEM")
-                return "ASSE";
-            else if(!int.TryParse(categoria.Substring(0,1), out i))  //se non inizia con un numero
-                return "ASSE";
+            //int i;
+            //if (categoria.Trim()=="3PLA" || categoria.Trim() == "WP")
+            //    return "PLAS";
+            //else if (categoria.Trim() == "3MET" || categoria.Trim() == "WM")
+            //    return "MORS";
+            //else if (categoria.Trim() == "3SEM")
+            //    return "ASSE";
+            //else if(!int.TryParse(categoria.Substring(0,1), out i))  //se non inizia con un numero
+            //    return "ASSE";
 
             //return categoria.Substring(0,4);
-            return __TRASH__;
-
-
         }
 
         public override void LastAction(ref DBHelper2 cm)
@@ -1089,6 +815,7 @@ namespace SyncCyberPlan_lib
  ,I.STDFLG_0
  ,Y.YCONFQTA_0
  ,Y.YQTADECIMI_0
+ ,F.YWCR_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +

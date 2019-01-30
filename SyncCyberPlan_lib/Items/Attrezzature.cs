@@ -7,6 +7,8 @@ namespace SyncCyberPlan_lib
 {
     public class Attrezzature : Articolo
     {
+        static public string __TOOL = "__TOOL__";
+
         public string _YATTCOD_0; 
         public string _YATTDES_0;        
         public short    _QTY;  //numero di attrezzature (stesso codice) presenti
@@ -74,7 +76,7 @@ namespace SyncCyberPlan_lib
             C_SCRAP_TYPE                         = ' ';                              // char 1
             C_PROCESS_SCRAP                      = (double)0;                        // real 
             C_STD_WAREHOUSE_CODE                 = EscapeSQL(__MAGAZZINO_INTERNO, 20);                // varchar 20
-            C_ITEM_GROUP                         = "__TOOL__";                           // varchar 8
+            C_ITEM_GROUP                         = __TOOL;                           // varchar 8
             C_MANAGER                            = "";                               // varchar 20
             C_HOST_CODE                          = "";                               // varchar 50
             C_SUPPLIER_CODE                      = EscapeSQL("", 30);                // varchar 30
