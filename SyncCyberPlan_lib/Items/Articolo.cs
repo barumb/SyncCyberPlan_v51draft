@@ -52,13 +52,14 @@ namespace SyncCyberPlan_lib
         public decimal REOTSD_0;    // punto di riordino
         public decimal SAFSTO_0;    // stock sicurezza
         public decimal MAXSTO_0;    // stock massimo
-        public decimal REOMINQTY_0; // lotto tecnico
-        public decimal MFGLOTQTY_0; // lotto economico
+        public decimal REOMINQTY_0; // lotto economico
+        public decimal MFGLOTQTY_0; // lotto tecnico
         public decimal MFGLTI_0;    // Lead time di produzione
         public decimal QUALTI_0;    // Lead time controllo qualità
         public decimal OFS_0;       // Lead time Acquisto
         public int[] LOCNUM = new int[15]; // descrizione locazione
         public string YWCR_0;   //Reparto (centro di carico)
+        public decimal YQTAPREANT_0;  //Qta prelievo anticipato, inserito apposta per mrp
 
         //tabella ITMBPS
         public string BPSNUM_0;
@@ -144,7 +145,8 @@ namespace SyncCyberPlan_lib
         public DateTime? C_USER_DATE03	; // datetime	
         public DateTime? C_USER_DATE04	; // datetime	
         public DateTime? C_USER_DATE05	; // datetime	
-        #endregion 
+        public float C_PROD_LOT_QTY;    //qta prelievo anticipato per overlap ordini
+        #endregion
 
 
         public Articolo(): base("CYB_ITEM")
@@ -209,8 +211,8 @@ namespace SyncCyberPlan_lib
             REOTSD_0 = getDBV<decimal>(row[45]);
             SAFSTO_0 = getDBV<decimal>(row[46]);
             MAXSTO_0 = getDBV<decimal>(row[47]);
-            REOMINQTY_0 = getDBV<decimal>(row[48]); //lotto tecnico
-            MFGLOTQTY_0 = getDBV<decimal>(row[49]);  //lotto economico
+            REOMINQTY_0 = getDBV<decimal>(row[48]); //lotto economico
+            MFGLOTQTY_0 = getDBV<decimal>(row[49]);  //lotto tecnico
             MFGLTI_0 = getDBV<decimal>(row[50]);  // Lead time di produzione
             QUALTI_0 = getDBV<decimal>(row[51]);  // Lead time controllo qualità
             OFS_0 = getDBV<decimal>(row[52]); // Lead time Acquisto
@@ -246,7 +248,8 @@ namespace SyncCyberPlan_lib
             STDFLG_0     = getDBV<byte>(row[81]);            //gestione a stock/commessa
             YCONFQTA_0   = getDBV<int>(row[82]);
             YQTADECIMI_0 = getDBV<int>(row[83]);
-            YWCR_0       = getDBV<string>(row[84]);   //reaprto (CdC)
+            YWCR_0       = getDBV<string>(row[84]);   //reparto (CdC)
+            YQTAPREANT_0 = getDBV<decimal>(row[85]);
 
 
             C_CODE                               = EscapeSQL(ITMREF_0, 50);          // varchar 50
@@ -415,9 +418,10 @@ namespace SyncCyberPlan_lib
             _tablerow[73] = C_USER_COLOR02          ;         // int			 C_USER_COLOR02 
             _tablerow[74] = DateTime_toCyb(C_USER_DATE01);    // datetime			 C_USER_DATE01 
             _tablerow[75] = DateTime_toCyb(C_USER_DATE02);    // datetime			 C_USER_DATE02 
-            _tablerow[76] = DateTime_toCyb(C_USER_DATE05);    // datetime			 C_USER_DATE05 
-            _tablerow[77] = DateTime_toCyb(C_USER_DATE03);    // datetime			 C_USER_DATE03 
-            _tablerow[78] = DateTime_toCyb(C_USER_DATE04);    // datetime			 C_USER_DATE04 
+            _tablerow[76] = DateTime_toCyb(C_USER_DATE03);    // datetime			 C_USER_DATE03 
+            _tablerow[77] = DateTime_toCyb(C_USER_DATE04);    // datetime			 C_USER_DATE04 
+            _tablerow[78] = DateTime_toCyb(C_USER_DATE05);    // datetime			 C_USER_DATE05 
+            _tablerow[79] = YQTAPREANT_0           ;          //float Qta prelievo anticipato
 
             return _tablerow;
         }
@@ -555,13 +559,14 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_USER_STRING09",  typeof(string));          // varchar 29
             _dataTable.Columns.Add("C_USER_STRING10",  typeof(string));          // varchar 29
             _dataTable.Columns.Add("C_USER_NOTE01",  typeof(string));            // varchar 99
-            _dataTable.Columns.Add("C_USER_COLOR01",  typeof(int));             // int	
-            _dataTable.Columns.Add("C_USER_COLOR02",  typeof(int));             // int	
+            _dataTable.Columns.Add("C_USER_COLOR01",  typeof(int));              // int	
+            _dataTable.Columns.Add("C_USER_COLOR02",  typeof(int));              // int	
             _dataTable.Columns.Add("C_USER_DATE01",  typeof(DateTime));          // datetime	
             _dataTable.Columns.Add("C_USER_DATE02",  typeof(DateTime));          // datetime	
-            _dataTable.Columns.Add("C_USER_DATE05",  typeof(DateTime));          // datetime	
             _dataTable.Columns.Add("C_USER_DATE03",  typeof(DateTime));          // datetime	
             _dataTable.Columns.Add("C_USER_DATE04",  typeof(DateTime));          // datetime	
+            _dataTable.Columns.Add("C_USER_DATE05",  typeof(DateTime));          // datetime	
+            _dataTable.Columns.Add("C_PROD_LOT_QTY", typeof(float));             // qta prelievo anticipato per overlap ordini	
         }
 
         protected decimal getQtaMIN(string articolo, string categoria, string YLIVTRAS_0, decimal QTAMIN)
@@ -816,6 +821,7 @@ namespace SyncCyberPlan_lib
  ,Y.YCONFQTA_0
  ,Y.YQTADECIMI_0
  ,F.YWCR_0
+ ,F.YQTAPREANT_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +
