@@ -331,6 +331,7 @@ namespace SyncCyberPlan_lib
             C_USER_DATE05                        = null;                             // datetime	
             C_USER_DATE03                        = null;                             // datetime	
             C_USER_DATE04                        = null;                             // datetime	
+            C_PROD_LOT_QTY                       = (float)YQTAPREANT_0;
         }
         public override DataRow GetCyberRow()
         {
@@ -380,48 +381,49 @@ namespace SyncCyberPlan_lib
             _tablerow[35] = C_ROP_QTY               ;         // numeric			 C_ROP_QTY 
             _tablerow[36] = C_SS_QTY                ;         // numeric			 C_SS_QTY 
             _tablerow[37] = C_USE_UNPEGGED_QTY      ;         // bit			 C_USE_UNPEGGED_QTY 
-            _tablerow[38] = C_USER_INT01            ;         // int			 C_USER_INT01 
-            _tablerow[39] = C_USER_INT02            ;         // int			 C_USER_INT02 
-            _tablerow[40] = C_USER_INT03            ;         // int			 C_USER_INT03 
-            _tablerow[41] = C_USER_INT04            ;         // int			 C_USER_INT04 
-            _tablerow[42] = C_USER_INT05            ;         // int			 C_USER_INT05 
-            _tablerow[43] = C_USER_INT06            ;         // int			 C_USER_INT06 
-            _tablerow[44] = C_USER_INT07            ;         // int			 C_USER_INT07 
-            _tablerow[45] = C_USER_INT08            ;         // int			 C_USER_INT08 
-            _tablerow[46] = C_USER_INT09            ;         // int			 C_USER_INT09 
-            _tablerow[47] = C_USER_INT10            ;         // int			 C_USER_INT10 
-            _tablerow[48] = C_USER_REAL01           ;         // float			 C_USER_REAL01 
-            _tablerow[49] = C_USER_REAL02           ;         // float			 C_USER_REAL02 
-            _tablerow[50] = C_USER_REAL03           ;         // float			 C_USER_REAL03 
-            _tablerow[51] = C_USER_REAL04           ;         // float			 C_USER_REAL04 
-            _tablerow[52] = C_USER_REAL05           ;         // float			 C_USER_REAL05 
-            _tablerow[53] = C_USER_CHAR01           ;         // char 1		 C_USER_CHAR01 
-            _tablerow[54] = C_USER_CHAR02           ;         // char 1		 C_USER_CHAR02 
-            _tablerow[55] = C_USER_CHAR03           ;         // char 1		 C_USER_CHAR03 
-            _tablerow[56] = C_USER_CHAR04           ;         // char 1		 C_USER_CHAR04 
-            _tablerow[57] = C_USER_CHAR05           ;         // char 1		 C_USER_CHAR05 
-            _tablerow[58] = C_USER_FLAG01           ;         // bit			 C_USER_FLAG01 
-            _tablerow[59] = C_USER_FLAG02           ;         // bit			 C_USER_FLAG02 
-            _tablerow[60] = C_USER_FLAG03           ;         // bit			 C_USER_FLAG03 
-            _tablerow[61] = C_USER_STRING01         ;         // varchar 29		 C_USER_STRING01 
-            _tablerow[62] = C_USER_STRING02         ;         // varchar 29		 C_USER_STRING02 
-            _tablerow[63] = C_USER_STRING03         ;         // varchar 29		 C_USER_STRING03 
-            _tablerow[64] = C_USER_STRING04         ;         // varchar 29		 C_USER_STRING04 
-            _tablerow[65] = C_USER_STRING05         ;         // varchar 29		 C_USER_STRING05 
-            _tablerow[66] = C_USER_STRING06         ;         // varchar 29		 C_USER_STRING06 
-            _tablerow[67] = C_USER_STRING07         ;         // varchar 29		 C_USER_STRING07 
-            _tablerow[68] = C_USER_STRING08         ;         // varchar 29		 C_USER_STRING08 
-            _tablerow[69] = C_USER_STRING09         ;         // varchar 29		 C_USER_STRING09 
-            _tablerow[70] = C_USER_STRING10         ;         // varchar 29		 C_USER_STRING10 
-            _tablerow[71] = C_USER_NOTE01           ;         // varchar 99		 C_USER_NOTE01 
-            _tablerow[72] = C_USER_COLOR01          ;         // int			 C_USER_COLOR01 
-            _tablerow[73] = C_USER_COLOR02          ;         // int			 C_USER_COLOR02 
-            _tablerow[74] = DateTime_toCyb(C_USER_DATE01);    // datetime			 C_USER_DATE01 
-            _tablerow[75] = DateTime_toCyb(C_USER_DATE02);    // datetime			 C_USER_DATE02 
-            _tablerow[76] = DateTime_toCyb(C_USER_DATE03);    // datetime			 C_USER_DATE03 
-            _tablerow[77] = DateTime_toCyb(C_USER_DATE04);    // datetime			 C_USER_DATE04 
-            _tablerow[78] = DateTime_toCyb(C_USER_DATE05);    // datetime			 C_USER_DATE05 
-            _tablerow[79] = YQTAPREANT_0           ;          //float Qta prelievo anticipato
+            _tablerow[38] = C_PROD_LOT_QTY;          //float Qta prelievo anticipato
+            _tablerow[39] = C_USER_INT01            ;         // int			 C_USER_INT01 
+            _tablerow[40] = C_USER_INT02            ;         // int			 C_USER_INT02 
+            _tablerow[41] = C_USER_INT03            ;         // int			 C_USER_INT03 
+            _tablerow[42] = C_USER_INT04            ;         // int			 C_USER_INT04 
+            _tablerow[43] = C_USER_INT05            ;         // int			 C_USER_INT05 
+            _tablerow[44] = C_USER_INT06            ;         // int			 C_USER_INT06 
+            _tablerow[45] = C_USER_INT07            ;         // int			 C_USER_INT07 
+            _tablerow[46] = C_USER_INT08            ;         // int			 C_USER_INT08 
+            _tablerow[47] = C_USER_INT09            ;         // int			 C_USER_INT09 
+            _tablerow[48] = C_USER_INT10            ;         // int			 C_USER_INT10 
+            _tablerow[49] = C_USER_REAL01           ;         // float			 C_USER_REAL01 
+            _tablerow[50] = C_USER_REAL02           ;         // float			 C_USER_REAL02 
+            _tablerow[51] = C_USER_REAL03           ;         // float			 C_USER_REAL03 
+            _tablerow[52] = C_USER_REAL04           ;         // float			 C_USER_REAL04 
+            _tablerow[53] = C_USER_REAL05           ;         // float			 C_USER_REAL05 
+            _tablerow[54] = C_USER_CHAR01           ;         // char 1		 C_USER_CHAR01 
+            _tablerow[55] = C_USER_CHAR02           ;         // char 1		 C_USER_CHAR02 
+            _tablerow[56] = C_USER_CHAR03           ;         // char 1		 C_USER_CHAR03 
+            _tablerow[57] = C_USER_CHAR04           ;         // char 1		 C_USER_CHAR04 
+            _tablerow[58] = C_USER_CHAR05           ;         // char 1		 C_USER_CHAR05 
+            _tablerow[59] = C_USER_FLAG01           ;         // bit			 C_USER_FLAG01 
+            _tablerow[60] = C_USER_FLAG02           ;         // bit			 C_USER_FLAG02 
+            _tablerow[61] = C_USER_FLAG03           ;         // bit			 C_USER_FLAG03 
+            _tablerow[62] = C_USER_STRING01         ;         // varchar 29		 C_USER_STRING01 
+            _tablerow[63] = C_USER_STRING02         ;         // varchar 29		 C_USER_STRING02 
+            _tablerow[64] = C_USER_STRING03         ;         // varchar 29		 C_USER_STRING03 
+            _tablerow[65] = C_USER_STRING04         ;         // varchar 29		 C_USER_STRING04 
+            _tablerow[66] = C_USER_STRING05         ;         // varchar 29		 C_USER_STRING05 
+            _tablerow[67] = C_USER_STRING06         ;         // varchar 29		 C_USER_STRING06 
+            _tablerow[68] = C_USER_STRING07         ;         // varchar 29		 C_USER_STRING07 
+            _tablerow[69] = C_USER_STRING08         ;         // varchar 29		 C_USER_STRING08 
+            _tablerow[70] = C_USER_STRING09         ;         // varchar 29		 C_USER_STRING09 
+            _tablerow[71] = C_USER_STRING10         ;         // varchar 29		 C_USER_STRING10 
+            _tablerow[72] = C_USER_NOTE01           ;         // varchar 99		 C_USER_NOTE01 
+            _tablerow[73] = C_USER_COLOR01          ;         // int			 C_USER_COLOR01 
+            _tablerow[74] = C_USER_COLOR02          ;         // int			 C_USER_COLOR02 
+            _tablerow[75] = DateTime_toCyb(C_USER_DATE01);    // datetime			 C_USER_DATE01 
+            _tablerow[76] = DateTime_toCyb(C_USER_DATE02);    // datetime			 C_USER_DATE02 
+            _tablerow[77] = DateTime_toCyb(C_USER_DATE03);    // datetime			 C_USER_DATE03 
+            _tablerow[78] = DateTime_toCyb(C_USER_DATE04);    // datetime			 C_USER_DATE04 
+            _tablerow[79] = DateTime_toCyb(C_USER_DATE05);    // datetime			 C_USER_DATE05 
+            
 
             return _tablerow;
         }
@@ -525,6 +527,7 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_ROP_QTY",  typeof(decimal));           // numeric	
             _dataTable.Columns.Add("C_SS_QTY",  typeof(decimal));            // numeric	
             _dataTable.Columns.Add("C_USE_UNPEGGED_QTY",  typeof(byte));       // bit	
+            _dataTable.Columns.Add("C_PROD_LOT_QTY", typeof(float));             // qta prelievo anticipato per overlap ordini	
             _dataTable.Columns.Add("C_USER_INT01",  typeof(int));             // int	
             _dataTable.Columns.Add("C_USER_INT02",  typeof(int));             // int	
             _dataTable.Columns.Add("C_USER_INT03",  typeof(int));             // int	
@@ -565,8 +568,7 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_USER_DATE02",  typeof(DateTime));          // datetime	
             _dataTable.Columns.Add("C_USER_DATE03",  typeof(DateTime));          // datetime	
             _dataTable.Columns.Add("C_USER_DATE04",  typeof(DateTime));          // datetime	
-            _dataTable.Columns.Add("C_USER_DATE05",  typeof(DateTime));          // datetime	
-            _dataTable.Columns.Add("C_PROD_LOT_QTY", typeof(float));             // qta prelievo anticipato per overlap ordini	
+            _dataTable.Columns.Add("C_USER_DATE05",  typeof(DateTime));          // datetime	            
         }
 
         protected decimal getQtaMIN(string articolo, string categoria, string YLIVTRAS_0, decimal QTAMIN)

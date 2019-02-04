@@ -19,17 +19,24 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
+                        Esegui("SAURO MBM41LIB_M DELETE BPR".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME BPR".Split(' '));
             return;
 
-            EseguiTutto();
+            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
             return;
 
             Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME ITM COD=MSB02005-0%".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+
             return;
+
+
+            EseguiTutto();
+            return;
+
 
             Esegui("SAURO MBM41LIB_M DELETE LOC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));
@@ -73,12 +80,7 @@ namespace Console
             //return;
             
             Esegui("SAURO MBM41LIB_M DELETE LOC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));
-           
-            
-            Esegui("SAURO MBM41LIB_M DELETE BPR".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME BPR".Split(' '));
-            
+            Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));                     
             
             Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME DISBAS COD=MSB02005-0%".Split(' '));
@@ -312,8 +314,8 @@ namespace Console
                 catch (Exception ex)
                 {
 
-                    _logger.Error(_cur_arg + "\n" + ex.ToString());
-                    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", ex.ToString());
+                    _logger.Error(string.Join(" ",args) + "\n" + ex.ToString());
+                    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", string.Join(" ", args) + "\n\n\n" + ex.ToString(), true);
                 }
 #endif
             }

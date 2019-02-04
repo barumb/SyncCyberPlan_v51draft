@@ -93,7 +93,7 @@ namespace SyncCyberPlan_lib
  A.BPAADDLIG_1, 
  A.BPAADDLIG_2 
  from " + db + ".BPARTNER B " +
-                " join " + db + ".BPADDRESS A on B.BPRNUM_0 = A.BPANUM_0 " +
+                " join " + db + ".BPADDRESS A on B.BPRNUM_0 = A.BPANUM_0 and (B.BPCFLG_0=2 or  B.BPSFLG_0=2)" +
                 " WHERE B.ENAFLG_0=2 and A.BPAADD_0='SL0' ";
 
             if (!string.IsNullOrWhiteSpace(codice_like))

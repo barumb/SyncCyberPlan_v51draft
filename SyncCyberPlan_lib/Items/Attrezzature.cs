@@ -136,6 +136,7 @@ namespace SyncCyberPlan_lib
             C_USER_DATE05                        = _YATTDATHAR_0;                             // datetime	
             C_USER_DATE03                        = null;                             // datetime	
             C_USER_DATE04                        = null;                             // datetime	
+            C_PROD_LOT_QTY                       = 0;
         }
         
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string tipo)
