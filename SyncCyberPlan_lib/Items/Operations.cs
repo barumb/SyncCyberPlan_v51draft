@@ -129,7 +129,7 @@ namespace SyncCyberPlan_lib
 
             FLVPZ = getDBV<string>(row[24]);  //flag vie pezzi dell'attrezzatura
 
-            NRVIE = getDBV<int>(row[25]);     //numero vie totali dell'articolo
+            NRVIE = (int)getDBV<decimal>(row[25]);     //numero vie totali dell'articolo
 
 
             C_ORDER_CODE              = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30); 
@@ -411,7 +411,7 @@ namespace SyncCyberPlan_lib
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             { 
                 //ThreadPool.QueueUserWorkItem(sendmail);
-                Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", __bulk_message);
+                Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", "mail.sauro.net", __bulk_message);
             }
         }
         //void sendmail(Object threadContext)

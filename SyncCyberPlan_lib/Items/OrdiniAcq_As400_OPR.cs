@@ -2,6 +2,7 @@
 using System;
 using log4net;
 using System.Data;
+using System.Data.Common;
 
 namespace SyncCyberPlan_lib
 {
@@ -189,7 +190,33 @@ namespace SyncCyberPlan_lib
             C_USER_DATE04         = null;                                                          //datetime                           
             C_USER_DATE05         = null;                                                          //datetime 
         }
-        
+
+        public override void LastAction(ref DBHelper2 cm)
+        {
+            string chk_query = @"SELECT OPR.[C_CODE]
+      ,OPR.[C_CORDER_CODE]
+      ,OPR.[C_ITEM_CODE]
+	  ,SOH.C_CODE
+  FROM [CyberPlanFrontiera].[dbo].[CYB_ORDER] OPR
+  full join [CyberPlanFrontiera].[dbo].[CYB_CORDER] SOH
+  on OPR.C_CORDER_CODE= SOH.C_CODE
+  where OPR.C_CODE like 'OPR%' and OPR.C_CORDER_CODE not like '000000000000' and SOH.C_CODE is null ";
+
+            string testo_mail = "";
+            DbDataReader dtr = cm.GetReaderSelectCommand(chk_query);
+            object[] row = new object[dtr.FieldCount];
+
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con ordine di vendita non presente (forse già chiuso)" + System.Environment.NewLine + System.Environment.NewLine;
+            }
+            if (testo_mail != "")
+            {
+                Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", "mail.sauro.net", testo_mail);
+            }
+        }
+
         char getMRP_type(string MFHTCOM)
         {
             //F=MTS make to stock (a fabbisogno)  C= MTO make to order (a commessa)  

@@ -206,7 +206,7 @@ order by PQMCART
         {
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             {
-                string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net,francesco.chiminazzo@sauro.net";
+                string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net";
 #if DEBUG
                 destinatari = "francesco.chiminazzo@sauro.net";
 #endif

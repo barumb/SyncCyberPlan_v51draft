@@ -217,7 +217,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail +=  "codice =" + getDBV<string>(row[0]) + "  componente=" + getDBV<string>(row[1]) +";  il componente non è presente in anagrafica o non è rilasciato" + System.Environment.NewLine + System.Environment.NewLine;
+                testo_mail += "codice =" + getDBV<string>(row[0]) + "  componente=" + getDBV<string>(row[1]) + ";  il componente non è presente in anagrafica o non è rilasciato" + System.Environment.NewLine + System.Environment.NewLine;
             }
 
             //--verifico che tutti i codici con distinta base siano presenti in anagrafica
@@ -258,8 +258,10 @@ namespace SyncCyberPlan_lib
                 testo_mail += "codice =" + getDBV<string>(row[0]) + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + System.Environment.NewLine + System.Environment.NewLine;
             }
 
-
-            Utils.SendMail("it@sauro.net", "codifica@sauro.net;francesco.chiminazzo@sauro.net", "mail.sauro.net", testo_mail);
+            if (testo_mail != "")
+            {
+                Utils.SendMail("it@sauro.net", "codifica@sauro.net", "mail.sauro.net", testo_mail);
+            }
         }
 
         protected void LastAction_RiferimentiFornitori(ref DBHelper2 cm)
