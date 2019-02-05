@@ -19,7 +19,11 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-                        Esegui("SAURO MBM41LIB_M DELETE BPR".Split(' '));
+            //Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
+            return;
+
+            Esegui("SAURO MBM41LIB_M DELETE BPR".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME BPR".Split(' '));
             return;
 
@@ -65,12 +69,6 @@ namespace Console
             Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA ".Split(' '));
             return;
             
-            Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
-            return;
-
-            Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
-            return;
             Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
             return; 
@@ -277,9 +275,12 @@ namespace Console
                             sm.WriteToCyberPlan<Articolo_Caratteristiche>(_mode_all, codicelike, "", _delete, "");
                             break;
                         case "CIC":
-                            //sm.WriteToCyberPlan<Cicli_Routing_Header>(_mode_all, codicelike, "", _delete, "");
-                            //sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");
-                            //sm.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
+                            if (_delete)
+                            {
+                                //ho aggiunto questo if per timore che quelli di CyberPlan non svuotino le tabelle
+                                //sm.WriteToCyberPlan<Cicli_Routing_Header>(_mode_all, codicelike, "", _delete, "");
+                                sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");                                
+                            }
                             sm.WriteToCyberPlan<Std_Op_Machine>(_mode_all, codicelike, "", _delete, "");
                             sm.WriteToCyberPlan<Item_Routing>(_mode_all, codicelike, "", _delete, "");
                             break;

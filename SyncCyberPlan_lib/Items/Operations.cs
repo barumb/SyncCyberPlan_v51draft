@@ -19,7 +19,7 @@ namespace SyncCyberPlan_lib
         public decimal MFHPCOM;
         public decimal MFHSCOM;
         public string  MFHCART;
-        public decimal MFHQTRC;
+        public decimal MFHQTRC; //qta richiesta
         public decimal MFHDCRE; //DATA
         public string  MFHSTAT;
         public decimal MFVDINI;  //DATA
@@ -36,6 +36,12 @@ namespace SyncCyberPlan_lib
         public decimal MFVAMPT;  //tempo per un pezzo/via
         public string  MFVUTSE;  //unita di misura tempo di setup
         public decimal MFVASET;  //tempo di setup
+
+        public string FLVPZ; //flag Vie pezzi dell'attrezzatura
+
+        public int NRVIE;   //numero vie totali articolo
+
+
 
         #region tabella output CYB_OPERATION
         public string C_ORDER_CODE;
@@ -116,10 +122,15 @@ namespace SyncCyberPlan_lib
             MFVWRKC = getDBV<string>(row[18]);
             MFVWKCT = getDBV<string>(row[19]);
 
-            MFVUTLM = getDBV<string>(row[20]);  //unita di misura tempo per un pezzo/via  1=ORE  2=100MI-HR   3 Minuti 4 giorni  5 settimane
+            MFVUTLM = getDBV<string>(row[20]);   //unita di misura tempo per un pezzo/via  1=ORE  2=100MI-HR   3 Minuti 4 giorni  5 settimane
             MFVAMPT = getDBV<decimal>(row[21]);  //tempo per un pezzo/via
-            MFVUTSE = getDBV<string>(row[22]);  //unita di misura tempo di setup
+            MFVUTSE = getDBV<string>(row[22]);   //unita di misura tempo di setup
             MFVASET = getDBV<decimal>(row[23]);  //tempo di setup
+
+            FLVPZ = getDBV<string>(row[24]);  //flag vie pezzi dell'attrezzatura
+
+            NRVIE = getDBV<int>(row[25]);     //numero vie totali dell'articolo
+
 
             C_ORDER_CODE              = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30); 
             C_OPNUM                   = 10;
@@ -137,7 +148,7 @@ namespace SyncCyberPlan_lib
             C_QUEUE_TIME              = -1;
             C_WAIT_TIME               = -1;
             C_SETUP_TIME              = getSetupTime(C_ORDER_CODE+" " + MFHCART + " Setup Time: MFVUTSE, MFVASET", MFVUTSE, MFVASET);
-            C_RUN_TIME                = getTotTime(C_ORDER_CODE + " " + MFHCART + " Tempo per pezzo/via MFVUTLM, MFVAMPT", MFVUTLM, MFVAMPT, C_QTY);
+            C_RUN_TIME                = getTotTime(C_ORDER_CODE + " " + MFHCART + " Tempo per pezzo/via MFVUTLM, MFVAMPT", MFVUTLM, MFVAMPT, C_QTY, FLVPZ, NRVIE);
             C_SETUP_GROUP_CODE        = "";
             C_SETUP_TEAM_GROUP_CODE   = "";
             C_SETUP_TEAM_GROUP_QTY    = -1;
@@ -236,6 +247,9 @@ namespace SyncCyberPlan_lib
             string _tabMFH = __libreriaAs400 + ".MFH00PF";
             string _tabMFV = __libreriaAs400 + ".MFV00PF";
 
+            string _tabRSH = __libreriaAs400 + ".RSHD00F";
+            string _tabPFH = __libreriaAs400 + ".PFHD00F";
+
             string query = "SELECT " + "\n"
                 + "  " + _tabMFH + ".MFHTORD" + "\n"
                 + ",  " + _tabMFH + ".MFHAORD" + "\n"
@@ -263,11 +277,20 @@ namespace SyncCyberPlan_lib
                 + ",  " + _tabMFV + ".MFVUTSE" + "\n"
                 + ",  " + _tabMFV + ".MFVASET" + "\n"
 
+                + ",  " + _tabRSH + ".FLVPZ" + "\n"
+
+                + ",  " + _tabPFH + ".NRVIE" + "\n"
+
                 + " FROM " + _tabMFH + "\n"
                 + " INNER JOIN " + _tabMFV + " ON " + "\n"
                                  + _tabMFH + ".MFHTORD = " + _tabMFV + ".MFVTORD " + "\n"
                        + " AND " + _tabMFH + ".MFHAORD = " + _tabMFV + ".MFVAORD " + "\n"
                        + " AND " + _tabMFH + ".MFHPORD = " + _tabMFV + ".MFVPORD " + "\n"
+                + " INNER JOIN " + _tabRSH + " ON " + "\n"
+                                 + _tabRSH + ".CDSTM = " + _tabMFV + ".MFVCSTM " + "\n"
+                + " INNER JOIN " + _tabPFH + " ON " + "\n"
+                                 + _tabPFH + ".CDART = " + _tabMFH + ".MFHCART " + "\n"
+
                 + " WHERE " + _tabMFH + ".MFHSTAT = 'RI' " + "\n"     //sempre RI
                 + " and   " + _tabMFV + ".MFVSTAT = 'RI' " + "\n"     //sempre RI
                 + " and   " + _tabMFV + ".MFVSTAV <> 'CH' " + "\n"    //questo indica se la riga è chiusa
@@ -372,9 +395,14 @@ namespace SyncCyberPlan_lib
             }
             return ret;
         }
-        int getTotTime(string commento, string unita_di_misura, decimal tempo_per_pezzo_via, decimal pezzi_richiesti)
+        int getTotTime(string commento, string unita_di_misura, decimal tempo_per_pezzo_via, decimal pezzi_richiesti, string FlagViePezzi,int NumVieTotali)
         {
             decimal tmp_tempo = pezzi_richiesti * tempo_per_pezzo_via;
+            if (FlagViePezzi.Trim().ToUpper() == "V")
+            {
+                //se l'attrezzatura va a vie moltiplico per il nuemro di vie
+                tmp_tempo = tmp_tempo * NumVieTotali;
+            }
             return getSetupTime(commento, unita_di_misura, tmp_tempo);
         }
 
