@@ -195,7 +195,75 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm)
         {
+            LastAction_CheckCoerenzaDB(ref cm);
             return;
+            LastAction_RiferimentiFornitori(ref cm);
+        }
+        protected void LastAction_CheckCoerenzaDB(ref DBHelper2 cm)
+        {
+            string testo_mail = "";
+
+            //verifico che tutti i componenti in distinta base siano presenti in anagrafica
+            string chk_query =
+                @"SELECT [C_BOM_CODE], [C_COMPONENT_CODE]
+  FROM [CyberPlanFrontiera].[dbo].[CYB_COMPONENT] C
+  left join [CyberPlanFrontiera].[dbo].[CYB_ITEM] I
+  on C.C_COMPONENT_CODE=I.[C_CODE ] and [C_ITEM_GROUP ]<> '__TOOL__'
+  where I.C_CODE is null ";
+
+            DbDataReader dtr = cm.GetReaderSelectCommand(chk_query);
+            object[] row = new object[dtr.FieldCount];
+
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                testo_mail +=  "codice =" + getDBV<string>(row[0]) + "  componente=" + getDBV<string>(row[1]) +";  il componente non è presente in anagrafica o non è rilasciato" + System.Environment.NewLine + System.Environment.NewLine;
+            }
+
+            //--verifico che tutti i codici con distinta base siano presenti in anagrafica
+            chk_query = @"SELECT [C_BOM_CODE],[C_COMPONENT_CODE]
+  FROM [CyberPlanFrontiera].[dbo].[CYB_COMPONENT] C
+  left join [CyberPlanFrontiera].[dbo].[CYB_ITEM] I
+  on C.[C_BOM_CODE]=I.[C_CODE ] and [C_ITEM_GROUP ]<> '__TOOL__'  
+  where I.C_CODE is null";
+
+            dtr = cm.GetReaderSelectCommand(chk_query);
+            row = new object[dtr.FieldCount];
+
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                testo_mail += "codice =" + getDBV<string>(row[0]) + " ha distinta base ma non è presente in anagrafica o non è rilasciato" + System.Environment.NewLine + System.Environment.NewLine;
+            }
+
+
+
+
+            //  --verifico che tutti i codici in anagrafica siano presenti con distinta base 
+            chk_query = @"SELECT I.[C_CODE ],[C_BOM_CODE],[C_COMPONENT_CODE]
+  FROM [CyberPlanFrontiera].[dbo].[CYB_COMPONENT] C
+  right join [CyberPlanFrontiera].[dbo].[CYB_ITEM] I
+  on C.[C_BOM_CODE]=I.[C_CODE ]   
+  where C.[C_BOM_CODE] is null 
+  and [C_ITEM_GROUP ]<> '__TOOL__'
+  and [C_M_B ] ='M' --make, prodotti in Sauro
+  order by I.[C_CODE ]";
+
+            dtr = cm.GetReaderSelectCommand(chk_query);
+            row = new object[dtr.FieldCount];
+
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                testo_mail += "codice =" + getDBV<string>(row[0]) + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + System.Environment.NewLine + System.Environment.NewLine;
+            }
+
+
+            Utils.SendMail("it@sauro.net", "codifica@sauro.net;francesco.chiminazzo@sauro.net", "mail.sauro.net", testo_mail);
+        }
+
+        protected void LastAction_RiferimentiFornitori(ref DBHelper2 cm)
+        {
             _logger.Info("Inizio inserimento distinte base fornitori");
             Dictionary<string, string> lista = Get_Lista_Articoli_Fornitori_Sage("SAURO");
 
@@ -254,10 +322,7 @@ C_WAREHOUSE_CODE = '" + __MAGAZZINO_INTERNO + @"' and C_BOM_CODE ='%%2%%' ";
 
             _logger.Info("Fine inserimento distinte base fornitori");
 
-
-             
         }
-
         static private List<string> Get_Lista_Articoli_RI_Sage(bool mode, string dossier, string codice_like)
         {
             List<string> _lista_articoli_rilasciati_in_sage = new List<string>(30000);

@@ -19,6 +19,9 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
+            Esegui("SAURO MBM41LIB_M ALLTIME DISBAS".Split(' '));
+            return;
+
             //Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
             return;
