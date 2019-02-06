@@ -122,6 +122,7 @@ namespace SyncCyberPlan_lib
 
         public void WriteToCyberPlan<T>(bool mode_all, string codice_like, string filtro, bool delete, string option) where T : Item, new()
         {
+            Item.ResetMailMessage();
             string startedAt = DateTime.Now.ToString();
             string message_error = "Command started at " + startedAt + "  " +
                 "\n Parameters: mode_all=" + mode_all + ", codice_like=" + codice_like + ", filtro=" + filtro + ", delete=" + delete + ", option=" + option + "\n\n";            

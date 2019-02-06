@@ -206,5 +206,9 @@ namespace SyncCyberPlan_lib
         {
             Item.NUMLASTDAYS = lastdays;
         }
+        public static void ResetMailMessage()
+        {
+            __bulk_message = "";
+        }
     }
 }
