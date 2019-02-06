@@ -226,6 +226,7 @@ namespace SyncCyberPlan_lib
   left join [CyberPlanFrontiera].[dbo].[CYB_ITEM] I
   on C.[C_BOM_CODE]=I.[C_CODE ] and [C_ITEM_GROUP ]<> '__TOOL__'  
   where I.C_CODE is null";
+            dtr.Close();
 
             dtr = cm.GetReaderSelectCommand(chk_query);
             row = new object[dtr.FieldCount];
@@ -240,15 +241,17 @@ namespace SyncCyberPlan_lib
 
 
             //  --verifico che tutti i codici in anagrafica siano presenti con distinta base 
+            //NB: and [C_M_B ] ='M' --make, prodotti in Sauro
             chk_query = @"SELECT I.[C_CODE ],[C_BOM_CODE],[C_COMPONENT_CODE]
   FROM [CyberPlanFrontiera].[dbo].[CYB_COMPONENT] C
   right join [CyberPlanFrontiera].[dbo].[CYB_ITEM] I
   on C.[C_BOM_CODE]=I.[C_CODE ]   
   where C.[C_BOM_CODE] is null 
   and [C_ITEM_GROUP ]<> '__TOOL__'
-  and [C_M_B ] ='M' --make, prodotti in Sauro
+  and [C_M_B ] ='M' 
   order by I.[C_CODE ]";
 
+            dtr.Close();
             dtr = cm.GetReaderSelectCommand(chk_query);
             row = new object[dtr.FieldCount];
 

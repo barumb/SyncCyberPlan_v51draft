@@ -19,7 +19,8 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME DISBAS".Split(' '));
             return;
 
             //Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
@@ -263,6 +264,7 @@ namespace Console
 
                 DBHelper2 am = DBHelper2.getAs400DBHelper(libreriaas400);
                 DBHelper2 sm = DBHelper2.getSageDBHelper(dossier);
+                DBHelper2 cm = DBHelper2.getCyberDBHelper();
 
                 //SageTable_Manager sm = new SageTable_Manager(dossier);
                 //As400Table_Manager am = new As400Table_Manager();
@@ -270,7 +272,7 @@ namespace Console
                 try
                 {
 #endif
-                    switch (oggetto)
+                switch (oggetto)
                     {
                         //da sage
                         case "ITM":
@@ -278,12 +280,11 @@ namespace Console
                             sm.WriteToCyberPlan<Articolo_Caratteristiche>(_mode_all, codicelike, "", _delete, "");
                             break;
                         case "CIC":
-                            if (_delete)
-                            {
-                                //ho aggiunto questo if per timore che quelli di CyberPlan non svuotino le tabelle
-                                //sm.WriteToCyberPlan<Cicli_Routing_Header>(_mode_all, codicelike, "", _delete, "");
-                                sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");                                
-                            }
+                            //ho aggiunto questo if per timore che quelli di CyberPlan non svuotino le tabelle
+                            //sm.WriteToCyberPlan<Cicli_Routing_Header>(_mode_all, codicelike, "", _delete, "");     
+                            if(_delete)  DBHelper2.EseguiSuDBCyberPlan(ref cm, "DELETE FROM [CyberPlanFrontiera].[dbo].[CYB_STD_OPERATION] where 1=1 ");
+                            //sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");      
+
                             sm.WriteToCyberPlan<Std_Op_Machine>(_mode_all, codicelike, "", _delete, "");
                             sm.WriteToCyberPlan<Item_Routing>(_mode_all, codicelike, "", _delete, "");
                             break;
