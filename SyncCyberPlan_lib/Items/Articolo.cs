@@ -337,8 +337,11 @@ namespace SyncCyberPlan_lib
         {
             if (REOCOD_0 == 0 && C_ITEM_GROUP != Attrezzature.__TOOL)
             {
-                //se REOCOD_0==0 (Tipo proposta dell'articolo sito, significa che NON c'è l'articolo sito ITALIA
-                __bulk_message += System.Environment.NewLine + System.Environment.NewLine + "articolo " + ITMREF_0 + " senza Articolo-sito ITALIA";
+                if (ITMREF_0 != "WI0000-00")
+                {
+                    //se REOCOD_0==0 (Tipo proposta dell'articolo sito, significa che NON c'è l'articolo sito ITALIA
+                    __bulk_message += System.Environment.NewLine + System.Environment.NewLine + "articolo " + ITMREF_0 + " senza Articolo-sito ITALIA";
+                }
                 return null;
             }
             DataRow _tablerow = _dataTable.NewRow();
