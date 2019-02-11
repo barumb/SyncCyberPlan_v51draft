@@ -15,6 +15,9 @@ namespace SyncCyberPlan_lib
         public short     _YPLAIMP_0;//PLAS
         public byte      _YPLADIV_0;//PLAS
 
+        public decimal _YCAD_0;    //per assemblaggio
+        public int _YCADTEM_0; //per assemblaggio
+
 
         #region tabella output CYB_ITEM_ROUTING
         public string    C_ITEM_CODE;                       //varchar 50
@@ -31,6 +34,9 @@ namespace SyncCyberPlan_lib
         public string C_USER_STRING02; // varchar 29
         public string C_USER_STRING03; // varchar 29
         public string C_USER_STRING04; // varchar 29
+
+        public decimal C_LOT_SIZE; //decimal  per assemblaggio
+        public int C_RUN_TIME; //int      per assemblaggio
         #endregion
 
 
@@ -46,6 +52,8 @@ namespace SyncCyberPlan_lib
             _YDATRIA_0  = getSageDate((DateTime)row[4]);
             _YPLAIMP_0  = getDBV<short>(row[5]);
             _YPLADIV_0  = getDBV<byte>(row[6]);
+            _YCAD_0     = getDBV<decimal>(row[7]);
+            _YCADTEM_0  = getDBV<int>(row[8]);
 
 
             C_ITEM_CODE = EscapeSQL(_ITMREF_0, 50);           //varchar 50
@@ -62,6 +70,9 @@ namespace SyncCyberPlan_lib
             C_USER_STRING02 = "";
             C_USER_STRING03 = "";
             C_USER_STRING04 = "";
+
+            C_LOT_SIZE = _YCAD_0;   //per assemblaggio        vie
+            C_RUN_TIME = _YCADTEM_0;//per assemblaggio        al minuto (se qui =60)
         }
         public override DataRow GetCyberRow()
         {
@@ -80,6 +91,8 @@ namespace SyncCyberPlan_lib
             _tablerow[10] = C_USER_STRING02;
             _tablerow[11] = C_USER_STRING03;
             _tablerow[12] = C_USER_STRING04;
+            _tablerow[13] = C_LOT_SIZE;
+            _tablerow[14] = C_RUN_TIME;
 
             return _tablerow;
         }
@@ -98,7 +111,10 @@ namespace SyncCyberPlan_lib
         ,YDATRIA_0
         ,YPLAIMP_0
         ,YPLADIV_0  
-        from SAURO.YPRDITM"
+        ,YCAD_0
+        ,YCADTEM_0
+        from SAURO.YPRDITM
+        where YENAFLG_0=2 "
             ;
 
             if (!string.IsNullOrWhiteSpace(codice_like))
@@ -129,7 +145,10 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_USER_STRING01 "   , typeof( string));
             _dataTable.Columns.Add("C_USER_STRING02 "   , typeof( string));
             _dataTable.Columns.Add("C_USER_STRING03 "   , typeof( string));
-            _dataTable.Columns.Add("C_USER_STRING04 "   , typeof(string)); 
-    }
+            _dataTable.Columns.Add("C_USER_STRING04 "   , typeof(string));
+
+            _dataTable.Columns.Add("C_LOT_SIZE", typeof(decimal));
+            _dataTable.Columns.Add("C_RUN_TIME", typeof(int));
+        }
     }
 }
