@@ -19,52 +19,10 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
-            return;
-
-            //Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
-            return;
-
-            Esegui("SAURO MBM41LIB_M DELETE BPR".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME BPR".Split(' '));
-            return;
-
-            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
-            return;
-
-            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-            //Esegui("SAURO MBM41LIB_M ALLTIME ITM COD=MSB02005-0%".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
-
-            return;
-
-
-            EseguiTutto();
-            return;
-
-
-            Esegui("SAURO MBM41LIB_M DELETE LOC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));
-            return;
-
-            Esegui("SAURO MBM41LIB_M DELETE GIAC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME GIAC".Split(' '));
-            return;
-
-            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
-            return;
-
             Esegui("SAURO MBM41LIB_M DELETE MAC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));
             return;
-
-            Esegui("SAURO MBM41LIB_M DELETE DEM".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME DEM".Split(' '));
-            return;
+            //EseguiTutto();
 
             Esegui("SAURO MBM41LIB_M DELETE POH-OFA".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM COD=IT001-ODM180062%".Split(' '));
@@ -75,23 +33,9 @@ namespace Console
             
             Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
-            return; 
-            
-            Esegui("SAURO MBM41LIB_M DELETE SOH".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));    
-            //return;
-            
-            Esegui("SAURO MBM41LIB_M DELETE LOC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));                     
-            
             Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME DISBAS COD=MSB02005-0%".Split(' '));
             Esegui("SAURO MBM41LIB_M LAST=20 DISBAS".Split(' '));
-          
-            
-            Esegui("SAURO MBM41LIB_M DELETE SOH".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));          
-           
             
 #else
             Esegui(args);
@@ -329,6 +273,20 @@ namespace Console
         }
         static void EseguiTutto()
         {
+            Esegui("SAURO MBM41LIB_M DELETE LOC".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE MAC".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE ITM ".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE BPR".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE POH-ODM ".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE OPR ".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE SOH".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE GIAC".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE DEM".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
+
+
             Esegui("SAURO MBM41LIB_M ALLTIME LOC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));

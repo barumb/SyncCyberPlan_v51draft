@@ -17,7 +17,7 @@ namespace SyncCyberPlan_lib
         public string TCLCOD_0;  //categoria len 5
         public string WEU_0;     //deve essere "GR" per WP
         public decimal ITMWEI_0; //peso per PLASTICA WP
-        public byte STDFLG_0; //Modalità gestione (stock=3 a cmomessa=4)
+        public byte STDFLG_0; //Modalità gestione (stock=3 a commessa=4)
 
         //tabella YITMINF
         public string YLIVTRAS_0;  //tipo articolo
@@ -305,7 +305,7 @@ namespace SyncCyberPlan_lib
             C_USER_REAL03                        = 0;                                // float	
             C_USER_REAL04                        = 0;                                // float	
             C_USER_REAL05                        = 0;                                // float	
-            C_USER_CHAR01                        = (char)EscapeSQL(YMRPTAG1_0,1)[0]; // char 1  Categoria pe morsetti 
+            C_USER_CHAR01                        = (char)EscapeSQL(YMRPTAG1_0,1)[0]; // char 1  Categoria pe morsetti / Frontalino Per WP
             C_USER_CHAR02                        = ' ';                              // char 1  Piega o non piega per FILO
             C_USER_CHAR03                        = ' '; //aggiornata successivamente da Articolo_caratteristiche() =getFAMP(ITMREF_0, ITMDES1_0);     // char 1
             C_USER_CHAR04                        = getSTH(TCLCOD_0,YMAT_0);          // char 1
@@ -686,7 +686,7 @@ namespace SyncCyberPlan_lib
         protected char getSTH(string categoria,string Cod_materiale)
         {
             char ret = ' ';
-            if (categoria.Trim() == "1GRA" || categoria.Trim() == "3PLA")
+            if (categoria.Trim() == "1GRA" || categoria.Trim() == "3PLA" || categoria.Trim() == "WP")
             {
                 if (Cod_materiale!= null)
                 {

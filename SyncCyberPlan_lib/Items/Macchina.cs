@@ -144,6 +144,7 @@ namespace SyncCyberPlan_lib
                 from x3.SAURO.WORKSTATIO W 
                 join x3.SAURO.ATEXTRA A on A.CODFIC_0 = 'WORKSTATIO' 
                 and A.ZONE_0 ='WSTDESAXX' and A.LANGUE_0='ITA' and A.IDENT1_0 = W.WST_0
+                where W.YENAFLG_0=2
                 ";
 
             if (!string.IsNullOrWhiteSpace(codice_like))

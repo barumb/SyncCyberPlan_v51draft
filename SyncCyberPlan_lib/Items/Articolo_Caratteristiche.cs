@@ -98,6 +98,12 @@ namespace SyncCyberPlan_lib
         }
         static void Update_FAMP(ref DBHelper2 db)
         {
+            //// caratteristiche 
+            //FAMP ...
+            //E estrattori
+            //DKTHQ plurime
+            // X tutto il resto
+
 
             /*
              * Query per avere le caratteristiche valide:

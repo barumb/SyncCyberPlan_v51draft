@@ -193,6 +193,11 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm)
         {
+
+            //
+            //controllo che gli OPR siano associati a ODV aperti
+            //
+
             string chk_query = @"SELECT OPR.[C_CODE]
       ,OPR.[C_CORDER_CODE]
       ,OPR.[C_ITEM_CODE]
@@ -211,6 +216,49 @@ namespace SyncCyberPlan_lib
                 dtr.GetValues(row);
                 testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con ordine di vendita non presente (forse già chiuso)" + System.Environment.NewLine + System.Environment.NewLine;
             }
+
+
+
+
+
+            //
+            //controllo che gli OPR abbiano codici presenti in anagrafica articoli
+            //
+
+            chk_query= @"SELECT OPR.[C_CODE]
+              ,OPR.[C_CORDER_CODE]
+              ,OPR.[C_ITEM_CODE]
+	          ,ITM.[C_CODE]
+              FROM[CyberPlanFrontiera].[dbo].[CYB_ORDER] OPR
+              left join[CyberPlanFrontiera].[dbo].[CYB_ITEM] ITM
+              on OPR.[C_ITEM_CODE]= ITM.C_CODE
+              where OPR.C_CODE like 'OPR%' --and OPR.C_CORDER_CODE not like '000000000000' 
+              and ITM.[C_ITEM_GROUP] not like '__TOOL__'
+              and ITM.C_CODE is null ";
+
+            dtr.Close();
+            dtr = cm.GetReaderSelectCommand(chk_query);
+            row = new object[dtr.FieldCount];
+
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con articolo non rilasciato" + System.Environment.NewLine + System.Environment.NewLine;
+            }
+
+
+
+
+
+
+
+
+
+
+            //
+            //invio mail
+            //
+
             if (testo_mail != "")
             {
                 Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", "mail.sauro.net", testo_mail);
