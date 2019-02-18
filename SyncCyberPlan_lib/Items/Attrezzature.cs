@@ -170,12 +170,15 @@ namespace SyncCyberPlan_lib
                      ,S.YATTMARHAR_0                     
                      ,S.YATTQUA_0     
                      ,S.YATTTYP_0
+
                      ,S.YATTDATSAU_0
                      ,S.YATTDATTYC_0
                      ,S.YATTDATHAR_0                     
                      ,S.YATTVP_0
-                      from " + db + ".YPRDATT S \n" +
-                      " where S.YATTENAFLG_0=2 "
+
+                      from " + db + @".YPRDATT S 
+                       where S.YATTENAFLG_0=2 
+                       and S.YATTWCR_0 <>'ASSE' "
               ;
             //if (!string.IsNullOrWhiteSpace(codice_like))
             //{

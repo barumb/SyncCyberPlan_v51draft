@@ -92,14 +92,14 @@ namespace SyncCyberPlan_lib
 		,F.YWCR_0
 		,C.YCONCDL_0
 						
-        from SAURO.YPRDITM I
-		left join SAURO.ITMMASTER M
+        from " + db + @".YPRDITM I
+		left join " + db + @".ITMMASTER M
 			on I.ITMREF_0 = M.ITMREF_0
-		left join SAURO.ITMFACILIT F
+		left join " + db + @".ITMFACILIT F
 			on I.ITMREF_0=F.ITMREF_0 and F.STOFCY_0='ITS01'
-		full join SAURO.YPRDCONF C
+		full join " + db + @".YPRDCONF C
 			on C.YCONATT_0= I.YATTCOD_0
-        left join SAURO.YPRDATT A 
+        left join " + db + @".YPRDATT A 
             on A.YATTCOD_0= I.YATTCOD_0
         where I.YENAFLG_0=2 
         and A.YATTENAFLG_0=2

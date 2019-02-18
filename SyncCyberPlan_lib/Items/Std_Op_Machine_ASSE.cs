@@ -65,11 +65,12 @@ namespace SyncCyberPlan_lib
             //18 febbario 2019
             //per ASSEMBLAGGIO recupero configurazioni di Attrezzature ATTIVE
             //e CREO per CyberPlan attrezzatura-Macchina
-            //dò per scontato che non ci sinao attrezzature associate a tutte le macchina: YCONCDL_0 <> ''
+            //dò per scontato che non ci siano attrezzature associate a tutte le macchina: YCONCDL_0 <> ''
+
             string sage_query = @" SELECT
                       C.YCONATT_0
                      ,C.YCONGRP_0
-                     ,W.WST_0
+                     ,W.WST_0 as WST_0
                      ,C.YCONLOTSIZ_0
                      ,C.YCONLOTUM_0
                      ,C.YCONCAD_0
@@ -77,11 +78,10 @@ namespace SyncCyberPlan_lib
                      ,C.YCONENAFLG_0
                      ,C.YCONDATRIA_0
                      ,W.WCR_0
-					 ,C.YCONCDL_0 
 					 --,A.YATTWCR_0
-                      from x3.SAURO.YPRDCONF C
-					 left join SAURO.YPRDATT A on A.YATTCOD_0= C.YCONATT_0
-                     join SAURO.WORKSTATIO W  on C.YCONGRP_0 = W.YGRP_0 and C.YCONCDL_0 = W.WST_0
+                      from " + db + @".YPRDCONF C
+					 left join " + db + @".YPRDATT A on A.YATTCOD_0= C.YCONATT_0
+                     join " + db + @".WORKSTATIO W  on C.YCONGRP_0 = W.YGRP_0 and C.YCONCDL_0 = W.WST_0
                       where YCONCDL_0 <> ''
 					  and W.WCR_0 = 'ASSE'
 					  and A.YATTENAFLG_0=2
