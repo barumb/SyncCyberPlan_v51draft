@@ -217,7 +217,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "codice =" + getDBV<string>(row[0]) + "  componente=" + getDBV<string>(row[1]) + ";  il componente non è presente in anagrafica o non è rilasciato" + System.Environment.NewLine + System.Environment.NewLine;
+                testo_mail += "codice =" + getDBV<string>(row[0]) + "  componente=" + getDBV<string>(row[1]) + ";  il componente non è presente in anagrafica o non è rilasciato" + Utils.NewLineMail();
             }
 
             //--verifico che tutti i codici con distinta base siano presenti in anagrafica
@@ -234,7 +234,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "codice =" + getDBV<string>(row[0]) + " ha distinta base ma non è presente in anagrafica o non è rilasciato" + System.Environment.NewLine + System.Environment.NewLine;
+                testo_mail += "codice =" + getDBV<string>(row[0]) + " ha distinta base ma non è presente in anagrafica o non è rilasciato" + Utils.NewLineMail();
             }
 
 
@@ -258,7 +258,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "codice =" + getDBV<string>(row[0]) + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + System.Environment.NewLine + System.Environment.NewLine;
+                testo_mail += "codice =" + getDBV<string>(row[0]) + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + Utils.NewLineMail();
             }
 
             if (testo_mail != "")

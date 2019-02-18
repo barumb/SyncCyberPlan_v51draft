@@ -79,7 +79,11 @@ namespace SyncCyberPlan_lib
             IPHostEntry hostInfo = new IPHostEntry();
             String strHostName = "";
 
-            //#if !DEBUG
+
+#if DEBUG
+                MailTO = "francesco.chiminazzo@sauro.net";
+#endif
+            MailTO = "francesco.chiminazzo@sauro.net";   //PROVVISORIO
             try
             {
                 // Get the local computer info.
@@ -90,19 +94,20 @@ namespace SyncCyberPlan_lib
                 //MailAddress from = new MailAddress(_MailFROM);
                 //MailAddress to = new MailAddress(_MailTO);
                 MailMessage Message = new MailMessage(MailFROM, MailTO);
+                //Message.IsBodyHtml = false;
 
                 if (errore)
                 {
-                    Message.Subject = "ERRORE sincronizzazione CyberPlan (" + System.DateTime.Now + " - " + hostInfo.HostName + ")";
+                    Message.Subject = "ERRORE sincronizzazione CyberPlan (" + hostInfo.HostName + ")";
                 }
                 else
                 {
-                    Message.Subject = "Avviso da sincronizzazione CyberPlan (" + System.DateTime.Now + " - " + hostInfo.HostName + ")";
+                    Message.Subject = "CyberPlan: c'è un problema da sistemare";
                 }
 
                 //((IPEndPoint)server.LocalEndpoint).Address.ToString() + " - " +  System.DateTime.Now + " - " + Msg;				
                 Message.Body =
-                      //"Avviso da Sincronizzazione CyberPlan (" + System.DateTime.Now + " - " + hostInfo.HostName + ")"
+                      "Avviso da Sincronizzazione CyberPlan (" + System.DateTime.Now + " - " + hostInfo.HostName + ")"
                       //+ System.Environment.NewLine                      
                       //+ System.Environment.NewLine + "Host Name:             " + hostInfo.HostName
                       //+ System.Environment.NewLine + "\t NetBIOS Machine Name:  " + System.Environment.MachineName + "  "
@@ -112,7 +117,7 @@ namespace SyncCyberPlan_lib
                       //+ System.Environment.NewLine + "\t CLR version:           " + System.Environment.Version + "  "
                       //+ System.Environment.NewLine + "\t Memoria fisica associata al contesto:  " + System.Environment.WorkingSet + "  "
 
-                      System.Environment.NewLine + Msg
+                      + Utils.NewLineMail() + Utils.NewLineMail() + Msg
                     ;
 
                 Message.Bcc.Add("francesco.chiminazzo@sauro.net");
@@ -141,6 +146,11 @@ namespace SyncCyberPlan_lib
         public static void SendMail(string MailFROM, string MailTO, string MailServerSMTP, string Msg)
         {
             SendMail(MailFROM, MailTO, MailServerSMTP, Msg, false);
+        }
+        public static string NewLineMail()
+        {
+            //outlook se non ci sono spazi potrebbe tagliare gli a capo
+            return "   " + System.Environment.NewLine;         
         }
     }
 }

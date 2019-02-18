@@ -50,9 +50,9 @@ namespace SyncCyberPlan_lib
             _YATTQUA_0     = getDBV<short>(row[11]);        //livello qualità
             _YATTTYP_0     = getDBV<string>(row[12]);       //tipo attrezzatura
 
-            _YATTDATSAU_0 = getSageDate((DateTime)row[13]);
-            _YATTDATTYC_0 = getSageDate((DateTime)row[14]);
-            _YATTDATHAR_0 = getSageDate((DateTime)row[15]);
+            _YATTDATSAU_0 = getSageDate(row[13]);
+            _YATTDATTYC_0 = getSageDate(row[14]);
+            _YATTDATHAR_0 = getSageDate(row[15]);
             _YATTVP_0     = (row[16] == System.DBNull.Value) ? ' ' : getDBV<string>(row[16])[0];
 
 

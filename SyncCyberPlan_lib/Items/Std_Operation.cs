@@ -14,7 +14,7 @@ namespace SyncCyberPlan_lib
         public decimal  _YSTACONFIG_0;
         public decimal  _YCONLOTSIZ_0;
         public string   _YGRP_0;     //GRUPPO macchine (CDL in sage)
-        public decimal  _YCONCADTIM_0;
+        public int  _YCONCADTIM_0;
         public string   _YCONLOTUM_0;
         public string   _Yfornitore_BPS_0;
         public string   _YCYB_CDC_0;
@@ -68,7 +68,7 @@ namespace SyncCyberPlan_lib
             _YSTACONFIG_0         = getDBV<decimal>(row[4]);
             _YCONLOTSIZ_0         = getDBV<decimal>(row[5]);
             _YGRP_0               = getDBV<string>(row[6]);      // Centro di lavoro
-            _YCONCADTIM_0         = getDBV<decimal>(row[7]);          // tempo della CADENZA 
+            _YCONCADTIM_0         = getDBV<int>(row[7]);          // tempo della CADENZA 
             _YCONLOTUM_0          = getDBV<string>(row[8]);      // Vie/pezzo
             _Yfornitore_BPS_0     = getDBV<string>(row[9]);      // fornitore
             _YCYB_CDC_0           = getDBV<string>(row[10]);     // reparto 
@@ -81,7 +81,7 @@ namespace SyncCyberPlan_lib
             C_DESCR = EscapeSQL(_YCYB_CDC_0, 30);                     //varchar    30
             C_QUEUE_TIME = 0;                                              //int     
             C_SETUP_TIME = (int)_YSTASETUP_0;                              //int     
-            C_RUN_TIME = (int)_YCONCADTIM_0;                                 //int     
+            C_RUN_TIME = _YCONCADTIM_0;                                 //int     
             C_WAIT_TIME = 0;                                              //int     
             C_DURATION = 0;                                              //int     
             C_LOT_SIZE = _YCONLOTSIZ_0 * _YCONCAD_0;                                    //numeric    

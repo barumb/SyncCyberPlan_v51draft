@@ -48,11 +48,14 @@
     <Compile Include="Item.cs" />
     <Compile Include="Items\Giacenze_XERI00F_opr.cs" />
     <Compile Include="Items\Giacenze_PQM00PF_esterne.cs" />
+    <Compile Include="Items\Item_Routing_PLAS.cs" />
+    <Compile Include="Items\Item_Routing_ASSE.cs" />
     <Compile Include="Items\Operations.cs" />
     <Compile Include="Items\Demand_OPR_Righe.cs" />
     <Compile Include="Items\Articolo_Caratteristiche.cs" />
     <Compile Include="Items\Giacenze.cs" />
     <Compile Include="Items\OrdiniAcq_POHODM.cs" />
+    <Compile Include="Items\Std_Op_Machine_ASSE.cs" />
     <Compile Include="Items\Std_Op_Machine.cs" />
     <Compile Include="Items\Item_Routing.cs" />
     <Compile Include="Items\Std_Operation.cs" />

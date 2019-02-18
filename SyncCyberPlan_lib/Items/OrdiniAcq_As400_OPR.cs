@@ -214,7 +214,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con ordine di vendita non presente (forse già chiuso)" + System.Environment.NewLine + System.Environment.NewLine;
+                testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con ordine di vendita non presente (forse già chiuso)" + Utils.NewLineMail();
             }
 
 
@@ -243,7 +243,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con articolo non rilasciato" + System.Environment.NewLine + System.Environment.NewLine;
+                testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con articolo non rilasciato" + Utils.NewLineMail();
             }
 
 

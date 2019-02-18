@@ -89,18 +89,18 @@ namespace SyncCyberPlan_lib
 
                 if ( PQMQGIA_Sum < soglia)
                 {
-                    message_error = ART + " ha giacenza totale negativa (magazzino " + magazzino + "): " + PQMQGIA_Sum + System.Environment.NewLine;
-                    __bulk_message += System.Environment.NewLine + message_error;
+                    message_error = ART + " ha giacenza totale negativa (magazzino " + magazzino + "): " + PQMQGIA_Sum + Utils.NewLineMail();
+                    __bulk_message += message_error;
                     //Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", message_error);
 
                 }
 
                 if (PQMQGIA_Sum > 0 && tmp < 0)
                 {
-                    message_error += ART + ": giacenza MINORE degli accantonamenti " + System.Environment.NewLine + System.Environment.NewLine
-                   + "GIACENZA TOTALE (sommatoria di PQMQGIA, magazzino " + magazzino + ") = " + PQMQGIA_Sum + System.Environment.NewLine + System.Environment.NewLine
-                   + "ACCANTONAMENTI TOTALI (sommatoria di ORR00PF.ORRQACA) = " + __accantonamenti[ART] + System.Environment.NewLine + System.Environment.NewLine;
-                    __bulk_message += System.Environment.NewLine + message_error;
+                    message_error += ART + ": giacenza MINORE degli accantonamenti " + Utils.NewLineMail()
+                   + "GIACENZA TOTALE (sommatoria di PQMQGIA, magazzino " + magazzino + ") = " + PQMQGIA_Sum + Utils.NewLineMail()
+                   + "ACCANTONAMENTI TOTALI (sommatoria di ORR00PF.ORRQACA) = " + __accantonamenti[ART] + Utils.NewLineMail();
+                    __bulk_message += message_error;
 
                     //Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", message_error);
                 }
@@ -207,9 +207,6 @@ order by PQMCART
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             {
                 string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net";
-#if DEBUG
-                destinatari = "francesco.chiminazzo@sauro.net";
-#endif
                 Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", __bulk_message);
             }
         }

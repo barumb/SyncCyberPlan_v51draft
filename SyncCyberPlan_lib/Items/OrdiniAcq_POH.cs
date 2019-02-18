@@ -36,9 +36,9 @@ namespace SyncCyberPlan_lib
             POHFCY_0 = getDBV<string>(row[4]);
             QTYSTU_0 = getDBV<decimal>(row[5]);
             RCPQTYSTU_0 = getDBV<decimal>(row[6]);
-            CREDAT_0 = getSageDate((DateTime)row[7]);
-            ORDDAT_0 = getSageDate((DateTime)row[8]);
-            EXTRCPDAT_0 = getSageDate((DateTime)row[9]);
+            CREDAT_0 = getSageDate(row[7]);
+            ORDDAT_0 = getSageDate(row[8]);
+            EXTRCPDAT_0 = getSageDate(row[9]);
             LINCLEFLG_0 = getDBV<byte>(row[10]);
             LINAMT_0 = (float)getDBV<decimal>(row[11]);
             BPSNUM_0 = getDBV<string>(row[12]);

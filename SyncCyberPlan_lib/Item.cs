@@ -175,13 +175,18 @@ namespace SyncCyberPlan_lib
             }
             return ret;
         }
-        protected DateTime? getSageDate(DateTime data)
+        protected DateTime? getSageDate(object data)
         {
-            if (data == System.Data.SqlTypes.SqlDateTime.MinValue)
+            if (data is System.DBNull)
             {
                 return null;
             }
-            else return data;
+            DateTime tmp = (DateTime)data;
+            if (tmp == System.Data.SqlTypes.SqlDateTime.MinValue)
+            {
+                return null;
+            }
+            else return tmp;
         }
         static public T GetDBV<T>(object obj)
         {

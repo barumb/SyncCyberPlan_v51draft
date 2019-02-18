@@ -19,8 +19,8 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            Esegui("SAURO MBM41LIB_M DELETE MAC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));
+            //Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
             return;
             //EseguiTutto();
 
@@ -230,7 +230,9 @@ namespace Console
                             //sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");      
 
                             sm.WriteToCyberPlan<Std_Op_Machine>(_mode_all, codicelike, "", _delete, "");
-                            sm.WriteToCyberPlan<Item_Routing>(_mode_all, codicelike, "", _delete, "");
+                            sm.WriteToCyberPlan<Std_Op_Machine_ASSE>(_mode_all, codicelike, "", _delete, "");
+                            sm.WriteToCyberPlan<Item_Routing_ASSE>(_mode_all, codicelike, "", _delete, "");
+                            sm.WriteToCyberPlan<Item_Routing_PLAS>(_mode_all, codicelike, "", _delete, "");
                             break;
                         case "BPR": sm.WriteToCyberPlan<Terzo>(_mode_all, codicelike, "", _delete, ""); break;
                         case "POH-ODM": sm.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;

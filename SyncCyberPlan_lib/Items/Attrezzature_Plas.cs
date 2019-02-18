@@ -41,7 +41,7 @@ namespace SyncCyberPlan_lib
             YATPVIEMIN_0     = getDBV<short>(row[6]);
             YATPVIEMAX_0     = getDBV<short>(row[7]);
             YATPSTA_0        = getDBV<byte>(row[8]);
-            YATPDATRIA_0     = getSageDate((DateTime)row[9]);
+            YATPDATRIA_0     = getSageDate(row[9]);
         }
         public override DataRow GetCyberRow()
         {

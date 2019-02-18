@@ -5,7 +5,7 @@ using System.Data;
 
 namespace SyncCyberPlan_lib
 {
-    public class Item_Routing : Item
+    public abstract class Item_Routing : Item
     {
         public string    _ITMREF_0;
         public string    _YATTCOD_0;
@@ -18,6 +18,12 @@ namespace SyncCyberPlan_lib
         public decimal _YCAD_0;    //per assemblaggio
         public int _YCADTEM_0; //per assemblaggio
 
+        public byte _ITMSTA_0; //stato articolo
+        public string _YWCR_0;   //reparto articolo
+
+        public string _YCONCDL_0;   //Macchina
+        //public int _YCONCAD_0;   //cadenza
+        //public int _YCONCADTIM_0;//tempo cadenza
 
         #region tabella output CYB_ITEM_ROUTING
         public string    C_ITEM_CODE;                       //varchar 50
@@ -43,37 +49,7 @@ namespace SyncCyberPlan_lib
         public Item_Routing(): base("CYB_ITEM_ROUTING")
         {
         }
-        public override void Init(object[] row)
-        {
-            _ITMREF_0   = getDBV<string>(row[0]);
-            _YATTCOD_0  = getDBV<string>(row[1]);
-            _YPRI_0     = getDBV<short>(row[2]);
-            _YENAFLG_0  = getDBV<byte>(row[3]);
-            _YDATRIA_0  = getSageDate((DateTime)row[4]);
-            _YPLAIMP_0  = getDBV<short>(row[5]);
-            _YPLADIV_0  = getDBV<byte>(row[6]);
-            _YCAD_0     = getDBV<decimal>(row[7]);
-            _YCADTEM_0  = getDBV<int>(row[8]);
-
-
-            C_ITEM_CODE = EscapeSQL(_ITMREF_0, 50);           //varchar 50
-            C_ITEM_PLANT = EscapeSQL("ITS01", 20);           //varchar 20
-            C_ROUTING_CODE = EscapeSQL(_YATTCOD_0, 51);           //varchar 51
-            C_ROUTING_ALT = EscapeSQL(_YPRI_0.ToString(), 9);            //varchar 9
-            C_NSEQ = 0;                          //int        
-            C_EFFECTIVE_DATE = _YDATRIA_0;                       //datetime   
-            C_EXPIRE_DATE = null;                       //datetime   
-
-            C_USER_FLAG01 = (byte)(_YPLADIV_0 == 2 ? 1 : 0);
-            C_USER_FLAG02 = 0;
-            C_USER_STRING01 = _YPLAIMP_0.ToString(); ;
-            C_USER_STRING02 = "";
-            C_USER_STRING03 = "";
-            C_USER_STRING04 = "";
-
-            C_LOT_SIZE = _YCAD_0;   //per assemblaggio        vie
-            C_RUN_TIME = _YCADTEM_0;//per assemblaggio        al minuto (se qui =60)
-        }
+        
         public override DataRow GetCyberRow()
         {
             DataRow _tablerow = _dataTable.NewRow();
@@ -96,38 +72,10 @@ namespace SyncCyberPlan_lib
 
             return _tablerow;
         }
-        public override string GetSelectQuery(bool mode, string dossier, string codice_like, string tipo)
-        {
-            string db = "x3." + dossier;
-            //string sage_query = "SELECT A.ITMREF_0, ITMSTA_0 from " + dossier + ".[ITMMASTER] A join " + dossier + ".[YITMINF] B on A.ITMREF_0=B.ITMREF_0" +
-            //    " WHERE YLIVTRAS_0='" + tipo + "' and ITMSTA=1 ";
-
-            string sage_query =
-  @"select 
-         ITMREF_0
-        ,YATTCOD_0
-        ,YPRI_0
-        ,YENAFLG_0
-        ,YDATRIA_0
-        ,YPLAIMP_0
-        ,YPLADIV_0  
-        ,YCAD_0
-        ,YCADTEM_0
-        from SAURO.YPRDITM
-        where YENAFLG_0=2 "
-            ;
-
-            if (!string.IsNullOrWhiteSpace(codice_like))
-            {
-                sage_query += " and ITMREF_0 like '" + codice_like.Trim() + "' \n";
-            }
-
-            sage_query += " ORDER BY ITMREF_0 ";
-            return sage_query;
-        }
+     
         public override string GetID()
         {
-            return C_ITEM_CODE + C_ITEM_PLANT + C_ROUTING_CODE + C_ROUTING_ALT + C_NSEQ;
+            return C_ITEM_CODE + C_ITEM_PLANT + C_ROUTING_CODE + C_ROUTING_ALT + " " + C_NSEQ;
         }
 
         public override void InitDataTable()

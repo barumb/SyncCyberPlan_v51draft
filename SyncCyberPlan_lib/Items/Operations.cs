@@ -378,15 +378,13 @@ namespace SyncCyberPlan_lib
             {
                 case "1": ret = tmp_tempo * 60; break;       //1=ORE
                 case "2":
-                    __bulk_message += System.Environment.NewLine + commento + System.Environment.NewLine + " ha unità tempo pari a 2";
-                    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", commento + System.Environment.NewLine + " ha unità tempo pari a 2");
+                    __bulk_message += commento + Utils.NewLineMail() + " ha unità tempo pari a <2>"+ Utils.NewLineMail();
                     break;
                 case "3": ret = tmp_tempo ; break;           //3 = minuti
                 case "4": ret = tmp_tempo * 60*24; break;    //4 = giorni
                 case "5": ret = tmp_tempo * 60*24*7; break;  //5 = settimane
                 default:
-                    __bulk_message += System.Environment.NewLine + commento + System.Environment.NewLine + " ha unità di misura non prevista: " + unita_di_misura;
-                    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", commento + System.Environment.NewLine + " ha unità di misura non prevista: " + unita_di_misura);
+                    __bulk_message += commento + Utils.NewLineMail() + " ha unità di misura non prevista: < " + unita_di_misura + " >" + Utils.NewLineMail();
                     break;
             }
             if (ret == -1)

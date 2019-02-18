@@ -340,7 +340,7 @@ namespace SyncCyberPlan_lib
                 if (ITMREF_0 != "WI0000-00")
                 {
                     //se REOCOD_0==0 (Tipo proposta dell'articolo sito, significa che NON c'è l'articolo sito ITALIA
-                    __bulk_message += System.Environment.NewLine + System.Environment.NewLine + "articolo " + ITMREF_0 + " senza Articolo-sito ITALIA";
+                    __bulk_message += Utils.NewLineMail() + "articolo " + ITMREF_0 + " senza Articolo-sito ITALIA";
                 }
                 return null;
             }
@@ -726,9 +726,6 @@ namespace SyncCyberPlan_lib
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             {
                 string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net";
-#if DEBUG
-                destinatari = "francesco.chiminazzo@sauro.net";
-#endif
                 Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", __bulk_message);
             }
         }

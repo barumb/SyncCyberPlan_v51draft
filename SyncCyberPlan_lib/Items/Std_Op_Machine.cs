@@ -18,7 +18,7 @@ namespace SyncCyberPlan_lib
         public decimal _YCONLOTSIZ_0;
         public string  _YCONLOTUM_0 ;
         public decimal _YCONCAD_0   ;
-        public decimal _YCONCADTIM_0;
+        public int _YCONCADTIM_0;
         public DateTime? _YCONDATRIA_0;
         public byte _YCONENAFLG_0;
         public string _WCR_0;   //flusso  (PLAS, MORS...reparto)
@@ -54,9 +54,9 @@ namespace SyncCyberPlan_lib
             _YCONLOTSIZ_0     = getDBV<decimal>(row[3]);
             _YCONLOTUM_0      = getDBV<string>(row[4]);
             _YCONCAD_0        = getDBV<decimal>(row[5]);
-            _YCONCADTIM_0     = getDBV<decimal>(row[6]);
+            _YCONCADTIM_0     = getDBV<int>(row[6]);
             _YCONENAFLG_0     = getDBV<byte>(row[7]);
-            _YCONDATRIA_0     = getSageDate((DateTime)row[8]);
+            _YCONDATRIA_0     = getSageDate(row[8]);
             _WCR_0            = getDBV<string>(row[9]);
 
 
@@ -71,12 +71,12 @@ namespace SyncCyberPlan_lib
 
             LOT_SIZE = getLotSize(_WCR_0, _YCONLOTSIZ_0, _YCONCAD_0);                     // numeric      
             PREFERENCE = 0;                     // int      
-            RUN_TIME = (int)_YCONCADTIM_0;                     // int      
+            RUN_TIME = _YCONCADTIM_0;                     // int      
             SETUP_TIME = 0;                     // int      
             WAIT_TIME = 0;                     // int      
             ACTIVE = (byte)(_YCONENAFLG_0 == 2 ? 1 : 0);
         }
-        protected decimal getLotSize(string flusso,decimal LotSize, decimal Cadenza)
+        protected virtual decimal getLotSize(string flusso,decimal LotSize, decimal Cadenza)
         {
             if (flusso == "PLAS")
             {
@@ -169,7 +169,7 @@ namespace SyncCyberPlan_lib
         {
             if (__dataTable_Conf_Attr_Macchine == null)
             {
-                __dataTable_Conf_Attr_Macchine = InitTable_ConfigAttrezzMacchine(dossier);
+                __dataTable_Conf_Attr_Macchine = InitTable_ConfigAttrezzura_ConMacchina(dossier);
             }
 
             string db = "x3." + dossier;
@@ -193,6 +193,8 @@ namespace SyncCyberPlan_lib
             //RECUPERO qui le configurazioni attrezz/GRUPPO (senza macchina)
             //da cui ricavo tramite join
             //tutte le combinazioni GRUPPO/MACCHINA possibili
+
+            //TUTTO ECCETTO ASSEMBLAGGIO
             string sage_query = @" SELECT
                       C.YCONATT_0
                      ,C.YCONGRP_0
@@ -206,14 +208,16 @@ namespace SyncCyberPlan_lib
                      ,W.WCR_0
                       from x3.SAURO.YPRDCONF C
                      join SAURO.WORKSTATIO W  on C.YCONGRP_0 = W.YGRP_0
+                     left join SAURO.YPRDATT A on A.YATTCOD_0= C.YCONATT_0
                       where YCONCDL_0 = ''
+                      and W.WCR_0 <> 'ASSE'
+					  and A.YATTENAFLG_0=2
                       order by YCONATT_0, WST_0 desc";
 
 
-            //C.YCONENAFLG_0=2 and 
+            //C.YCONENAFLG_0=2 and  : VA VALUTATA LA DATA DI RIATTIIVAZIONE
             //C.YCONCDL_0 <> '';
             //and YCONATT_0 like 'STP014%'
-
 
 
             //if (!string.IsNullOrWhiteSpace(codice_like))
@@ -250,7 +254,7 @@ namespace SyncCyberPlan_lib
             table.Columns.Add("ACTIVE", typeof(byte));
 
         }
-        static protected DataTable InitTable_ConfigAttrezzMacchine(string dossier)
+        static protected DataTable InitTable_ConfigAttrezzura_ConMacchina(string dossier)
         {
             //recupero dati Configurazione Attrezzature Macchine dove c'è la macchina, non solo il gruppo
             DataTable ret = new DataTable();
@@ -269,7 +273,10 @@ namespace SyncCyberPlan_lib
                      ,W.WCR_0
                       from SAURO.YPRDCONF C
                      join SAURO.WORKSTATIO W  on C.YCONCDL_0 = W.WST_0
+                     left join SAURO.YPRDATT A on A.YATTCOD_0= C.YCONATT_0
                       where YCONCDL_0 <> '' 
+                      and W.WCR_0 <> 'ASSE'
+					  and A.YATTENAFLG_0=2
                       order by YCONATT_0, YCONCDL_0 desc";
 
             DBHelper2 db = DBHelper2.getSageDBHelper(dossier);
