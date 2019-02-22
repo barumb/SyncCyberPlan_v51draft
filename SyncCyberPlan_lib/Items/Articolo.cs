@@ -64,6 +64,8 @@ namespace SyncCyberPlan_lib
         //tabella ITMBPS
         public string BPSNUM_0;
 
+        //vista  FAMPEX
+        public char FAMPEX;
 
         #region tabella output CYB_ITEM        
         public string C_CODE	; // varchar 50
@@ -121,7 +123,7 @@ namespace SyncCyberPlan_lib
         public float C_USER_REAL05	; // float	
         public char C_USER_CHAR01	; // char 1   //per morsetti CATEGORIA altezza??
         public char C_USER_CHAR02	; // char 1
-        public char C_USER_CHAR03	; // char 1
+        public char C_USER_CHAR03	; // char 1   //FAMPEX per PLASTICA
         public char C_USER_CHAR04	; // char 1
         public char C_USER_CHAR05	; // char 1
         public byte C_USER_FLAG01	; // bit	
@@ -307,7 +309,7 @@ namespace SyncCyberPlan_lib
             C_USER_REAL05                        = 0;                                // float	
             C_USER_CHAR01                        = (char)EscapeSQL(YMRPTAG1_0,1)[0]; // char 1  Categoria pe morsetti / Frontalino Per WP
             C_USER_CHAR02                        = ' ';                              // char 1  Piega o non piega per FILO
-            C_USER_CHAR03                        = ' '; //aggiornata successivamente da Articolo_caratteristiche() =getFAMP(ITMREF_0, ITMDES1_0);     // char 1
+            C_USER_CHAR03                        = FAMPEX;   //' '; //aggiornata successivamente da Articolo_caratteristiche() =getFAMP(ITMREF_0, ITMDES1_0);     // char 1
             C_USER_CHAR04                        = getSTH(TCLCOD_0,YMAT_0);          // char 1
             C_USER_CHAR05                        = ' ';                              // char 1
             C_USER_FLAG01                        = 0;                                // bit	
@@ -824,11 +826,12 @@ namespace SyncCyberPlan_lib
  ,Y.YQTADECIMI_0
  ,F.YWCR_0
  ,F.YQTAPREANT_0
+ ,FAMPEX.FAMPEX_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +
-
-                " left join "+
+                " left join " + db + ".YITMVP FAMPEX on FAMPEX.ITMREF_0 = I.ITMREF_0 \n" +
+                " left join " +
                 " ( " +
                 "     select ITMREF_0, BPSNUM_0 from SAURO.ITMBPS where ROWID in " +
                 "         (select  min(ROWID)from SAURO.ITMBPS where BPSNUM_0 <> 'A000818' group by ITMREF_0) " +

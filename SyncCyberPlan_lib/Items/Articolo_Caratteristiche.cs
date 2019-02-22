@@ -23,7 +23,7 @@ namespace SyncCyberPlan_lib
 
         public Articolo_Caratteristiche(): base("YITMCAR")
         {
-
+            throw new NotSupportedException();
         }
 
         public override void Init(object[] row)
@@ -168,6 +168,7 @@ order by a.itmref,a.valcod desc
                         when '006' then 'A'
                         when '038' then 'M'
                         when '051' then 'P'
+                        when '057' then 'E'
                         when '150' then a.VALTXT
                         end AS FAMP
                         FROM [CyberPlanFrontiera].[dbo].[YITMCAR] a
@@ -181,6 +182,7 @@ order by a.itmref,a.valcod desc
                         a.valcod = '006' or               
                         a.valcod = '038' or               
                         a.valcod = '051' or 
+                        a.valcod = '057' or 
                         a.valcod = '150'                 
                         --order by a.itmref,a.valcod desc
                         ) C

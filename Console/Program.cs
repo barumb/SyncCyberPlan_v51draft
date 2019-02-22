@@ -19,8 +19,8 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            Esegui("SAURO MBM41LIB_M DELETE ATT".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ATT".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
             //EseguiTutto();
 
@@ -221,7 +221,7 @@ namespace Console
                         //da sage
                         case "ITM":
                             sm.WriteToCyberPlan<Articolo>(_mode_all, codicelike, "", _delete, "");
-                            sm.WriteToCyberPlan<Articolo_Caratteristiche>(_mode_all, codicelike, "", _delete, "");
+                            //aggiunto vista FAMPEX    sm.WriteToCyberPlan<Articolo_Caratteristiche>(_mode_all, codicelike, "", _delete, "");
                             break;
                         case "CIC":
                             //ho aggiunto questo if per timore che quelli di CyberPlan non svuotino le tabelle
