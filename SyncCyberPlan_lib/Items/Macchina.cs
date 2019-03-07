@@ -22,6 +22,7 @@ namespace SyncCyberPlan_lib
         public int     _YCAD_0;      //cadenza
         public int     _YCADTEM_0;    //cadenza tempo in secondi
         public byte    _WSTTYP_0; //tipo macchina  1 macchina  2= manuale  
+        public string  _YMACLIN_0;  //macchina successiva(in linea)
 
         #region tabella output CYB_MACHINE
         public string C_CODE         ;             //varchar](30) NOT NULL,
@@ -39,6 +40,7 @@ namespace SyncCyberPlan_lib
         public string C_USER_STRING02;             //varchar](29) NULL,
         public string C_USER_STRING03;             //varchar](29) NULL,
         public string C_USER_STRING04;             //varchar](29) NULL,
+        public string C_USER_STRING05;             //varchar](29) NULL,
         public DateTime? C_USER_TIME01  ;          //datetime] NULL,
         public DateTime? C_USER_TIME02  ;          //datetime] NULL,
         public float C_UTILIZATION  ;              //float] NULL,
@@ -69,6 +71,7 @@ namespace SyncCyberPlan_lib
             _YCAD_0       = getDBV<int>(row[11]);
             _YCADTEM_0    = getDBV<int>(row[12]);
             _WSTTYP_0     = getDBV<byte>(row[13]);
+            _YMACLIN_0    = getDBV<string>(row[14]);
 
 
             C_CODE = _WST_0;           //varchar](30) NOT NULL,
@@ -77,7 +80,7 @@ namespace SyncCyberPlan_lib
             C_USER_CHAR01 = ' ';         //char](1) NULL,
             C_USER_CHAR02 = ' ';         //char](1) NULL,
             C_USER_FLAG01 = (byte)(_YPLADIV_0 == 2 ? 1 : 0);  //bit] NULL,
-            C_USER_FLAG02 = (byte)(_WSTTYP_0==2? 1 : 0);    //bit] NULL,   se manuale (WSSTYP=2) metto true
+            C_USER_FLAG02 = getFlagManuale(_YMRPCDL_0, _WSTTYP_0, _WST_0);    //bit] NULL,   se manuale (WSSTYP=2) metto true
             C_USER_INT01 = _YCAD_0;             //int] NULL,
             C_USER_INT02 = _YCADTEM_0;          //int] NULL,
             C_USER_REAL01 = (float)_YPLAGRMIN_0;            //float] NULL,
@@ -86,11 +89,12 @@ namespace SyncCyberPlan_lib
             C_USER_STRING02 = _YGRP_0;  //varchar](29) NULL,
             C_USER_STRING03 = _YBPS_0;   //varchar](29) NULL,
             C_USER_STRING04 = Attrezzature.GetTipoPLastica("PC", _YPLASTH_0, _YPLAPA66_0);       //varchar](29) NULL,
+            C_USER_STRING05 = _YMACLIN_0;             //varchar](29) NULL,  //macchina successiva
             C_USER_TIME01 = null;         //datetime] NULL,
             C_USER_TIME02 = null;         //datetime] NULL,
             C_UTILIZATION = 0;           //float] NULL,
             C_WAIT_TIME = 0;              //float] NULL,
-            C_WORKCENTER = _YMRPCDL_0;   //varchar](30) NULL,
+            C_WORKCENTER = getMrpCDL(_YMRPCDL_0, _WSTTYP_0, _WST_0);   //varchar](30) NULL,
         }
         public override DataRow GetCyberRow()
         {
@@ -111,11 +115,12 @@ namespace SyncCyberPlan_lib
             _tablerow[12] = C_USER_STRING02;
             _tablerow[13] = C_USER_STRING03;
             _tablerow[14] = C_USER_STRING04;
-            _tablerow[15] = DateTime_toCyb(C_USER_TIME01); 
-            _tablerow[16] = DateTime_toCyb(C_USER_TIME02);
-            _tablerow[17] = C_UTILIZATION;
-            _tablerow[18] = C_WAIT_TIME;  
-            _tablerow[19] = C_WORKCENTER; 
+            _tablerow[15] = C_USER_STRING05;
+            _tablerow[16] = DateTime_toCyb(C_USER_TIME01); 
+            _tablerow[17] = DateTime_toCyb(C_USER_TIME02);
+            _tablerow[18] = C_UTILIZATION;
+            _tablerow[19] = C_WAIT_TIME;  
+            _tablerow[20] = C_WORKCENTER; 
 
             return _tablerow;
         }
@@ -141,6 +146,7 @@ namespace SyncCyberPlan_lib
                 , W.YCAD_0
                 , W.YCADTEM_0
                 , W.WSTTYP_0
+                , W.YMACLIN_0
                 from x3.SAURO.WORKSTATIO W 
                 join x3.SAURO.ATEXTRA A on A.CODFIC_0 = 'WORKSTATIO' 
                 and A.ZONE_0 ='WSTDESAXX' and A.LANGUE_0='ITA' and A.IDENT1_0 = W.WST_0
@@ -154,7 +160,36 @@ namespace SyncCyberPlan_lib
             sage_query += " ORDER BY W.WST_0 ";
             return sage_query;
         }
-        
+
+        protected string getMrpCDL(string mrpcdl, byte WSTTYP, string macchina)
+        {
+            //se il CDl_mrp è "ASSI" e la macchina è manuale ( WSTTYP=2)
+            //come CDL va passata la macchina stessa
+            //e non va passato il flag "manuale"
+            if (mrpcdl == "ASSI" && WSTTYP == 2)
+            {
+                return macchina;
+            }
+            else
+            {
+                return mrpcdl;
+            }
+        }
+        protected byte getFlagManuale(string mrpcdl, byte WSTTYP, string macchina)
+        {
+            //se il CDl_mrp è "ASSI" e la macchina è manuale ( WSTTYP=2)
+            //come CDL va passata la macchina stessa
+            //e non va passato il flag "manuale"
+            if (mrpcdl == "ASSI" && WSTTYP == 2)
+            {
+                return 0;
+            }
+            else
+            {
+                return (byte)(_WSTTYP_0 == 2 ? 1 : 0);
+            }
+        }
+
         public override string GetID()
         {
             return C_CODE;
@@ -177,6 +212,7 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_USER_STRING02", typeof(string));
             _dataTable.Columns.Add("C_USER_STRING03", typeof(string));
             _dataTable.Columns.Add("C_USER_STRING04", typeof(string));
+            _dataTable.Columns.Add("C_USER_STRING05", typeof(string));
             _dataTable.Columns.Add("C_USER_TIME01", typeof(DateTime));
             _dataTable.Columns.Add("C_USER_TIME02", typeof(DateTime));
             _dataTable.Columns.Add("C_UTILIZATION", typeof(float));
