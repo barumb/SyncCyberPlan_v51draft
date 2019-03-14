@@ -160,7 +160,7 @@ namespace SyncCyberPlan_lib
         {
             ITMREF_0 = getDBV<string>(row[0]);
 
-            if (ITMREF_0 == "MSG20091-00001")
+            if (ITMREF_0.StartsWith("WP"))
             {
                 ;
             }
@@ -173,7 +173,7 @@ namespace SyncCyberPlan_lib
             TCLCOD_0 = getDBV<string>(row[5]);
             YLIVTRAS_0 = getDBV<string>(row[6]);
             YFAMCOM_0 = getDBV<string>(row[7]);
-            YPRDAPP_0 = (row[8] == System.DBNull.Value) ? ' ' : getDBV<string>(row[8])[0];
+            YPRDAPP_0 = getDBV_char(row[8]);
             REOCOD_0 = getDBV<byte>(row[9]);             //tipo proposta
             PRPLTI_0 = getDBV<decimal>(row[10]);
             SHR_0 = getDBV<decimal>(row[11]);            //% scarto
@@ -252,6 +252,7 @@ namespace SyncCyberPlan_lib
             YQTADECIMI_0 = getDBV<int>(row[83]);
             YWCR_0       = getDBV<string>(row[84]);   //reparto (CdC)
             YQTAPREANT_0 = getDBV<decimal>(row[85]);
+            FAMPEX       = getDBV_char(row[86]);
 
 
             C_CODE                               = EscapeSQL(ITMREF_0, 50);          // varchar 50

@@ -19,8 +19,8 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            Esegui("SAURO MBM41LIB_M DELETE MAC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));
+            //Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
             //EseguiTutto();
 

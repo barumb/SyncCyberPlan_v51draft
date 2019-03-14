@@ -175,6 +175,10 @@ namespace SyncCyberPlan_lib
             }
             return ret;
         }
+        protected char getDBV_char(object obj)
+        {
+            return (obj == System.DBNull.Value) ? ' ' : getDBV<string>(obj)[0];
+        }
         protected DateTime? getSageDate(object data)
         {
             if (data is System.DBNull)

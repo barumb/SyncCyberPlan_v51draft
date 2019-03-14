@@ -7,7 +7,6 @@ namespace SyncCyberPlan_lib
 {
     public class Item_Routing_ASSE : Item_Routing
     {
-
         public Item_Routing_ASSE(): base()
         {
         }
@@ -75,7 +74,7 @@ namespace SyncCyberPlan_lib
             //    " WHERE YLIVTRAS_0='" + tipo + "' and ITMSTA=1 ";
 
             //per Assemblaggio tempo e tempoCadenza sono quelli dell'attrezzatura
-            //ATTENZIONE: viene dato per scontato che non ci siamo atrtezzature dell'ASSEMBLAGGIO
+            //ATTENZIONE: viene dato per scontato che non ci siamo attrezzature dell'ASSEMBLAGGIO
             //assegnate a TUTTE le macchine (quindi campo C.YCONCDL_0 non deve mai essere vuoto)
 
             string sage_query =
