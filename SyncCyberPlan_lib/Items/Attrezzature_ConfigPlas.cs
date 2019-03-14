@@ -5,7 +5,7 @@ using System.Data;
 
 namespace SyncCyberPlan_lib
 {
-    public class Attrezzature_Plas: Item
+    public class Attrezzature_ConfigPlas: Item
     { 
         public string YATTCOD_0;                   //nvarchar](10) NOT NULL,
         public string YATPVER_0;                     //nvarchar](4) NOT NULL,
@@ -24,7 +24,7 @@ namespace SyncCyberPlan_lib
         #endregion
 
 
-        public Attrezzature_Plas(): base("YPRDATTP")
+        public Attrezzature_ConfigPlas(): base("YPRDATTP")
         {
 
         }

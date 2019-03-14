@@ -230,17 +230,18 @@ namespace Console
                             //sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");      
 
                             sm.WriteToCyberPlan<Std_Op_Machine>(_mode_all, codicelike, "", _delete, "");
-                            sm.WriteToCyberPlan<Std_Op_Machine_ASSE>(_mode_all, codicelike, "", _delete, "");
-                            sm.WriteToCyberPlan<Item_Routing_ASSE>(_mode_all, codicelike, "", _delete, "");
-                            sm.WriteToCyberPlan<Item_Routing_PLAS>(_mode_all, codicelike, "", _delete, "");
+                            //sm.WriteToCyberPlan<Std_Op_Machine_ASSE>(_mode_all, codicelike, "", _delete, "");
+                            sm.WriteToCyberPlan<Item_Routing>(_mode_all, codicelike, "", _delete, "");
+                            //sm.WriteToCyberPlan<Item_Routing_ASSE>(_mode_all, codicelike, "", _delete, "");
+                            //sm.WriteToCyberPlan<Item_Routing_PLAS>(_mode_all, codicelike, "", _delete, "");
                             break;
                         case "BPR": sm.WriteToCyberPlan<Terzo>(_mode_all, codicelike, "", _delete, ""); break;
                         case "POH-ODM": sm.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;
                         //case "POH-OFA": sm.WriteToCyberPlan<OrdiniAcq_OFA>(_mode_all, codicelike, "", _delete, ""); break;
                         case "MAC": sm.WriteToCyberPlan<Macchina>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "ATT": sm.WriteToCyberPlan<Attrezzature_ASSE>(_mode_all, codicelike, "", _delete, "");
+                        case "ATT": //sm.WriteToCyberPlan<Attrezzature_ASSE>(_mode_all, codicelike, "", _delete, "");
                                     sm.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
-                                    sm.WriteToCyberPlan<Attrezzature_Plas>(_mode_all, codicelike, "", _delete, ""); 
+                                    sm.WriteToCyberPlan<Attrezzature_ConfigPlas>(_mode_all, codicelike, "", _delete, ""); 
                         break;
 
 

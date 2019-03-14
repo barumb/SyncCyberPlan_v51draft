@@ -48,6 +48,10 @@ namespace SyncCyberPlan_lib
             //string sage_query = "SELECT A.ITMREF_0, ITMSTA_0 from " + dossier + ".[ITMMASTER] A join " + dossier + ".[YITMINF] B on A.ITMREF_0=B.ITMREF_0" +
             //    " WHERE YLIVTRAS_0='" + tipo + "' and ITMSTA=1 ";
 
+            //NB: messo Join non left o full: 
+            //left potrebbe portare dei null, ma qui servono solo dati completi (se per es. un'attrezzatura non esiste in YPRDATT non deve essere esportata la riga)
+            //full non ha senso: parto dalla YPRDITM, se non c'è qui non ha senso esportare record
+            
             string sage_query =
   @"SELECT   I.ITMREF_0
         ,I.YATTCOD_0
@@ -60,16 +64,16 @@ namespace SyncCyberPlan_lib
         ,I.YCADTEM_0
 		,M.ITMSTA_0
 		,F.YWCR_0
-        from SAURO.YPRDITM I
-		full join SAURO.ITMMASTER M
+        from " + db + @".YPRDITM I
+		join " + db + @".ITMMASTER M
 			on I.ITMREF_0 = M.ITMREF_0
-		full join SAURO.ITMFACILIT F
+		join " + db + @".ITMFACILIT F
 		    on I.ITMREF_0=F.ITMREF_0 and F.STOFCY_0='ITS01'
-        left join SAURO.YPRDATT A 
+        join " + db + @".YPRDATT A 
             on A.YATTCOD_0= I.YATTCOD_0
         where I.YENAFLG_0=2 
         and A.YATTENAFLG_0=2
-		and F.YWCR_0 like 'PLAS' "
+		and F.YWCR_0 = 'PLAS' "
             ;
 
             if (!string.IsNullOrWhiteSpace(codice_like))

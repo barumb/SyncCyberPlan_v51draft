@@ -209,9 +209,9 @@ namespace SyncCyberPlan_lib
                       from x3.SAURO.YPRDCONF C
                      join SAURO.WORKSTATIO W  on C.YCONGRP_0 = W.YGRP_0
                      left join SAURO.YPRDATT A on A.YATTCOD_0= C.YCONATT_0
-                      where YCONCDL_0 = ''
-                      and W.WCR_0 <> 'ASSE'
-					  and A.YATTENAFLG_0=2
+                      where YCONCDL_0 = '' " +
+                      //and W.WCR_0 <> 'ASSE'
+					  @" and A.YATTENAFLG_0=2
                       order by YCONATT_0, WST_0 desc";
 
 
@@ -274,9 +274,9 @@ namespace SyncCyberPlan_lib
                       from SAURO.YPRDCONF C
                      join SAURO.WORKSTATIO W  on C.YCONCDL_0 = W.WST_0
                      left join SAURO.YPRDATT A on A.YATTCOD_0= C.YCONATT_0
-                      where YCONCDL_0 <> '' 
-                      and W.WCR_0 <> 'ASSE'
-					  and A.YATTENAFLG_0=2
+                      where YCONCDL_0 <> '' " +
+                      //and W.WCR_0 <> 'ASSE'
+					  @" and A.YATTENAFLG_0=2
                       order by YCONATT_0, YCONCDL_0 desc";
 
             DBHelper2 db = DBHelper2.getSageDBHelper(dossier);

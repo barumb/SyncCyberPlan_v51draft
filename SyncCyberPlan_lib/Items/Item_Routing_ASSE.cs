@@ -92,13 +92,13 @@ namespace SyncCyberPlan_lib
 		,C.YCONCDL_0
 						
         from " + db + @".YPRDITM I
-		left join " + db + @".ITMMASTER M
+		join " + db + @".ITMMASTER M
 			on I.ITMREF_0 = M.ITMREF_0
-		left join " + db + @".ITMFACILIT F
+		join " + db + @".ITMFACILIT F
 			on I.ITMREF_0=F.ITMREF_0 and F.STOFCY_0='ITS01'
-		full join " + db + @".YPRDCONF C
+		join " + db + @".YPRDCONF C
 			on C.YCONATT_0= I.YATTCOD_0
-        left join " + db + @".YPRDATT A 
+        join " + db + @".YPRDATT A 
             on A.YATTCOD_0= I.YATTCOD_0
         where I.YENAFLG_0=2 
         and A.YATTENAFLG_0=2

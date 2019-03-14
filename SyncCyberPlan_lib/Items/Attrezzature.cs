@@ -177,9 +177,12 @@ namespace SyncCyberPlan_lib
                      ,S.YATTVP_0
 
                       from " + db + @".YPRDATT S 
-                       where S.YATTENAFLG_0=2 
-                       and S.YATTWCR_0 <>'ASSE' "
-              ;
+                       where S.YATTENAFLG_0=2 "
+                        ;
+                       //and S.YATTWCR_0 <>'ASSE' "
+ 
+
+
             //if (!string.IsNullOrWhiteSpace(codice_like))
             //{
             //    sage_query += " and B.BPRNUM_0 like '" + codice_like.Trim() + "'";
