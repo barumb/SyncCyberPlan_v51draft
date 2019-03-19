@@ -19,10 +19,13 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
+            EseguiTutto();
+            return;
+
             //Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
-            //EseguiTutto();
+
 
             Esegui("SAURO MBM41LIB_M DELETE POH-OFA".Split(' '));
             //Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM COD=IT001-ODM180062%".Split(' '));
@@ -206,9 +209,9 @@ namespace Console
                 ///////////////////FINE ARG 
 
 
-                DBHelper2 am = DBHelper2.getAs400DBHelper(libreriaas400);
-                DBHelper2 sm = DBHelper2.getSageDBHelper(dossier);
-                DBHelper2 cm = DBHelper2.getCyberDBHelper();
+                DBHelper2 as400 = DBHelper2.getAs400DBHelper(libreriaas400);
+                DBHelper2 sage = DBHelper2.getSageDBHelper(dossier);
+                DBHelper2 cyber = DBHelper2.getCyberDBHelper();
 
                 //SageTable_Manager sm = new SageTable_Manager(dossier);
                 //As400Table_Manager am = new As400Table_Manager();
@@ -220,44 +223,44 @@ namespace Console
                     {
                         //da sage
                         case "ITM":
-                            sm.WriteToCyberPlan<Articolo>(_mode_all, codicelike, "", _delete, "");
+                            sage.WriteToCyberPlan<Articolo>(_mode_all, codicelike, "", _delete, "");
                             //aggiunto vista FAMPEX    sm.WriteToCyberPlan<Articolo_Caratteristiche>(_mode_all, codicelike, "", _delete, "");
                             break;
                         case "CIC":
                             //ho aggiunto questo if per timore che quelli di CyberPlan non svuotino le tabelle
                             //sm.WriteToCyberPlan<Cicli_Routing_Header>(_mode_all, codicelike, "", _delete, "");     
-                            if(_delete)  DBHelper2.EseguiSuDBCyberPlan(ref cm, "DELETE FROM [CyberPlanFrontiera].[dbo].[CYB_STD_OPERATION] where 1=1 ");
+                            if(_delete)  DBHelper2.EseguiSuDBCyberPlan(ref cyber, "DELETE FROM [CyberPlanFrontiera].[dbo].[CYB_STD_OPERATION] where 1=1 ");
                             //sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");      
 
-                            sm.WriteToCyberPlan<Std_Op_Machine>(_mode_all, codicelike, "", _delete, "");
+                            sage.WriteToCyberPlan<Std_Op_Machine>(_mode_all, codicelike, "", _delete, "");
                             //sm.WriteToCyberPlan<Std_Op_Machine_ASSE>(_mode_all, codicelike, "", _delete, "");
-                            sm.WriteToCyberPlan<Item_Routing>(_mode_all, codicelike, "", _delete, "");
+                            sage.WriteToCyberPlan<Item_Routing>(_mode_all, codicelike, "", _delete, "");
                             //sm.WriteToCyberPlan<Item_Routing_ASSE>(_mode_all, codicelike, "", _delete, "");
                             //sm.WriteToCyberPlan<Item_Routing_PLAS>(_mode_all, codicelike, "", _delete, "");
                             break;
-                        case "BPR": sm.WriteToCyberPlan<Terzo>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "POH-ODM": sm.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;
+                        case "BPR": sage.WriteToCyberPlan<Terzo>(_mode_all, codicelike, "", _delete, ""); break;
+                        case "POH-ODM": sage.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;
                         //case "POH-OFA": sm.WriteToCyberPlan<OrdiniAcq_OFA>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "MAC": sm.WriteToCyberPlan<Macchina>(_mode_all, codicelike, "", _delete, ""); break;
+                        case "MAC": sage.WriteToCyberPlan<Macchina>(_mode_all, codicelike, "", _delete, ""); break;
                         case "ATT": //sm.WriteToCyberPlan<Attrezzature_ASSE>(_mode_all, codicelike, "", _delete, "");
-                                    sm.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
-                                    sm.WriteToCyberPlan<Attrezzature_ConfigPlas>(_mode_all, codicelike, "", _delete, ""); 
+                                    sage.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
+                                    sage.WriteToCyberPlan<Attrezzature_ConfigPlas>(_mode_all, codicelike, "", _delete, ""); 
                         break;
 
 
                         //da as400                    
-                        case "LOC": am.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "SOH": am.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
+                        case "LOC": as400.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
+                        case "SOH": as400.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
                         case "OPR":
-                            am.WriteToCyberPlan<OrdiniAcq_As400_OPR>(_mode_all, codicelike, "", _delete, "");
-                            am.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
+                            as400.WriteToCyberPlan<OrdiniAcq_As400_OPR>(_mode_all, codicelike, "", _delete, "");
+                            as400.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
                         break;
-                        case "GIAC": am.WriteToCyberPlan<Giacenze_ORR00PF>(_mode_all, codicelike, "", _delete, ""); 
-                                     am.WriteToCyberPlan<Giacenze_PQM00PF>(_mode_all, codicelike, "", _delete, ""); //interne
-                                     am.WriteToCyberPlan<Giacenze_PQM00PF_esterne>(_mode_all, codicelike, "", _delete, "");
+                        case "GIAC": as400.WriteToCyberPlan<Giacenze_ORR00PF>(_mode_all, codicelike, "", _delete, ""); 
+                                     as400.WriteToCyberPlan<Giacenze_PQM00PF>(_mode_all, codicelike, "", _delete, ""); //interne
+                                     as400.WriteToCyberPlan<Giacenze_PQM00PF_esterne>(_mode_all, codicelike, "", _delete, "");
                         break;
-                        case "DISBAS": am.WriteToCyberPlan<DistintaBase>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "DEM": am.WriteToCyberPlan<Demand_OPR_RIGHE>(_mode_all, codicelike, "", _delete, ""); break;
+                        case "DISBAS": as400.WriteToCyberPlan<DistintaBase>(_mode_all, codicelike, "", _delete, ""); break;
+                        case "DEM": as400.WriteToCyberPlan<Demand_OPR_RIGHE>(_mode_all, codicelike, "", _delete, ""); break;
 
 
                     default: _logger.Error(_cur_arg + ": tipo articolo non previsto"); return;
