@@ -30,11 +30,12 @@ namespace SyncCyberPlan_lib
         public decimal YCORPOPRO_0;       //profodità...
         public string YMAT_0;             //per capire se è sth PER WG (granulati->PLASTICA)
         public string YTAGOEM_0;          //Marchio
-        public string YCOLORE_0;          //Marchio
+        public string YCOLORE_0;          //Colore
         public decimal YPESMAT_0;         //peso materozza/impronta
         public string YPASSOVIE_0;        //passo        
         public int   YCONFQTA_0;         //qta per confezione
         public int   YQTADECIMI_0;         //qta per confezione
+        public string YSTAMPCOLORE_0;      //Color inchiostro stampigliatura
 
 
 
@@ -253,6 +254,7 @@ namespace SyncCyberPlan_lib
             YWCR_0       = getDBV<string>(row[84]);   //reparto (CdC)
             YQTAPREANT_0 = getDBV<decimal>(row[85]);
             FAMPEX       = getDBV_char(row[86]);
+            YSTAMPCOLORE_0 = getDBV<string>(row[87]);
 
 
             C_CODE                               = EscapeSQL(ITMREF_0, 50);          // varchar 50
@@ -320,7 +322,7 @@ namespace SyncCyberPlan_lib
             C_USER_STRING02                      = EscapeSQL(YCOLORE_0, 29);         // varchar 29
             C_USER_STRING03                      = EscapeSQL("", 29);                // varchar 29  SEZIONE per FILO
             C_USER_STRING04                      = EscapeSQL(YPASSOVIE_0, 29);       // varchar 29  passo
-            C_USER_STRING05                      = EscapeSQL("", 29);                // varchar 29
+            C_USER_STRING05                      = EscapeSQL(YSTAMPCOLORE_0, 29);    // varchar 29
             C_USER_STRING06                      = EscapeSQL("", 29);                // varchar 29
             C_USER_STRING07                      = EscapeSQL("", 29);                // varchar 29
             C_USER_STRING08                      = EscapeSQL("", 29);                // varchar 29
@@ -828,6 +830,7 @@ namespace SyncCyberPlan_lib
  ,F.YWCR_0
  ,F.YQTAPREANT_0
  ,FAMPEX.FAMPEX_0
+ ,Y.YSTAMPCOLORE_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +
