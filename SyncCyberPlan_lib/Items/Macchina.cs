@@ -23,6 +23,7 @@ namespace SyncCyberPlan_lib
         public int     _YCADTEM_0;    //cadenza tempo in secondi
         public byte    _WSTTYP_0; //tipo macchina  1 macchina  2= manuale  
         public string  _YMACLIN_0;  //macchina successiva(in linea)
+        public byte _YPIEFLG_0; //flag piegatrice (per morsetti)
 
         #region tabella output CYB_MACHINE
         public string C_CODE         ;             //varchar](30) NOT NULL,
@@ -72,12 +73,13 @@ namespace SyncCyberPlan_lib
             _YCADTEM_0    = getDBV<int>(row[12]);
             _WSTTYP_0     = getDBV<byte>(row[13]);
             _YMACLIN_0    = getDBV<string>(row[14]);
+            _YPIEFLG_0    = getDBV<byte>(row[15]);
 
 
             C_CODE = _WST_0;           //varchar](30) NOT NULL,
             C_DESCR = _TEXTE_0;         //varchar](50) NULL,
             C_EFFICIENCY = 0;             //int] NULL,
-            C_USER_CHAR01 = ' ';         //char](1) NULL,
+            C_USER_CHAR01 = _YPIEFLG_0 == 2 ? 'P' : ' ';         //char](1) NULL,
             C_USER_CHAR02 = ' ';         //char](1) NULL,
             C_USER_FLAG01 = (byte)(_YPLADIV_0 == 2 ? 1 : 0);  //bit] NULL,
             C_USER_FLAG02 = getFlagManuale(_YMRPCDL_0, _WSTTYP_0, _WST_0);    //bit] NULL,   se manuale (WSSTYP=2) metto true
@@ -147,6 +149,7 @@ namespace SyncCyberPlan_lib
                 , W.YCADTEM_0
                 , W.WSTTYP_0
                 , W.YMACLIN_0
+                , W.YPIEFLG_0
                 from x3.SAURO.WORKSTATIO W 
                 join x3.SAURO.ATEXTRA A on A.CODFIC_0 = 'WORKSTATIO' 
                 and A.ZONE_0 ='WSTDESAXX' and A.LANGUE_0='ITA' and A.IDENT1_0 = W.WST_0
