@@ -53,7 +53,6 @@
     <Compile Include="Items\Articolo_Caratteristiche.cs" />
     <Compile Include="Items\Giacenze.cs" />
     <Compile Include="Items\OrdiniAcq_POHODM.cs" />
-    <Compile Include="Items\Std_Op_Machine_ASSE.cs" />
     <Compile Include="Items\Std_Op_Machine.cs" />
     <Compile Include="Items\Item_Routing.cs" />
     <Compile Include="Items\Std_Operation.cs" />
