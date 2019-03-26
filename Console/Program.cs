@@ -19,7 +19,8 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            //EseguiTutto();
+            EseguiTutto();
+            return;
 
 
             //Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));

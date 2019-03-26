@@ -23,7 +23,6 @@ namespace SyncCyberPlan_lib
 					 ,A.YATTQTY_0
 					 ,A.YATTVIN_0
 
-					 ,A.YATTLOT_0
 					 ,A.YATTMAT_0
 					 ,A.YATTFLGPA66_0
 					 ,A.YATTFLGSTH_0

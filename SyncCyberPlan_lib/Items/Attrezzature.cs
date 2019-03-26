@@ -14,7 +14,6 @@ namespace SyncCyberPlan_lib
         public short    _QTY;  //numero di attrezzature (stesso codice) presenti
         public string _YATTVIN_0;
 
-        public decimal _YATTLOT_0;           //standard lot size
         public decimal _YATTMAT_0   ;        //peso materozzza (PLAS)
         public byte _YATTFLGPA66_0;       //flag pa66 (PLAS)
         public byte _YATTFLGSTH_0;        //flag STH (PLAS)
@@ -40,20 +39,19 @@ namespace SyncCyberPlan_lib
             _QTY          = getDBV<short>(row[2]);
             _YATTVIN_0    = getDBV<string>(row[3]);
 
-            _YATTLOT_0     = getDBV<decimal>(row[4]);       //standard lot size
-            _YATTMAT_0     = getDBV<decimal>(row[5]);       //peso materozzza (PLAS)
-            _YATTFLGPA66_0 = getDBV<byte>(row[6]);          //flag pa66 (PLAS)
-            _YATTFLGSTH_0  = getDBV<byte>(row[7]);          //flag STH (PLAS)
-            _YATTMARSAU_0  = getDBV<byte>(row[8]);          //Flag Marchio (PLAS)
-            _YATTMARTYC_0  = getDBV<byte>(row[9]);          //Flag Marchio (PLAS)
-            _YATTMARHAR_0  = getDBV<byte>(row[10]);         //Flag Marchio (PLAS)
-            _YATTQUA_0     = getDBV<short>(row[11]);        //livello qualità
-            _YATTTYP_0     = getDBV<string>(row[12]);       //tipo attrezzatura
+            _YATTMAT_0     = getDBV<decimal>(row[4]);       //peso materozzza (PLAS)
+            _YATTFLGPA66_0 = getDBV<byte>(row[5]);          //flag pa66 (PLAS)
+            _YATTFLGSTH_0  = getDBV<byte>(row[6]);          //flag STH (PLAS)
+            _YATTMARSAU_0  = getDBV<byte>(row[7]);          //Flag Marchio (PLAS)
+            _YATTMARTYC_0  = getDBV<byte>(row[8]);          //Flag Marchio (PLAS)
+            _YATTMARHAR_0  = getDBV<byte>(row[9]);         //Flag Marchio (PLAS)
+            _YATTQUA_0     = getDBV<short>(row[10]);        //livello qualità
+            _YATTTYP_0     = getDBV<string>(row[11]);       //tipo attrezzatura
 
-            _YATTDATSAU_0 = getSageDate(row[13]);
-            _YATTDATTYC_0 = getSageDate(row[14]);
-            _YATTDATHAR_0 = getSageDate(row[15]);
-            _YATTVP_0     = (row[16] == System.DBNull.Value) ? ' ' : getDBV<string>(row[16])[0];
+            _YATTDATSAU_0 = getSageDate(row[12]);
+            _YATTDATTYC_0 = getSageDate(row[13]);
+            _YATTDATHAR_0 = getSageDate(row[14]);
+            _YATTVP_0     = (row[15] == System.DBNull.Value) ? ' ' : getDBV<string>(row[15])[0];
 
 
 
@@ -161,7 +159,6 @@ namespace SyncCyberPlan_lib
                      ,S.YATTQTY_0
                      ,S.YATTVIN_0
 
-                     ,S.YATTLOT_0
                      ,S.YATTMAT_0
                      ,S.YATTFLGPA66_0
                      ,S.YATTFLGSTH_0
