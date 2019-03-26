@@ -15,9 +15,6 @@ namespace SyncCyberPlan_lib
         public short     _YPLAIMP_0;//PLAS
         public byte      _YPLADIV_0;//PLAS
 
-        public decimal _YCAD_0;    //per assemblaggio
-        public int _YCADTEM_0; //per assemblaggio
-
         public byte _ITMSTA_0; //stato articolo
         public string _YWCR_0;   //reparto articolo
 
@@ -59,10 +56,10 @@ namespace SyncCyberPlan_lib
             //_YDATRIA_0  = getSageDate(row[4]);
             _YPLAIMP_0 = getDBV<short>(row[5]);
             _YPLADIV_0 = getDBV<byte>(row[6]);
-            _YCAD_0 = getDBV<decimal>(row[7]);
-            _YCADTEM_0 = getDBV<int>(row[8]);
-            _ITMSTA_0 = getDBV<byte>(row[9]);
-            _YWCR_0 = getDBV<string>(row[10]);
+            //_YCAD_0 = getDBV<decimal>(row[7]);
+            //_YCADTEM_0 = getDBV<int>(row[8]);
+            _ITMSTA_0 = getDBV<byte>(row[7]);
+            _YWCR_0 = getDBV<string>(row[8]);
 
             C_ITEM_CODE = EscapeSQL(_ITMREF_0, 50);           //varchar 50
             C_ITEM_PLANT = EscapeSQL("ITS01", 20);           //varchar 20
@@ -79,8 +76,8 @@ namespace SyncCyberPlan_lib
             C_USER_STRING03 = "";
             C_USER_STRING04 = "";
 
-            C_LOT_SIZE = _YCAD_0;   //per assemblaggio        vie
-            C_RUN_TIME = _YCADTEM_0;//per assemblaggio        al minuto (se qui =60)
+            C_LOT_SIZE = -1;   //per assemblaggio        vie
+            C_RUN_TIME = -1;//per assemblaggio        al minuto (se qui =60)
         }
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string tipo)
         {
@@ -100,8 +97,7 @@ namespace SyncCyberPlan_lib
         ,'c era I.YDATRIA_0'
         ,I.YPLAIMP_0
         ,I.YPLADIV_0  
-        ,I.YCAD_0
-        ,I.YCADTEM_0
+
 		,M.ITMSTA_0
 		,F.YWCR_0
         from " + db + @".YPRDITM I
