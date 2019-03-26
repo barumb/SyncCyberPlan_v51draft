@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="DBHelper.cs" />
     <Compile Include="Item.cs" />
-    <Compile Include="Items\Attrezzature _ASSE.cs" />
     <Compile Include="Items\Giacenze_XERI00F_opr.cs" />
     <Compile Include="Items\Giacenze_PQM00PF_esterne.cs" />
     <Compile Include="Items\Operations.cs" />
