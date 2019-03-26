@@ -23,7 +23,7 @@ namespace SyncCyberPlan_lib
         public int     _YCADTEM_0;    //cadenza tempo in secondi
         public byte    _WSTTYP_0; //tipo macchina  1 macchina  2= manuale  
         public string  _YMACLIN_0;  //macchina successiva(in linea)
-        public byte _YPIEFLG_0; //flag piegatrice (per morsetti)
+        public byte _YPIEFLG_0; //flag piegatrice (per filo)
 
         #region tabella output CYB_MACHINE
         public string C_CODE         ;             //varchar](30) NOT NULL,

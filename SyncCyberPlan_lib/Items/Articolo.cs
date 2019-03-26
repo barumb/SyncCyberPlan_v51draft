@@ -36,6 +36,7 @@ namespace SyncCyberPlan_lib
         public int   YCONFQTA_0;         //qta per confezione
         public int   YQTADECIMI_0;         //qta per confezione
         public string YSTAMPCOLORE_0;      //Color inchiostro stampigliatura
+        public byte YPIEFLG_0;  //flag "Richiede piegatrice" per FILO
 
 
 
@@ -255,6 +256,7 @@ namespace SyncCyberPlan_lib
             YQTAPREANT_0 = getDBV<decimal>(row[85]);
             FAMPEX       = getDBV_char(row[86]);
             YSTAMPCOLORE_0 = getDBV<string>(row[87]);
+            YPIEFLG_0    = getDBV<byte>(row[88]);
 
 
             C_CODE                               = EscapeSQL(ITMREF_0, 50);          // varchar 50
@@ -311,7 +313,7 @@ namespace SyncCyberPlan_lib
             C_USER_REAL04                        = 0;                                // float	
             C_USER_REAL05                        = 0;                                // float	
             C_USER_CHAR01                        = (char)EscapeSQL(YMRPTAG1_0,1)[0]; // char 1  Categoria pe morsetti / Frontalino Per WP
-            C_USER_CHAR02                        = ' ';                              // char 1  Piega o non piega per FILO
+            C_USER_CHAR02                        = YPIEFLG_0==2?'P':' ';             // char 1  Piega o non piega per FILO
             C_USER_CHAR03                        = FAMPEX;   //' '; //aggiornata successivamente da Articolo_caratteristiche() =getFAMP(ITMREF_0, ITMDES1_0);     // char 1
             C_USER_CHAR04                        = getSTH(TCLCOD_0,YMAT_0);          // char 1
             C_USER_CHAR05                        = ' ';                              // char 1
@@ -831,6 +833,7 @@ namespace SyncCyberPlan_lib
  ,F.YQTAPREANT_0
  ,FAMPEX.FAMPEX_0
  ,Y.YSTAMPCOLORE_0
+ ,Y.YPIEFLG_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +
