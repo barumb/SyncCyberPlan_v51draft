@@ -41,7 +41,6 @@ namespace SyncCyberPlan_lib
 
 
         //tabella ITMFACILIT
-        public char YPRDAPP_0;   //approvigionamento
         public byte REOCOD_0;    //tipo proposta
         public decimal PRPLTI_0; //Lead Time Preparazione > C_PROTECTION_TIME
         public decimal SHR_0;    //% scarto
@@ -175,7 +174,7 @@ namespace SyncCyberPlan_lib
             TCLCOD_0 = getDBV<string>(row[5]);
             YLIVTRAS_0 = getDBV<string>(row[6]);
             YFAMCOM_0 = getDBV<string>(row[7]);
-            YPRDAPP_0 = getDBV_char(row[8]);
+            //YPRDAPP_0 = getDBV_char(row[8]);  campo che non eiste più
             REOCOD_0 = getDBV<byte>(row[9]);             //tipo proposta
             PRPLTI_0 = getDBV<decimal>(row[10]);
             SHR_0 = getDBV<decimal>(row[11]);            //% scarto
@@ -752,7 +751,7 @@ namespace SyncCyberPlan_lib
  ,I.TCLCOD_0
  ,Y.YLIVTRAS_0
  ,Y.YFAMCOM_0
- ,F.YPRDAPP_0
+ ,'ex F.YPRDAPP_0' as ggg
  ,F.REOCOD_0
  ,F.PRPLTI_0
  ,F.SHR_0

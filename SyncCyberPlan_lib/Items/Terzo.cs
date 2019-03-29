@@ -14,6 +14,7 @@ namespace SyncCyberPlan_lib
         public string BPAADDLIG_0; //righe indirizzo
         public string BPAADDLIG_1; //righe indirizzo
         public string BPAADDLIG_2; //righe indirizzo
+        public string YBPSOLD_0; //codice As400 (usato come UBICAZIONE magazzino
 
         #region tabella output CYB_COMPANY
         public string C_CODE;
@@ -44,6 +45,7 @@ namespace SyncCyberPlan_lib
             BPAADDLIG_0 = getDBV<string>(row[4]); //righe indirizzo
             BPAADDLIG_1 = getDBV<string>(row[5]); //righe indirizzo
             BPAADDLIG_2 = getDBV<string>(row[6]);
+            YBPSOLD_0   = getDBV<string>(row[7]);
 
 
 
@@ -54,7 +56,7 @@ namespace SyncCyberPlan_lib
             C_CUSTOMER = (BPCFLG_0 == 2) ? 1 : 0; //1=si
             C_SUPPLIER = (BPSFLG_0 == 2) ? 1 : 0; ; //1=si
 
-            C_USER_STRING01 = EscapeSQL("", 29);
+            C_USER_STRING01 = C_SUPPLIER==1 ? EscapeSQL(YBPSOLD_0, 29) : "";
             C_USER_STRING02 = EscapeSQL("", 29);
             C_USER_STRING03 = EscapeSQL("", 29);
             C_USER_STRING04 = EscapeSQL("", 29);
@@ -91,9 +93,11 @@ namespace SyncCyberPlan_lib
  B.BPSFLG_0, 
  A.BPAADDLIG_0, 
  A.BPAADDLIG_1, 
- A.BPAADDLIG_2 
+ A.BPAADDLIG_2, 
+ S.YBPSOLD_0
  from " + db + ".BPARTNER B " +
                 " join " + db + ".BPADDRESS A on B.BPRNUM_0 = A.BPANUM_0 and (B.BPCFLG_0=2 or  B.BPSFLG_0=2)" +
+                " join " + db + ".BPSUPPLIER S on S.BPSNUM_0 = B.BPRNUM_0 " +
                 " WHERE B.ENAFLG_0=2 and A.BPAADD_0='SL0' ";
 
             if (!string.IsNullOrWhiteSpace(codice_like))

@@ -19,9 +19,8 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-            // EseguiTutto();
-            Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
+             EseguiTutto();
+            
             return;
 
 
