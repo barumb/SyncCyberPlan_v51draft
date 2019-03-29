@@ -823,7 +823,7 @@ namespace SyncCyberPlan_lib
  ,I.WEU_0
  ,I.ITMWEI_0
  ,Y.YCOLORE_0
- ,B.BPSNUM_0
+ ,F.YBPSNUM_0
  ,Y.YPESMAT_0
  ,Y.YPASSOVIE_0
  ,I.STDFLG_0
@@ -838,12 +838,12 @@ namespace SyncCyberPlan_lib
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +
                 " left join " + db + ".YITMVP FAMPEX on FAMPEX.ITMREF_0 = I.ITMREF_0 \n" +
-                " left join " +
-                " ( " +
-                "     select ITMREF_0, BPSNUM_0 from SAURO.ITMBPS where ROWID in " +
-                "         (select  min(ROWID)from SAURO.ITMBPS where BPSNUM_0 <> 'A000818' group by ITMREF_0) " +
-                "  ) B " +
-                "  on B.ITMREF_0 = I.ITMREF_0 " +
+                ////" left join " +
+                ////" ( " +
+                ////"     select ITMREF_0, BPSNUM_0 from SAURO.ITMBPS where ROWID in " +
+                ////"         (select  min(ROWID)from SAURO.ITMBPS where BPSNUM_0 <> 'A000818' group by ITMREF_0) " +
+                ////"  ) B " +
+                ////"  on B.ITMREF_0 = I.ITMREF_0 " +
 
 
  //               " LEFT JOIN " +
