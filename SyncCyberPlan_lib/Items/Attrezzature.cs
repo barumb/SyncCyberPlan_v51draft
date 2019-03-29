@@ -26,6 +26,7 @@ namespace SyncCyberPlan_lib
         public DateTime? _YATTDATTYC_0;  //data riattivazione MArchio Tyco
         public DateTime? _YATTDATHAR_0;  //data riattivazione MArchio Harting
         public char _YATTVP_0;  //flag vie/pezzi
+        public short _YATTLEATIM_0; //lead time, usato per contolavoro
 
         public Attrezzature( )//: base("CYB_TOOL")
         {
@@ -52,7 +53,7 @@ namespace SyncCyberPlan_lib
             _YATTDATTYC_0 = getSageDate(row[13]);
             _YATTDATHAR_0 = getSageDate(row[14]);
             _YATTVP_0     = (row[15] == System.DBNull.Value) ? ' ' : getDBV<string>(row[15])[0];
-
+            _YATTLEATIM_0 = getDBV<short>(row[16]);
 
 
             C_CODE                               = EscapeSQL(_YATTCOD_0, 50);      // varchar 50
@@ -60,7 +61,7 @@ namespace SyncCyberPlan_lib
             C_DESCR                              = EscapeSQL(_YATTDES_0, 50);     // varchar 50
             C_M_B                                = ' ';                              // char 1  o APPROVIGIONAMENTO?
             C_PHANTOM                            = 0;                                // bit 
-            C_FIXED_LEAD_TIME                    = (int)0;                           // int 
+            C_FIXED_LEAD_TIME                    = _YATTLEATIM_0;                     // int 
             C_VAR_LEAD_TIME                      = 0;                                // real 
             C_BUY_PREPROC_LT                     = 0;                                // real 
             C_BUY_PROC_LT                        = (int)0;                           // real 
@@ -172,6 +173,7 @@ namespace SyncCyberPlan_lib
                      ,S.YATTDATTYC_0
                      ,S.YATTDATHAR_0                     
                      ,S.YATTVP_0
+                     ,S.YATTLEATIM_0
 
                       from " + db + @".YPRDATT S 
                        where S.YATTENAFLG_0=2 "
