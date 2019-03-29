@@ -447,7 +447,7 @@ namespace SyncCyberPlan_lib
                 case 2: ret = 'B'; break;
                 case 3: ret = 'M'; break;
                 case 4: ret = '?'; break; //acquisto intersito
-                case 5: ret = 'D'; break;
+                case 5: ret = 'D'; break;//contolavoro
                 default: ret = ' '; break;
             }
             return ret;

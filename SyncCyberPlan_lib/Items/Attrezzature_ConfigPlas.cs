@@ -77,7 +77,8 @@ namespace SyncCyberPlan_lib
       ,[YATPVIEMAX_0]
       ,[YATPSTA_0]
       ,[YATPDATRIA_0]
-  FROM " + db+ ".[YPRDATTP] ";
+  FROM " + db+ ".[YPRDATTP] "
+  + " where YATPSTA_0<= 2 ";
 
             if (!string.IsNullOrWhiteSpace(codice_like))
             {
