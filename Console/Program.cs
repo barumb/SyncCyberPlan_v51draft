@@ -19,13 +19,10 @@ namespace Console
         {
             log4net.Config.XmlConfigurator.Configure();
 #if DEBUG
-             EseguiTutto();
+             //EseguiTutto();
             
-            return;
-
-
-            //Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE BPR".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME BPR".Split(' '));
             return;
 
 

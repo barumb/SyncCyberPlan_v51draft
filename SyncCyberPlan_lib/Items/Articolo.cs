@@ -449,6 +449,11 @@ namespace SyncCyberPlan_lib
                 case 5: ret = 'D'; break;//contolavoro
                 default: ret = ' '; break;
             }
+            if (ret == ' ' || ret == '?')
+            {
+                //mandare mail
+                __bulk_message += Utils.NewLineMail() + "articolo " + ITMREF_0 + " con tipo Proposta non prevista in Articolo-sito ITALIA";
+            }
             return ret;
         }
 
