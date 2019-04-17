@@ -21,8 +21,8 @@ namespace Console
 #if DEBUG
              //EseguiTutto();
             
-            Esegui("SAURO MBM41LIB_M DELETE BPR".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME BPR".Split(' '));
+            Esegui("SAURO MBM41LIB_M DELETE MAC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME MAC".Split(' '));
             return;
 
 

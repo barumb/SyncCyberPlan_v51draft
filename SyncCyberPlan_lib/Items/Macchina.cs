@@ -19,8 +19,7 @@ namespace SyncCyberPlan_lib
         public byte    _YPLADIV_0;   //flag divisore   PLAS
         public decimal _YPLAGRMIN_0; //grammmatura  PLAS
         public decimal _YPLAGRMAX_0; //grammmatura  PLAS
-        public int     _YCAD_0;      //cadenza
-        public int     _YCADTEM_0;    //cadenza tempo in secondi
+        public int     _YQTASETCLF ;      //numero pezzi /settimana per Conto lavoro a capacita finita
         public byte    _WSTTYP_0; //tipo macchina  1 macchina  2= manuale  
         public string  _YMACLIN_0;  //macchina successiva(in linea)
         public byte _YPIEFLG_0; //flag piegatrice (per filo)
@@ -69,11 +68,10 @@ namespace SyncCyberPlan_lib
             _YPLADIV_0    = getDBV<byte>(row[8]);
             _YPLAGRMIN_0  = getDBV<decimal>(row[9]);
             _YPLAGRMAX_0  = getDBV<decimal>(row[10]);
-            _YCAD_0       = getDBV<int>(row[11]);
-            _YCADTEM_0    = getDBV<int>(row[12]);
-            _WSTTYP_0     = getDBV<byte>(row[13]);
-            _YMACLIN_0    = getDBV<string>(row[14]);
-            _YPIEFLG_0    = getDBV<byte>(row[15]);
+            _YQTASETCLF   = getDBV<int>(row[11]);
+            _WSTTYP_0     = getDBV<byte>(row[12]);
+            _YMACLIN_0    = getDBV<string>(row[13]);
+            _YPIEFLG_0    = getDBV<byte>(row[14]);
 
 
             C_CODE = _WST_0;           //varchar](30) NOT NULL,
@@ -83,8 +81,8 @@ namespace SyncCyberPlan_lib
             C_USER_CHAR02 = ' ';         //char](1) NULL,
             C_USER_FLAG01 = (byte)(_YPLADIV_0 == 2 ? 1 : 0);  //bit] NULL,
             C_USER_FLAG02 = getFlagManuale(_YMRPCDL_0, _WSTTYP_0, _WST_0);    //bit] NULL,   se manuale (WSSTYP=2) metto true
-            C_USER_INT01 = _YCAD_0;             //int] NULL,
-            C_USER_INT02 = _YCADTEM_0;          //int] NULL,
+            C_USER_INT01 = _YQTASETCLF;             //int] NULL,
+            C_USER_INT02 = 0;          //int] NULL,
             C_USER_REAL01 = (float)_YPLAGRMIN_0;            //float] NULL,
             C_USER_REAL02 = (float)_YPLAGRMAX_0;            //float] NULL,
             C_USER_STRING01 = _WCR_0;   //varchar](29) NULL,
@@ -145,8 +143,7 @@ namespace SyncCyberPlan_lib
                 , W.YPLADIV_0
                 , W.YPLAGRMIN_0
                 , W.YPLAGRMAX_0
-                , W.YCAD_0
-                , W.YCADTEM_0
+                , W.YQTASETCLF_0 
                 , W.WSTTYP_0
                 , W.YMACLIN_0
                 , W.YPIEFLG_0
