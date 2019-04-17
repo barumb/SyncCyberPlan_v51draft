@@ -14,7 +14,7 @@ namespace SyncCyberPlan_lib
         public string BPAADDLIG_0; //righe indirizzo
         public string BPAADDLIG_1; //righe indirizzo
         public string BPAADDLIG_2; //righe indirizzo
-        public string YBPSOLD_0; //codice As400 (usato come UBICAZIONE magazzino
+        public string YBPSOLD_0; //codice As400 (usato come UBICAZIONE magazzino per fornitori)
 
         #region tabella output CYB_COMPANY
         public string C_CODE;
@@ -97,7 +97,7 @@ namespace SyncCyberPlan_lib
  S.YBPSOLD_0
  from " + db + ".BPARTNER B " +
                 " join " + db + ".BPADDRESS A on B.BPRNUM_0 = A.BPANUM_0 and (B.BPCFLG_0=2 or  B.BPSFLG_0=2)" +
-                " join " + db + ".BPSUPPLIER S on S.BPSNUM_0 = B.BPRNUM_0 " +
+                " left join " + db + ".BPSUPPLIER S on S.BPSNUM_0 = B.BPRNUM_0 " +
                 " WHERE B.ENAFLG_0=2 and A.BPAADD_0='SL0' ";
 
             if (!string.IsNullOrWhiteSpace(codice_like))

@@ -91,7 +91,7 @@ namespace SyncCyberPlan_lib
         //public abstract string To_CYBERDB_QueryValues_OLD_non_più_usata();
         protected string EscapeSQL(string field, int strlen)
         {
-            string ret = null;
+            string ret = "?";
             if (field != null)
             {
                 ret = field.Replace("'", "''");  //escape del singolo apice ' : si mette due volte ''
