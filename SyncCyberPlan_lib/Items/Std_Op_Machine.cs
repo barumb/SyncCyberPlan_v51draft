@@ -80,7 +80,7 @@ namespace SyncCyberPlan_lib
         {
             if (flusso == "PLAS")
             {
-                return Cadenza; //per la plastica il lotsize è il numero di impronte
+                return Cadenza; //per la plastica il lotsize è il numero di impronte, non il campo Lotsize
             }
             return LotSize * Cadenza;
         }
