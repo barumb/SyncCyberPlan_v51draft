@@ -166,9 +166,13 @@ namespace SyncCyberPlan_lib
             //se il CDl_mrp è "ASSI" e la macchina è manuale ( WSTTYP=2)
             //come CDL va passata la macchina stessa
             //e non va passato il flag "manuale"
-            if (mrpcdl == "ASSI" && WSTTYP == 2)
+            if ((mrpcdl == "ASSI" || mrpcdl == "ASSE") && WSTTYP == 2)
             {
                 return macchina;
+            }
+            else if (mrpcdl == "CLF")
+            {
+                return "CLF_"+macchina;
             }
             else
             {
