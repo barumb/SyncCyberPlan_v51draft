@@ -18,6 +18,7 @@ namespace SyncCyberPlan_lib
         public string WEU_0;     //deve essere "GR" per WP
         public decimal ITMWEI_0; //peso per PLASTICA WP
         public byte STDFLG_0; //Modalità gestione (stock=3 a commessa=4)
+        public byte PHAFLG_0;  //flag fantasma, maschera ITM1 (nascosto); si trova in categoria 0PHA e anche in maschera ITF0 /articolo sito, nascosto)
 
         //tabella YITMINF
         public string YLIVTRAS_0;  //tipo articolo
@@ -256,13 +257,14 @@ namespace SyncCyberPlan_lib
             FAMPEX       = getDBV_char(row[86]);
             YSTAMPCOLORE_0 = getDBV<string>(row[87]);
             YPIEFLG_0    = getDBV<byte>(row[88]);
+            PHAFLG_0    = getDBV<byte>(row[89]);
 
 
             C_CODE                               = EscapeSQL(ITMREF_0, 50);          // varchar 50
             C_PLANT_CODE                         = "ITS01";                          // varchar 20
             C_DESCR                              = EscapeSQL(ITMDES1_0, 50);         // varchar 50
             C_M_B                                = getTipoProposta(REOCOD_0);        // char 1  o APPROVIGIONAMENTO?  MAKE or BUY
-            C_PHANTOM                            = YLIVTRAS_0 == "SF" ? 1 : 0;       // bit 
+            C_PHANTOM                            = PHAFLG_0 == 2 ? 1 : 0;           // bit 
             C_FIXED_LEAD_TIME                    = (C_M_B=='M'?(int)MFGLTI_0: (int)OFS_0) ;                    // int  lead time di produzione o di acquisto in base al Tipo proposta
             C_VAR_LEAD_TIME                      = -1;                               // real 
             C_BUY_PREPROC_LT                     = -1;                               // real 
@@ -338,6 +340,15 @@ namespace SyncCyberPlan_lib
             C_USER_DATE03                        = null;                             // datetime	
             C_USER_DATE04                        = null;                             // datetime	
             C_PROD_LOT_QTY                       = (float)YQTAPREANT_0;
+
+            if (
+                (YLIVTRAS_0 == "SF" && PHAFLG_0 != 2)
+                ||
+                (YLIVTRAS_0 != "SF" && PHAFLG_0 == 2)
+                )
+            {
+                __bulk_message += Utils.NewLineMail() + " Articolo " + ITMREF_0 + " ha liv.trasformazione " + YLIVTRAS_0 + " ma flag PHAFLG pari a " + PHAFLG_0;
+            }
         }
         public override DataRow GetCyberRow()
         {
@@ -740,6 +751,7 @@ namespace SyncCyberPlan_lib
                 Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", __bulk_message);
             }
         }
+
         static public string SelectQuery(bool mode, string dossier, string codice_like, string tipo)
         {
             string db = "x3." + dossier;
@@ -838,6 +850,7 @@ namespace SyncCyberPlan_lib
  ,FAMPEX.FAMPEX_0
  ,Y.YSTAMPCOLORE_0
  ,Y.YPIEFLG_0
+, I.PHAFLG_0
   from " + db + ".ITMMASTER I \n" +
                 " left join " + db + ".YITMINF Y on I.ITMREF_0 = Y.ITMREF_0 \n" +
                 " left join " + db + ".ITMFACILIT F on I.ITMREF_0 = F.ITMREF_0 and F.STOFCY_0 = 'ITS01' \n" +

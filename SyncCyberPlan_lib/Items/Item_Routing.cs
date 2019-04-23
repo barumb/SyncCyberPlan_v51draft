@@ -19,8 +19,8 @@ namespace SyncCyberPlan_lib
         public string _YWCR_0;   //reparto articolo
 
         public string _YCONCDL_0;   //Macchina
-        //public int _YCONCAD_0;   //cadenza
-        //public int _YCONCADTIM_0;//tempo cadenza
+
+        public string _YATTWCR_0; //reparto attrezzatura
 
         #region tabella output CYB_ITEM_ROUTING
         public string    C_ITEM_CODE;                       //varchar 50
@@ -53,13 +53,22 @@ namespace SyncCyberPlan_lib
             _YATTCOD_0 = getDBV<string>(row[1]);
             _YPRI_0 = getDBV<short>(row[2]);
             _YENAFLG_0 = getDBV<byte>(row[3]);
-            //_YDATRIA_0  = getSageDate(row[4]);
+            _YATTWCR_0  = getDBV<string>(row[4]);
             _YPLAIMP_0 = getDBV<short>(row[5]);
             _YPLADIV_0 = getDBV<byte>(row[6]);
             //_YCAD_0 = getDBV<decimal>(row[7]);
             //_YCADTEM_0 = getDBV<int>(row[8]);
             _ITMSTA_0 = getDBV<byte>(row[7]);
             _YWCR_0 = getDBV<string>(row[8]);
+
+            if (_YATTCOD_0 is null)
+            {
+                __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " è attivo ma non è associato ad una attrezzatura";
+            }
+            else  if (_YATTWCR_0 != _YWCR_0)
+            {
+                __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " ha reparto <" + _YWCR_0 + ">, mentre l'attrezzatura associata " + _YATTCOD_0 + " ha reparto <" + _YATTWCR_0 +">";
+            }
 
             C_ITEM_CODE = EscapeSQL(_ITMREF_0, 50);           //varchar 50
             C_ITEM_PLANT = EscapeSQL("ITS01", 20);           //varchar 20
@@ -90,27 +99,49 @@ namespace SyncCyberPlan_lib
             //full non ha senso: parto dalla YPRDITM, se non c'è qui non ha senso esportare record
 
             string sage_query =
-  @"SELECT   I.ITMREF_0
+  @"SELECT   M.ITMREF_0
         ,I.YATTCOD_0
         ,I.YPRI_0
         ,I.YENAFLG_0
-        ,'c era I.YDATRIA_0'
+        ,A.YATTWCR_0
         ,I.YPLAIMP_0
         ,I.YPLADIV_0  
 
 		,M.ITMSTA_0
 		,F.YWCR_0
-        from " + db + @".YPRDITM I
-		join " + db + @".ITMMASTER M
-			on I.ITMREF_0 = M.ITMREF_0
+
+        from " + db + @".ITMMASTER M
 		join " + db + @".ITMFACILIT F
-		    on I.ITMREF_0=F.ITMREF_0 and F.STOFCY_0='ITS01'
-        join " + db + @".YPRDATT A 
+			on M.ITMREF_0=F.ITMREF_0 and F.STOFCY_0='ITS01'
+		left join " + db + @".YPRDITM I
+		    on M.ITMREF_0 = I.ITMREF_0
+        left join " + db + @".YPRDATT A 
             on A.YATTCOD_0= I.YATTCOD_0
-        where I.YENAFLG_0=2 
-        and A.YATTENAFLG_0=2 "
+        where 
+             M.ITMREF_0 not like 'WU%' 
+         and M.ITMREF_0 not like 'WWACQ%' 
+         and M.ITMREF_0 not like 'WWVEN%' 
+         and M.ITMREF_0 not like 'WWDPI%' 
+		 and M.ITMSTA_0=1 
+		 and M.PHAFLG_0=1
+		 and F.REOCOD_0<>2
+
+        and 
+		 (   
+		     ( I.YENAFLG_0=2  and A.YATTENAFLG_0=2 ) or
+			 I.YATTCOD_0 is null
+		) "
         ;
-//        and F.YWCR_0 = 'PLAS' "
+            /*
+                     and M.ITMSTA_0=1    articoli ATTIVI
+                     and M.PHAFLG_0=1    NON phantom
+                     and F.REOCOD_0<>2   non di acquisto
+
+
+
+                 ( I.YENAFLG_0=2  and A.YATTENAFLG_0=2 ) or
+			    I.YATTCOD_0 is null                          PER BECCARE ARTICOLI non associati ad un'attrezzatura Attiva o senza un'associazione attiva
+             */
             ;
 
             if (!string.IsNullOrWhiteSpace(codice_like))
@@ -203,6 +234,15 @@ namespace SyncCyberPlan_lib
 
             _dataTable.Columns.Add("C_LOT_SIZE", typeof(decimal));
             _dataTable.Columns.Add("C_RUN_TIME", typeof(int));
+        }
+
+        public override void LastAction(ref DBHelper2 cm)
+        {
+            if (!string.IsNullOrWhiteSpace(__bulk_message))
+            {
+                string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net";
+                Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", __bulk_message);
+            }
         }
     }
 }
