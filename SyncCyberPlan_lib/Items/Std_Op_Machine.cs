@@ -78,10 +78,11 @@ namespace SyncCyberPlan_lib
         }
         protected virtual decimal getLotSize(string flusso,decimal LotSize, decimal Cadenza)
         {
-            if (flusso == "PLAS")
-            {
-                return Cadenza; //per la plastica il lotsize è il numero di impronte, non il campo Lotsize
-            }
+            //commento: il lot size deve sempre essere 1, ma possono metterlo diverso, come per tutti gli altri casi
+            //if (flusso == "PLAS")
+            //{
+            //    return Cadenza; //per la plastica il lotsize è il numero di impronte, non il campo Lotsize
+            //}
             return LotSize * Cadenza;
         }
         public override DataRow GetCyberRow()

@@ -188,6 +188,11 @@ namespace SyncCyberPlan_lib
         }*/
         public override DataRow GetCyberRow()
         {
+            if (false)
+            {
+                //l'associazione articolo/attrezzatura non va passata nel caso di Contolavoro CL
+                return null;
+            }
             //and F.YWCR_0 = A.YATTWCR_0
             DataRow _tablerow = _dataTable.NewRow();
 
