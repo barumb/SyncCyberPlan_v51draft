@@ -71,7 +71,7 @@ namespace SyncCyberPlan_lib
         //vista  FAMPEX
         public char FAMPEX;
 
-        static protected Dictionary<string, Tuple<short, string>> datiContoLavoroCapacitaInfinita = null;
+        static protected Dictionary<string, Tuple<short, string, string>> datiContoLavoroCapacitaInfinita = null;
 
         #region tabella output CYB_ITEM        
         public string C_CODE	; // varchar 50
@@ -933,7 +933,7 @@ namespace SyncCyberPlan_lib
             return sage_query;
         }
 
-        static public Dictionary<string, Tuple<short, string>> DatiArticoliContolavoro(string dossier)
+        static public Dictionary<string, Tuple<short, string, string>> DatiArticoliContolavoro(string dossier)
         {
             /*
              * Gli articoli di contolavoro in Sage hanno associato un'attrezzatura e una macchina,
@@ -986,11 +986,22 @@ where P.YENAFLG_0=2 and A.YATTENAFLG_0=2 and
 ;
             DbDataReader dtr = sage.GetReaderSelectCommand(qry);
             object[] row = new object[dtr.FieldCount];
-            Dictionary<string, Tuple<short, string>> itm_CL= new Dictionary<string, Tuple<short, string>>(100);  //Tupla: leadTime, fornitore
+            Dictionary<string, Tuple<short, string, string>> itm_CL= new Dictionary<string, Tuple<short, string, string>>(100);  //Tupla: leadTime, fornitore, cdl_mrp
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                itm_CL.Add((string)row[0], new Tuple<short, string>( (short)row[2], (string)row[6])); //  Articolo + (leadTime, Fonitore)
+                string itmref = (string)row[0];
+                if (itm_CL.ContainsKey(itmref) )
+                {
+                    if ((string)row[5]!="PLAE")
+                    {
+                        __bulk_message += Utils.NewLineMail() + " articolo " + itmref + " ha configurazioni multiple con attrezzature e macchine";
+                    }
+                }
+                else
+                {
+                    itm_CL.Add(itmref, new Tuple<short, string, string>((short)row[2], (string)row[6], (string)row[5])); //  Articolo + (leadTime, Fornitore, cdl_mrp)
+                }
             }
             _logger.Debug("DatiArticoliContolavoro... end");
             return itm_CL;

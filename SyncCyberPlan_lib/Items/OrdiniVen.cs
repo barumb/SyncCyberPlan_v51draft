@@ -2,6 +2,7 @@
 using System;
 using log4net;
 using System.Data;
+using System.Data.Common;
 
 namespace SyncCyberPlan_lib
 {
@@ -428,6 +429,32 @@ namespace SyncCyberPlan_lib
 			_dataTable.Columns.Add("C_USER_DATE03",                      typeof(DateTime));         //datetime 
 			_dataTable.Columns.Add("C_USER_DATE04",                      typeof(DateTime));         //datetime 
 			_dataTable.Columns.Add("C_USER_DATE05",                      typeof(DateTime));        //
+        }
+
+        public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
+        {
+            //CONTROLLO che il terzo dell'ODV sia presente nell'anagrfaica terzi
+            string testo_mail = "";
+            string chk_query = 
+@"SELECT distinct O.C_CODE
+, O.C_CUSTOMER_CODE
+FROM [CyberPlanFrontiera].[dbo].[CYB_CORDER] O
+left join CyberPlanFrontiera.dbo.CYB_COMPANY T on O.C_CUSTOMER_CODE=T.C_CODE
+where T.C_CODE is null ";
+
+            DbDataReader dtr = cm.GetReaderSelectCommand(chk_query);
+            object[] row = new object[dtr.FieldCount];
+
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                testo_mail += "ODV =" + getDBV<string>(row[0]) + "  non caricato; manca codice cliente =" + getDBV<string>(row[1]) + Utils.NewLineMail();
+            }
+
+            if (testo_mail != "")
+            {
+                Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", testo_mail);
+            }
         }
     }
 }
