@@ -20,13 +20,14 @@ namespace SyncCyberPlan_lib
         public byte _YATTMARSAU_0;        //Flag Marchio (PLAS)
         public byte _YATTMARTYC_0;        //Flag Marchio (PLAS)
         public byte _YATTMARHAR_0;        //Flag Marchio (PLAS)
-        public short _YATTQUA_0; //livello qualità (PLAS numero stampo)
-        public string _YATTTYP_0; //livello qualità (PLAS numero stampo)
+        public short _YATTQUA_0;         //livello qualità (PLAS numero stampo)
+        public string _YATTWCR_0;        //reparto
         public DateTime? _YATTDATSAU_0;  //data riattivazione MArchio Sauro
         public DateTime? _YATTDATTYC_0;  //data riattivazione MArchio Tyco
         public DateTime? _YATTDATHAR_0;  //data riattivazione MArchio Harting
         public char _YATTVP_0;  //flag vie/pezzi
         public short _YATTLEATIM_0; //lead time, usato per contolavoro
+        
 
         public Attrezzature( )//: base("CYB_TOOL")
         {
@@ -47,7 +48,7 @@ namespace SyncCyberPlan_lib
             _YATTMARTYC_0  = getDBV<byte>(row[8]);          //Flag Marchio (PLAS)
             _YATTMARHAR_0  = getDBV<byte>(row[9]);         //Flag Marchio (PLAS)
             _YATTQUA_0     = getDBV<short>(row[10]);        //livello qualità
-            _YATTTYP_0     = getDBV<string>(row[11]);       //tipo attrezzatura
+            _YATTWCR_0     = getDBV<string>(row[11]);       //reparto
 
             _YATTDATSAU_0 = getSageDate(row[12]);
             _YATTDATTYC_0 = getSageDate(row[13]);
@@ -118,9 +119,9 @@ namespace SyncCyberPlan_lib
             C_USER_FLAG02                        = 0;                                // bit	
             C_USER_FLAG03                        = 0;                                // bit	
             C_USER_STRING01                      = EscapeSQL(_YATTVIN_0, 29);                // varchar 29
-            C_USER_STRING02                      = getMarchi(_YATTTYP_0, _YATTMARSAU_0,_YATTMARTYC_0,_YATTMARHAR_0);                // varchar 29
+            C_USER_STRING02                      = getMarchi(_YATTWCR_0, _YATTMARSAU_0,_YATTMARTYC_0,_YATTMARHAR_0);                // varchar 29
             C_USER_STRING03                      = EscapeSQL("", 29);                // varchar 29  SEZIONE per FILO
-            C_USER_STRING04                      = Attrezzature.GetTipoPLastica(_YATTTYP_0,_YATTFLGSTH_0,_YATTFLGPA66_0);                // varchar 29
+            C_USER_STRING04                      = Attrezzature.GetTipoPLastica(_YATTWCR_0, _YATTFLGSTH_0,_YATTFLGPA66_0);                // varchar 29
             C_USER_STRING05                      = EscapeSQL("", 29);                // varchar 29
             C_USER_STRING06                      = EscapeSQL("", 29);                // varchar 29
             C_USER_STRING07                      = EscapeSQL("", 29);                // varchar 29
@@ -167,7 +168,7 @@ namespace SyncCyberPlan_lib
                      ,S.YATTMARTYC_0
                      ,S.YATTMARHAR_0                     
                      ,S.YATTQUA_0     
-                     ,S.YATTTYP_0
+                     ,S.YATTWCR_0
 
                      ,S.YATTDATSAU_0
                      ,S.YATTDATTYC_0
@@ -189,10 +190,10 @@ namespace SyncCyberPlan_lib
             return sage_query;
         }
 
-        protected string getMarchi(string TipoAttr, short FlagSauro, short FlagTyco, short FlagHarting)
+        protected string getMarchi(string Reparto, short FlagSauro, short FlagTyco, short FlagHarting)
         {
             string ret = "";
-            if (TipoAttr.ToUpper() == "PC")
+            if (Reparto.ToUpper() == "PLAS")
             {
                 if (FlagSauro == 2) ret += "1";
                 if (FlagTyco == 2) ret += "2";
@@ -200,10 +201,10 @@ namespace SyncCyberPlan_lib
             }
             return ret;
         }
-        static public string GetTipoPLastica(string TipoAttr, short FlagSTH,short FlagPa66)
+        static public string GetTipoPLastica(string Reparto, short FlagSTH,short FlagPa66)
         {
             string ret = "";
-            if (TipoAttr.ToUpper() == "PC")
+            if (Reparto.ToUpper() == "PLAS")
             {
                 if (FlagSTH == 2) ret += "S";
                 if (FlagPa66 == 2) ret += "P";
