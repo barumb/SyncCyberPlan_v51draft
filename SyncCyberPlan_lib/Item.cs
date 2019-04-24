@@ -76,13 +76,13 @@ namespace SyncCyberPlan_lib
             }
             return i;
         }
-        public virtual void LastAction(ref DBHelper2 cm)
+        public virtual void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
 
         }
-        public void DoLastAction(ref DBHelper2 cm)
+        public void DoLastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            LastAction(ref cm);
+            LastAction(ref cm, sage);
         }
         public abstract void InitDataTable();
         public abstract string GetSelectQuery(bool mode, string dossier, string codice_like, string tipo);        

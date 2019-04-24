@@ -165,7 +165,7 @@ order by PQMCART
             return ret;
         }
 
-        public override void LastAction(ref DBHelper2 cm)
+        public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             {

@@ -22,8 +22,8 @@ namespace SyncCyberPlan_lib
 		protected DbConnection  _connection;
 		protected DbCommand _cmdSql;
 
-		// Server=myServerName\myInstanceName;Database=myDataBase;User Id=myUsername; Password=myPassword;
-		public DBHelper2(DbConnection conn)
+        // Server=myServerName\myInstanceName;Database=myDataBase;User Id=myUsername; Password=myPassword;
+        public DBHelper2(DbConnection conn)
 		{
             if (conn == null)
             {
@@ -173,7 +173,7 @@ namespace SyncCyberPlan_lib
                 int res = DBHelper2.EseguiSuDBCyberPlan_Bulk(ref cm, tmp._CP_tabella, Item._dataTable);
                 _logger.Info(i+added + " items [last= " + tmp.GetID() + "]");
             }
-            tmp.DoLastAction(ref cm);
+            tmp.DoLastAction(ref cm, this);
             dtr.Close();
 
             //if (thereIsMessage)

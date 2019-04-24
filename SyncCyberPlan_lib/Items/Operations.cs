@@ -404,7 +404,7 @@ namespace SyncCyberPlan_lib
             return getSetupTime(commento, unita_di_misura, tmp_tempo);
         }
 
-        public override void LastAction(ref DBHelper2 cm)
+        public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             { 

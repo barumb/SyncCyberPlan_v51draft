@@ -2,6 +2,8 @@
 using System;
 using log4net;
 using System.Data;
+using System.Data.Common;
+
 
 namespace SyncCyberPlan_lib
 {
@@ -68,6 +70,8 @@ namespace SyncCyberPlan_lib
 
         //vista  FAMPEX
         public char FAMPEX;
+
+        static protected Dictionary<string, Tuple<short, string>> datiContoLavoroCapacitaInfinita = null;
 
         #region tabella output CYB_ITEM        
         public string C_CODE	; // varchar 50
@@ -246,7 +250,8 @@ namespace SyncCyberPlan_lib
             WEU_0        = getDBV<string>(row[75]);         //deve essere GR per WP
             ITMWEI_0     = getDBV<decimal>(row[76]);        //peso WP
             YCOLORE_0    = getDBV<string>(row[77]);
-            BPSNUM_0     = getDBV<string>(row[78]);
+            //BPSNUM_0     = getDBV<string>(row[78]);
+            BPSNUM_0 = "";
             YPESMAT_0    = getDBV<decimal>(row[79]);        //peso materozza/impronta
             YPASSOVIE_0  = getDBV<string>(row[80]);
             STDFLG_0     = getDBV<byte>(row[81]);            //gestione a stock/commessa
@@ -258,7 +263,6 @@ namespace SyncCyberPlan_lib
             YSTAMPCOLORE_0 = getDBV<string>(row[87]);
             YPIEFLG_0    = getDBV<byte>(row[88]);
             PHAFLG_0    = getDBV<byte>(row[89]);
-
 
             C_CODE                               = EscapeSQL(ITMREF_0, 50);          // varchar 50
             C_PLANT_CODE                         = "ITS01";                          // varchar 20
@@ -282,7 +286,7 @@ namespace SyncCyberPlan_lib
             C_ITEM_GROUP                         = EscapeSQL(TCLCOD_0, 8);           // varchar 8
             C_MANAGER                            = "";                               // varchar 20
             C_HOST_CODE                          = "";                               // varchar 50
-            C_SUPPLIER_CODE                      = EscapeSQL(BPSNUM_0, 30);          // varchar 30
+            C_SUPPLIER_CODE                      = EscapeSQL("", 30);          // varchar 30
             C_ABC_CLASS                          = ' ';                              // char 1
             C_VALUE                              = 0;                                // float	
             C_COST                               = 0;                                // float	
@@ -340,6 +344,30 @@ namespace SyncCyberPlan_lib
             C_USER_DATE03                        = null;                             // datetime	
             C_USER_DATE04                        = null;                             // datetime	
             C_PROD_LOT_QTY                       = (float)YQTAPREANT_0;
+
+
+            if (datiContoLavoroCapacitaInfinita.ContainsKey(ITMREF_0))
+            {
+                if (datiContoLavoroCapacitaInfinita[ITMREF_0].Item1 != 0)
+                {
+                    //modifico solo se diverso da zero; così è possibile mettere 0 sull'attrezzatura e fissare articolo per articolo il LeadTime
+                    C_FIXED_LEAD_TIME = datiContoLavoroCapacitaInfinita[ITMREF_0].Item1;
+                }
+                C_SUPPLIER_CODE = datiContoLavoroCapacitaInfinita[ITMREF_0].Item2;
+                //controllo
+                if (C_M_B != 'D')
+                {
+                    __bulk_message += Utils.NewLineMail() + " articolo " + ITMREF_0 + " assegnato ad attrezzatura di contolavoro, ma ha tipo proposta " + REOCOD_0;
+                }
+            }
+            else
+            {
+                if (C_M_B == 'D')
+                {
+                    __bulk_message += Utils.NewLineMail() + " articolo " + ITMREF_0 + " non assegnato ad attrezzatura di contolavoro, ma ha tipo proposta Contolavoro";
+                }
+            }
+
 
             if (
                 (YLIVTRAS_0 == "SF" && PHAFLG_0 != 2)
@@ -503,6 +531,10 @@ namespace SyncCyberPlan_lib
 
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string tipo)
         {
+            if (datiContoLavoroCapacitaInfinita == null)
+            {
+                datiContoLavoroCapacitaInfinita = DatiArticoliContolavoro(dossier);
+            }
             //metodo statico creato per poter essere richiamato senza modificare tabella statica _dataTable
             return SelectQuery(mode, dossier, codice_like, tipo);
         }
@@ -743,7 +775,7 @@ namespace SyncCyberPlan_lib
             //return categoria.Substring(0,4);
         }
 
-        public override void LastAction(ref DBHelper2 cm)
+        public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             {
@@ -839,7 +871,7 @@ namespace SyncCyberPlan_lib
  ,I.WEU_0
  ,I.ITMWEI_0
  ,Y.YCOLORE_0
- ,F.YBPSNUM_0
+ ,'era F.YBPSNUM_0'
  ,Y.YPESMAT_0
  ,Y.YPASSOVIE_0
  ,I.STDFLG_0
@@ -899,6 +931,69 @@ namespace SyncCyberPlan_lib
 
             sage_query += " ORDER BY I.ITMREF_0 ";
             return sage_query;
+        }
+
+        static public Dictionary<string, Tuple<short, string>> DatiArticoliContolavoro(string dossier)
+        {
+            /*
+             * Gli articoli di contolavoro in Sage hanno associato un'attrezzatura e una macchina,
+             * ma CyberPlan ignora queste associazioni perchè gestisce il contolavoro come tale 
+             * (fa un trasferimento di materiale e una proposta di ordine)
+             * 
+             * Per il CL a capacità infinita (CDL_mrp='CL') va impostato il LeadTime ed eventualòmente il fonritore predefinito
+             * Il leadtime per ocodità è a livello di attrezzatura
+             * Il fornitore a livello di macchina
+             * 
+             * [ 
+             * Per il CL a capacità finita (CDL_mrp='CLF') il numero pezzi è a livello di macchina (potrebbero esserci più attrezzature,
+             * ma un unico fornitore, il limite di pz è comune per la somma degli eventuali ordini)
+             * In questo caso Cyber si crea dei cicli fittizi
+             * ]
+             */
+
+            //Il reparto c'è sia  sull'articolo che sull'attrezzatura che sulla macchina
+            //Visto che l'articolo è associato ad un'attrezzatura ci basiamo sul reparto di questa (i controlli vengono fatti in altri posti via mail)
+            // C'è già un leadtime a livello di articolo-sito: aggiorniamo solo se è diverso da zero
+
+            //Per reparti esterni gestiti come interni (ASSE, ASSEC, PLAE) il LeadTime in teoria è sempre 0 su Sage (campo bloccato)
+            //quindi verrà aggiornato solo il fornitore (cmq il LeadTime non verrebbe considerato da Cyber, visto che vengono gestiti i cicli)
+
+            DBHelper2 sage = DBHelper2.getSageDBHelper(dossier);
+            _logger.Debug("DatiArticoliContolavoro...");
+            string db = "x3." + dossier;
+            string qry =
+@"select 
+  P.ITMREF_0
+, P.YATTCOD_0
+, A.YATTLEATIM_0
+, C.YCONCDL_0
+, W.WCR_0
+, W.YMRPCDL_0
+, W.YBPS_0 
+from " + db + @".YPRDITM P
+join " + db + @".YPRDATT A 
+	on P.YATTCOD_0 = A.YATTCOD_0
+join " + db + @".YPRDCONF C 
+	on C.YCONATT_0=A.YATTCOD_0
+join " + db + @".WORKSTATIO W 
+    on W.WST_0= C.YCONCDL_0
+where P.YENAFLG_0=2 and A.YATTENAFLG_0=2 and 
+(
+	(YATTWCR_0='CL' and W.YMRPCDL_0='CL')
+	or
+	(W.YMRPCDL_0 like 'ASSE%' or W.YMRPCDL_0 like 'PLAE%' or W.YMRPCDL_0 like 'CTAE%')
+)"
+;
+            DbDataReader dtr = sage.GetReaderSelectCommand(qry);
+            object[] row = new object[dtr.FieldCount];
+            Dictionary<string, Tuple<short, string>> itm_CL= new Dictionary<string, Tuple<short, string>>(100);  //Tupla: leadTime, fornitore
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                itm_CL.Add((string)row[0], new Tuple<short, string>( (short)row[2], (string)row[6])); //  Articolo + (leadTime, Fonitore)
+            }
+            _logger.Debug("DatiArticoliContolavoro... end");
+            return itm_CL;
         }
     }
 }

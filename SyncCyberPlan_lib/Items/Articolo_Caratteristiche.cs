@@ -92,11 +92,11 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("PRIORITA", typeof(int));   //smallint         
         }
 
-        public override void LastAction(ref DBHelper2 db)
+        public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            Update_FAMP(ref db);
+            Update_FAMP(ref cm);
         }
-        static void Update_FAMP(ref DBHelper2 db)
+        static void Update_FAMP(ref DBHelper2 cm)
         {
             //// caratteristiche 
             //FAMP ...
@@ -199,7 +199,7 @@ order by a.itmref,a.valcod desc
 
 
 
-            int i = DBHelper2.EseguiSuDBCyberPlan(ref db, upd_query);
+            int i = DBHelper2.EseguiSuDBCyberPlan(ref cm, upd_query);
         }
     }
 }

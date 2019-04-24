@@ -241,7 +241,7 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_RUN_TIME", typeof(int));
         }
 
-        public override void LastAction(ref DBHelper2 cm)
+        public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             {

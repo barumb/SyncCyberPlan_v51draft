@@ -193,7 +193,7 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_USER_CHAR02",           typeof(char));                   // char 1
         }
 
-        public override void LastAction(ref DBHelper2 cm)
+        public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
             LastAction_CheckCoerenzaDB(ref cm);
             return;

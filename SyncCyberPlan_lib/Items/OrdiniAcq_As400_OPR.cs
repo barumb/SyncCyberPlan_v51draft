@@ -191,7 +191,7 @@ namespace SyncCyberPlan_lib
             C_USER_DATE05         = null;                                                          //datetime 
         }
 
-        public override void LastAction(ref DBHelper2 cm)
+        public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
 
             //
