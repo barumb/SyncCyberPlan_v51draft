@@ -80,7 +80,7 @@ namespace SyncCyberPlan_lib
             C_USER_CHAR01 = _YPIEFLG_0 == 2 ? 'P' : ' ';         //char](1) NULL,
             C_USER_CHAR02 = ' ';         //char](1) NULL,
             C_USER_FLAG01 = (byte)(_YPLADIV_0 == 2 ? 1 : 0);  //bit] NULL,
-            C_USER_FLAG02 = getFlagManuale(_YMRPCDL_0, _WSTTYP_0, _WST_0);    //bit] NULL,   se manuale (WSSTYP=2) metto true
+            C_USER_FLAG02 = getFlagManuale(_YMRPCDL_0, _WSTTYP_0, _WST_0);    //bit] NULL,   se manuale (WSTTYP=2) metto true
             C_USER_INT01 = _YQTASETCLF;             //int] NULL,
             C_USER_INT02 = 0;          //int] NULL,
             C_USER_REAL01 = (float)_YPLAGRMIN_0;            //float] NULL,
