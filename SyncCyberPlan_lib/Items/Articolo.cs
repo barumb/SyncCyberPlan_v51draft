@@ -312,8 +312,8 @@ namespace SyncCyberPlan_lib
             C_USER_INT08                         = 0;                                // int	
             C_USER_INT09                         = 0;                                // int	
             C_USER_INT10                         = 0;                                // int	
-            C_USER_REAL01                        = getPeso(TCLCOD_0, ITMREF_0, ITMWEI_0, WEU_0);                  // float	
-            C_USER_REAL02                        = (float)YPESMAT_0;                 // float	
+            C_USER_REAL01                        = getPeso(YWCR_0, ITMREF_0, ITMWEI_0, WEU_0);                  // float	
+            C_USER_REAL02                        = GetPesoMaterozza(ITMREF_0, YWCR_0, YPESMAT_0);                 // float	
             C_USER_REAL03                        = 0;                                // float	
             C_USER_REAL04                        = 0;                                // float	
             C_USER_REAL05                        = 0;                                // float	
@@ -673,17 +673,22 @@ namespace SyncCyberPlan_lib
             }
             return ret;
         }
-        protected float getPeso(string categoria,string articolo, decimal peso, string udm)
+        protected float getPeso(string reparto,string articolo, decimal peso, string udm)
         {
-            if (categoria == "3PLA")
+            if (reparto == "PLAS")
             {
+                if (peso == 0)
+                {
+                    //CE NE SONO TROPPI__bulk_message += Utils.NewLineMail()+ articolo + " (corpo plastico) non ha il peso";
+                }
+
                 if (udm == "GR")
                 {
                     return (float)peso;
                 }
                 else
                 {
-                    __bulk_message += articolo + " (corpo plastico) non ha il peso espresso in grammi; sistema anagrafica in sage";
+                    __bulk_message += Utils.NewLineMail() + articolo + " (corpo plastico) non ha il peso espresso in grammi; sistema anagrafica in sage";
                     return 0;
                 }
             }
@@ -760,8 +765,10 @@ namespace SyncCyberPlan_lib
             }
             else
             {
-                if(YWCR_0 == "ASSE" || YWCR_0 == "PLAS" || YWCR_0 == "CL" || YWCR_0 == "CTAPE" || 
+                if(
+                    !(YWCR_0 == "ASSE" || YWCR_0 == "PLAS" || YWCR_0 == "CL" || YWCR_0 == "CTAPE" || 
                     YWCR_0 == "FILO" || YWCR_0 == "MORS" || YWCR_0 == "TERM" || YWCR_0 == "VITI" )
+                    )
                 __bulk_message += Utils.NewLineMail() + "articolo " + ITMREF_0 + " con reparto non previsto: " + YWCR_0;
                 return YWCR;
             }
@@ -777,6 +784,14 @@ namespace SyncCyberPlan_lib
             //    return "ASSE";
 
             //return categoria.Substring(0,4);
+        }
+        protected float GetPesoMaterozza(string articolo, string reparto, decimal pesomaterozza)
+        {
+            if (reparto == "PLAS" && pesomaterozza == 0)
+            {
+                //CE NE SONO TROPPI __bulk_message += Utils.NewLineMail() + "articolo " + articolo + " non ha peso materozza";
+            }
+            return (float)YPESMAT_0;
         }
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
