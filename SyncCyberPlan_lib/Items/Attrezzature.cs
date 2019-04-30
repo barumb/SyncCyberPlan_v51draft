@@ -199,6 +199,10 @@ namespace SyncCyberPlan_lib
                 if (FlagTyco == 2) ret += "2";
                 if (FlagHarting == 2) ret += "3";                                
             }
+            if (ret == "")
+            {
+                __bulk_message += Utils.NewLineMail() + "l'attrezzatura " + ITMREF_0 + " ha tutti i marchi disabilitati";
+            }
             return ret;
         }
         static public string GetTipoPLastica(string Reparto, short FlagSTH,short FlagPa66)
