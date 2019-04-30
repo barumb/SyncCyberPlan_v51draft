@@ -755,10 +755,14 @@ namespace SyncCyberPlan_lib
         {
             if (string.IsNullOrWhiteSpace(YWCR))
             {
+                __bulk_message += Utils.NewLineMail() + "articolo "+ ITMREF_0 + " senza reparto";
                 return __TRASH__;
             }
             else
             {
+                if(YWCR_0 == "ASSE" || YWCR_0 == "PLAS" || YWCR_0 == "CL" || YWCR_0 == "CTAPE" || 
+                    YWCR_0 == "FILO" || YWCR_0 == "MORS" || YWCR_0 == "TERM" || YWCR_0 == "VITI" )
+                __bulk_message += Utils.NewLineMail() + "articolo " + ITMREF_0 + " con reparto non previsto: " + YWCR_0;
                 return YWCR;
             }
 
