@@ -88,7 +88,7 @@ namespace SyncCyberPlan_lib
             C_USER_STRING01 = _WCR_0;   //varchar](29) NULL,
             C_USER_STRING02 = _YGRP_0;  //varchar](29) NULL,
             C_USER_STRING03 = _YBPS_0;   //varchar](29) NULL,
-            C_USER_STRING04 = Attrezzature.GetTipoPLastica("PC", _YPLASTH_0, _YPLAPA66_0);       //varchar](29) NULL,
+            C_USER_STRING04 = Attrezzature.GetTipoPLastica(_WCR_0, _YPLASTH_0, _YPLAPA66_0);       //varchar](29) NULL,
             C_USER_STRING05 = _YMACLIN_0;             //varchar](29) NULL,  //macchina successiva
             C_USER_TIME01 = null;         //datetime] NULL,
             C_USER_TIME02 = null;         //datetime] NULL,
