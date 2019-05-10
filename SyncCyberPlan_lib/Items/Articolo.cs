@@ -959,7 +959,7 @@ namespace SyncCyberPlan_lib
              * ma CyberPlan ignora queste associazioni perchè gestisce il contolavoro come tale 
              * (fa un trasferimento di materiale e una proposta di ordine)
              * 
-             * Per il CL a capacità infinita (CDL_mrp='CL') va impostato il LeadTime ed eventualòmente il fonritore predefinito
+             * Per il CL a capacità infinita (CDL_mrp='CL') va impostato il LeadTime ed eventualmente il fornitore predefinito
              * Il leadtime per ocodità è a livello di attrezzatura
              * Il fornitore a livello di macchina
              * 

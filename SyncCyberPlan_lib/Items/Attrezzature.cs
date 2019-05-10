@@ -201,7 +201,7 @@ namespace SyncCyberPlan_lib
             }
             if (ret == "")
             {
-                __bulk_message += Utils.NewLineMail() + "l'attrezzatura " + ITMREF_0 + " ha tutti i marchi disabilitati";
+                __bulk_message += Utils.NewLineMail() + "l'attrezzatura " + C_CODE + " ha tutti i marchi disabilitati";
             }
             return ret;
         }
