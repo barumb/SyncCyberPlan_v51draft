@@ -751,7 +751,7 @@ namespace SyncCyberPlan_lib
                 {
                     if (Cod_materiale.Trim() == "104" || Cod_materiale.Trim() == "105" || Cod_materiale.Trim() == "106")
                         ret = 'S';  //sth
-                    else ret = 'P';  //Pa66
+                    else ret = 'P';  //Pa66 o ABS
                 }
             }
             return ret;
@@ -959,12 +959,12 @@ namespace SyncCyberPlan_lib
              * ma CyberPlan ignora queste associazioni perchè gestisce il contolavoro come tale 
              * (fa un trasferimento di materiale e una proposta di ordine)
              * 
-             * Per il CL a capacità infinita (CDL_mrp='CL') va impostato il LeadTime ed eventualmente il fornitore predefinito
-             * Il leadtime per ocodità è a livello di attrezzatura
+             * Per il CL a capacità infinita (macchine con CDL_mrp='CL') va impostato il LeadTime ed eventualmente il fornitore predefinito
+             * Il leadtime per comodità è a livello di attrezzatura
              * Il fornitore a livello di macchina
              * 
              * [ 
-             * Per il CL a capacità finita (CDL_mrp='CLF') il numero pezzi è a livello di macchina (potrebbero esserci più attrezzature,
+             * Per il CL a capacità finita (macchine con CDL_mrp='CLF') il numero pezzi è a livello di macchina (potrebbero esserci più attrezzature,
              * ma un unico fornitore, il limite di pz è comune per la somma degli eventuali ordini)
              * In questo caso Cyber si crea dei cicli fittizi
              * ]
@@ -974,7 +974,7 @@ namespace SyncCyberPlan_lib
             //Visto che l'articolo è associato ad un'attrezzatura ci basiamo sul reparto di questa (i controlli vengono fatti in altri posti via mail)
             // C'è già un leadtime a livello di articolo-sito: aggiorniamo solo se è diverso da zero
 
-            //Per reparti esterni gestiti come interni (ASSE, ASSEC, PLAE) il LeadTime in teoria è sempre 0 su Sage (campo bloccato)
+            //Per reparti esterni gestiti come interni (ASSE, ASSEC, PLAE) il campo LeadTime dell'attrezzatura dovrebbe essere sempre 0 su Sage (campo bloccato)
             //quindi verrà aggiornato solo il fornitore (cmq il LeadTime non verrebbe considerato da Cyber, visto che vengono gestiti i cicli)
 
             DBHelper2 sage = DBHelper2.getSageDBHelper(dossier);

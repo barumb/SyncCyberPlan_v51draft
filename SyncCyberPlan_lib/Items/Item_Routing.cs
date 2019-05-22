@@ -20,7 +20,7 @@ namespace SyncCyberPlan_lib
 
         public string _YCONCDL_0;   //Macchina
 
-        public string _YATTWCR_0; //reparto attrezzatura
+        public string _YATTTYP_0; //tipo attrezzatura
 
         #region tabella output CYB_ITEM_ROUTING
         public string    C_ITEM_CODE;                       //varchar 50
@@ -53,7 +53,7 @@ namespace SyncCyberPlan_lib
             _YATTCOD_0 = getDBV<string>(row[1]);
             _YPRI_0 = getDBV<short>(row[2]);
             _YENAFLG_0 = getDBV<byte>(row[3]);
-            _YATTWCR_0  = getDBV<string>(row[4]);
+            _YATTTYP_0  = getDBV<string>(row[4]);
             _YPLAIMP_0 = getDBV<short>(row[5]);
             _YPLADIV_0 = getDBV<byte>(row[6]);
             //_YCAD_0 = getDBV<decimal>(row[7]);
@@ -65,9 +65,9 @@ namespace SyncCyberPlan_lib
             {
                 __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " è attivo ma non è associato ad una attrezzatura";
             }
-            else  if (_YATTWCR_0 != _YWCR_0)
+            else  if (!_YWCR_0.StartsWith(_YATTTYP_0) )
             {
-                __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " ha reparto <" + _YWCR_0 + ">, mentre l'attrezzatura associata " + _YATTCOD_0 + " ha reparto <" + _YATTWCR_0 +">";
+                __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " ha reparto <" + _YWCR_0 + ">, mentre l'attrezzatura associata " + _YATTCOD_0 + " ha tipo <" + _YATTTYP_0 +">";
             }
 
             C_ITEM_CODE = EscapeSQL(_ITMREF_0, 50);           //varchar 50
@@ -103,7 +103,7 @@ namespace SyncCyberPlan_lib
         ,I.YATTCOD_0
         ,I.YPRI_0
         ,I.YENAFLG_0
-        ,A.YATTWCR_0
+        ,A.YATTTYP_0
         ,I.YPLAIMP_0
         ,I.YPLADIV_0  
 
@@ -192,8 +192,7 @@ namespace SyncCyberPlan_lib
             {
                 //l'associazione articolo/attrezzatura non va passata nel caso di Contolavoro CL
                 return null;
-            }
-            //and F.YWCR_0 = A.YATTWCR_0
+            }            
             DataRow _tablerow = _dataTable.NewRow();
 
             _tablerow[0] = C_ITEM_CODE;                       //varchar 50

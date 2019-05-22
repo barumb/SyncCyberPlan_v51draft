@@ -17,7 +17,7 @@ namespace SyncCyberPlan_lib
         public int  _YCONCADTIM_0;
         public string   _YCONLOTUM_0;
         public string   _Yfornitore_BPS_0;
-        public string   _YCYB_CDC_0;
+        public string   _YATTWCR_0;
         public decimal   _YCONCAD_0;  //CADENZA
         
 
@@ -71,14 +71,14 @@ namespace SyncCyberPlan_lib
             _YCONCADTIM_0         = getDBV<int>(row[7]);          // tempo della CADENZA 
             _YCONLOTUM_0          = getDBV<string>(row[8]);      // Vie/pezzo
             _Yfornitore_BPS_0     = getDBV<string>(row[9]);      // fornitore
-            _YCYB_CDC_0           = getDBV<string>(row[10]);     // reparto 
+            _YATTWCR_0           = getDBV<string>(row[10]);     // reparto 
             _YCONCAD_0            = getDBV<decimal>(row[11]);   //  CADENZA            
 
             C_ROUTING_CODE = EscapeSQL(_COD_ATTREZZ, 51);                    //varchar    51
             C_ROUTING_ALT = EscapeSQL("0", 9);                              //varchar    9
             C_OPNUM = 10;                                             //int     
             C_ALT_OPNUM = EscapeSQL("0", 9);                              //varchar    9
-            C_DESCR = EscapeSQL(_YCYB_CDC_0, 30);                     //varchar    30
+            C_DESCR = EscapeSQL(_YATTWCR_0, 30);                     //varchar    30
             C_QUEUE_TIME = 0;                                              //int     
             C_SETUP_TIME = (int)_YSTASETUP_0;                              //int     
             C_RUN_TIME = _YCONCADTIM_0;                                 //int     
