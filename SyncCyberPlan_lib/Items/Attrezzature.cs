@@ -25,7 +25,7 @@ namespace SyncCyberPlan_lib
         public DateTime? _YATTDATSAU_0;  //data riattivazione MArchio Sauro
         public DateTime? _YATTDATTYC_0;  //data riattivazione MArchio Tyco
         public DateTime? _YATTDATHAR_0;  //data riattivazione MArchio Harting
-        public char _YATTVP_0;  //flag vie/pezzi
+        public char _YATTLOTUM_0;  //flag vie/pezzi
         public short _YATTLEATIM_0; //lead time, usato per contolavoro
         
 
@@ -53,7 +53,7 @@ namespace SyncCyberPlan_lib
             _YATTDATSAU_0 = getSageDate(row[12]);
             _YATTDATTYC_0 = getSageDate(row[13]);
             _YATTDATHAR_0 = getSageDate(row[14]);
-            _YATTVP_0     = (row[15] == System.DBNull.Value) ? ' ' : getDBV<string>(row[15])[0];
+            _YATTLOTUM_0     = (row[15] == System.DBNull.Value) ? ' ' : getDBV<string>(row[15])[0];
             _YATTLEATIM_0 = getDBV<short>(row[16]);
 
 
@@ -110,7 +110,7 @@ namespace SyncCyberPlan_lib
             C_USER_REAL03                        = 0;                                // float	
             C_USER_REAL04                        = 0;                                // float	
             C_USER_REAL05                        = 0;                                // float	
-            C_USER_CHAR01                        = _YATTVP_0;                        // char 1  Flag Vie/Pezzi       ///////mai fatto -> Categoria pe morsetti 
+            C_USER_CHAR01                        = _YATTLOTUM_0;                        // char 1  Flag Vie/Pezzi       ///////mai fatto -> Categoria pe morsetti 
             C_USER_CHAR02                        = ' ';                              // char 1  ////////Piega o non pieag per FILO
             C_USER_CHAR03                        = ' ';                              // char 1
             C_USER_CHAR04                        = ' ';                              // char 1
@@ -173,7 +173,7 @@ namespace SyncCyberPlan_lib
                      ,S.YATTDATSAU_0
                      ,S.YATTDATTYC_0
                      ,S.YATTDATHAR_0                     
-                     ,S.YATTVP_0
+                     ,S.YATTLOTUM_0
                      ,S.YATTLEATIM_0
 
                       from " + db + @".YPRDATT S 
