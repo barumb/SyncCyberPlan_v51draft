@@ -16,7 +16,7 @@ namespace SyncCyberPlan_lib
         public string _WST_0;
         public string  _YCONGRP_0   ;
         public decimal _YCONLOTSIZ_0;
-        public string  _YCONLOTUM_0 ;
+        //public string  _YCONLOTUM_0 ;
         public decimal _YCONCAD_0   ;
         public int _YCONCADTIM_0;
         public DateTime? _YCONDATRIA_0;
@@ -52,12 +52,12 @@ namespace SyncCyberPlan_lib
             _YCONGRP_0        = getDBV<string>(row[1]);
             _WST_0            = getDBV<string>(row[2]);
             _YCONLOTSIZ_0     = getDBV<decimal>(row[3]);
-            _YCONLOTUM_0      = getDBV<string>(row[4]);
-            _YCONCAD_0        = getDBV<decimal>(row[5]);
-            _YCONCADTIM_0     = getDBV<int>(row[6]);
-            _YCONENAFLG_0     = getDBV<byte>(row[7]);
-            _YCONDATRIA_0     = getSageDate(row[8]);
-            _WCR_0            = getDBV<string>(row[9]);
+            //_YCONLOTUM_0      = getDBV<string>(row[4]);
+            _YCONCAD_0        = getDBV<decimal>(row[4]);
+            _YCONCADTIM_0     = getDBV<int>(row[5]);
+            _YCONENAFLG_0     = getDBV<byte>(row[6]);
+            _YCONDATRIA_0     = getSageDate(row[7]);
+            _WCR_0            = getDBV<string>(row[8]);
 
 
             C_ROUTING_CODE = EscapeSQL(_YCONATT_0, 51);      // varchar 51  
@@ -201,7 +201,6 @@ namespace SyncCyberPlan_lib
                      ,C.YCONGRP_0
                      ,W.WST_0
                      ,C.YCONLOTSIZ_0
-                     ,C.YCONLOTUM_0
                      ,C.YCONCAD_0
                      ,C.YCONCADTIM_0
                      ,C.YCONENAFLG_0
@@ -266,7 +265,6 @@ namespace SyncCyberPlan_lib
                      ,C.YCONGRP_0
                      ,C.YCONCDL_0 as WST_0
                      ,C.YCONLOTSIZ_0
-                     ,C.YCONLOTUM_0
                      ,C.YCONCAD_0
                      ,C.YCONCADTIM_0
                      ,C.YCONENAFLG_0

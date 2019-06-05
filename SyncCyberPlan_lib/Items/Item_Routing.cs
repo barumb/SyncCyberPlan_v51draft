@@ -65,9 +65,16 @@ namespace SyncCyberPlan_lib
             {
                 __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " è attivo ma non è associato ad una attrezzatura";
             }
-            else  if (!_YWCR_0.StartsWith(_YATTTYP_0) )
+            else if (!_YWCR_0.StartsWith(_YATTTYP_0))
             {
-                __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " ha reparto <" + _YWCR_0 + ">, mentre l'attrezzatura associata " + _YATTCOD_0 + " ha tipo <" + _YATTTYP_0 +">";
+                if (!(
+                    (_YWCR_0 == "ASSE" && _YATTTYP_0 == "STA") ||
+                    (_YWCR_0 == "ASSE" && _YATTTYP_0 == "ETI") ||
+                    (_YWCR_0 == "PLAS" && _YATTTYP_0 == "PC")
+                    ))
+                {
+                    __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " ha reparto <" + _YWCR_0 + ">, mentre l'attrezzatura associata " + _YATTCOD_0 + " ha tipo <" + _YATTTYP_0 + ">";
+                }
             }
 
             C_ITEM_CODE = EscapeSQL(_ITMREF_0, 50);           //varchar 50

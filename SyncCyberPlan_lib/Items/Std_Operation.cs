@@ -15,7 +15,7 @@ namespace SyncCyberPlan_lib
         public decimal  _YCONLOTSIZ_0;
         public string   _YGRP_0;     //GRUPPO macchine (CDL in sage)
         public int  _YCONCADTIM_0;
-        public string   _YCONLOTUM_0;
+        public string   _YATTLOTUM_0;
         public string   _Yfornitore_BPS_0;
         public string   _YATTWCR_0;
         public decimal   _YCONCAD_0;  //CADENZA
@@ -69,7 +69,7 @@ namespace SyncCyberPlan_lib
             _YCONLOTSIZ_0         = getDBV<decimal>(row[5]);
             _YGRP_0               = getDBV<string>(row[6]);      // Centro di lavoro
             _YCONCADTIM_0         = getDBV<int>(row[7]);          // tempo della CADENZA 
-            _YCONLOTUM_0          = getDBV<string>(row[8]);      // Vie/pezzo
+            _YATTLOTUM_0          = getDBV<string>(row[8]);      // Vie/pezzo
             _Yfornitore_BPS_0     = getDBV<string>(row[9]);      // fornitore
             _YATTWCR_0           = getDBV<string>(row[10]);     // reparto 
             _YCONCAD_0            = getDBV<decimal>(row[11]);   //  CADENZA            
@@ -98,7 +98,7 @@ namespace SyncCyberPlan_lib
             C_USER_NOTE01 = EscapeSQL("", 99);                              //varchar    99
             C_USER_INT01 = 0;                                              //int     
             C_USER_REAL01 = 0;                                              //float    
-            C_USER_STRING01 = EscapeSQL(_YCONLOTUM_0, 29);                      //varchar    29    //per Assemblaggio Flag Via/pezzo
+            C_USER_STRING01 = EscapeSQL(_YATTLOTUM_0, 29);                      //varchar    29    //per Assemblaggio Flag Via/pezzo
             C_USER_STRING02 = EscapeSQL(_YGRP_0, 29);           //varchar    29  Gruppo inserita nella  PRIMARY KEY
             C_USER_TIME01 = 0;                                              //int     
             C_USER_TIME02 = 0;                                              //int     
@@ -170,7 +170,7 @@ namespace SyncCyberPlan_lib
                      ,C.YCONLOTSIZ_0
                      ,C.YCONGRP_0
                      ,C.YCONCADTIM_0
-                     ,C.YCONLOTUM_0
+                     ,S.YATTLOTUM_0
                      ,'fornitore'
                      ,S.YATTWCR_0 
                      ,C.YCONCAD_0                     
