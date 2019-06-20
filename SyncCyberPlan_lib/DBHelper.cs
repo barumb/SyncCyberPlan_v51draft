@@ -101,7 +101,7 @@ namespace SyncCyberPlan_lib
             try
             {
                 res = _cmdSql.ExecuteNonQuery();
-                if (res == -1)
+                if (res == -1 && (command.Contains("UPDATE ") || command.Contains("INSERT ") || command.Contains("DELETE ") ))
                 {
                     //rollback
                     _logger.Error("rollback query \n" + command);
@@ -258,7 +258,7 @@ namespace SyncCyberPlan_lib
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query, int timeout)
         {
 #if DEBUG
-            return 1;
+            //return 1;
 #endif
             int ret = -99;
             if (!string.IsNullOrWhiteSpace(query))
