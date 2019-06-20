@@ -193,7 +193,7 @@ namespace SyncCyberPlan_lib
         protected string getMarchi(string TipoAttrezzatura, short FlagSauro, short FlagTyco, short FlagHarting)
         {
             string ret = "";
-            if (TipoAttrezzatura.ToUpper() == "PLA")
+            if (TipoAttrezzatura.ToUpper().StartsWith("PLA"))
             {
                 if (FlagSauro == 2) ret += "1";
                 if (FlagTyco == 2) ret += "2";
