@@ -88,7 +88,7 @@ namespace SyncCyberPlan_lib
             C_USER_STRING01 = _WCR_0;   //varchar](29) NULL,
             C_USER_STRING02 = _YGRP_0;  //varchar](29) NULL,
             C_USER_STRING03 = _YBPS_0;   //varchar](29) NULL,
-            C_USER_STRING04 = Attrezzature.GetTipoPLastica(_WCR_0, _YPLASTH_0, _YPLAPA66_0);       //varchar](29) NULL,
+            C_USER_STRING04 = Macchina.GetTipoPLastica(_WCR_0, _YPLASTH_0, _YPLAPA66_0);       //varchar](29) NULL,
             C_USER_STRING05 = _YMACLIN_0;             //varchar](29) NULL,  //macchina successiva
             C_USER_TIME01 = null;         //datetime] NULL,
             C_USER_TIME02 = null;         //datetime] NULL,
@@ -222,6 +222,18 @@ namespace SyncCyberPlan_lib
             _dataTable.Columns.Add("C_UTILIZATION", typeof(float));
             _dataTable.Columns.Add("C_WAIT_TIME", typeof(float));
             _dataTable.Columns.Add("C_WORKCENTER", typeof(string));
+        }
+
+
+        static public string GetTipoPLastica(string reparto, short FlagSTH, short FlagPa66)
+        {
+            string ret = "";
+            if (reparto.ToUpper() == "PLAS")
+            {
+                if (FlagSTH == 2) ret += "S";
+                if (FlagPa66 == 2) ret += "P";
+            }
+            return ret;
         }
     }
 }

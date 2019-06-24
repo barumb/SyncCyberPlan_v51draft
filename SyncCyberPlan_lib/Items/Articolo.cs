@@ -707,18 +707,26 @@ namespace SyncCyberPlan_lib
         }
         protected int getMarchio(string tagoem)
         {
+            int ret = -1;
+
             //1 Sauro
             //2 Tyco
             //3 Harting
-            string tmp = tagoem.Trim();
-            int ret=-1;
-
-            switch (tagoem)
+            if (tagoem != null)
             {
-                case "1": ret = 1;break;
-                case "2": ret = 2;break;
-                case "3": ret = 3;break;
-                default: ret= -1; break;
+                string tmp = tagoem.Trim();
+
+                switch (tagoem)
+                {
+                    case "1": ret = 1; break;
+                    case "2": ret = 2; break;
+                    case "3": ret = 3; break;
+                    default: ret = -1; break;
+                }
+            }
+            else
+            {
+                __bulk_message += Utils.NewLineMail() + " articolo " + ITMREF_0 + " Forse manca record corrispondente in YITMINF!";
             }
             return ret;
         }

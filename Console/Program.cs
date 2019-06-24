@@ -22,7 +22,7 @@ namespace Console
             // EseguiTutto();
             
             Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
 
 

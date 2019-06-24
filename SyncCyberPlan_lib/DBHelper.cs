@@ -258,7 +258,7 @@ namespace SyncCyberPlan_lib
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query, int timeout)
         {
 #if DEBUG
-            //return 1;
+            return 1;
 #endif
             int ret = -99;
             if (!string.IsNullOrWhiteSpace(query))
