@@ -21,6 +21,8 @@ namespace Console
 #if DEBUG
             // EseguiTutto();
             
+            Esegui("FINALCHECK".Split(' '));
+            return;
             Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
             Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
@@ -75,6 +77,11 @@ namespace Console
                 CYBER_utils.SetStatus("Completed");
                 return;
             }
+            else if (args[0].ToUpper() == "FINALCHECK")
+            {
+                CYBER_utils.FinalCheck();
+                return;
+            }
             if (args.Length < 4)
             {
                 _logger.Info("\n\n\nSintassi:\n" +
@@ -106,7 +113,8 @@ namespace Console
                     "SyncCyberPlan START     prima di iniziare sync tabelle CyberPlan\n" +
                     "SyncCyberPlan STOP      alla fine del     sync tabelle CyberPlan\n" +
                     "SyncCyberPlan INIT_CYB  per inizializzare tabelle CyberPlan\n" +
-                    "SyncCyberPlan INIT_CYB  per inizializzare tabelle CyberPlan\n" +
+                    "SyncCyberPlan FINALCHECK per far partire i controlli finali\n" +
+                    
 
                     "COD = WP%  per ottenere un filtro sui codici\n"
                 );
@@ -270,7 +278,7 @@ namespace Console
                 {
 
                     _logger.Error(string.Join(" ",args) + "\n" + ex.ToString());
-                    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", string.Join(" ", args) + "\n\n\n" + ex.ToString(), true);
+                    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", string.Join(" ", args) + "\n\n\n" + ex.ToString(), true);
                 }
 #endif
             }

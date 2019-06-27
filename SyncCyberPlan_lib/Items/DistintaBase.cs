@@ -263,7 +263,7 @@ namespace SyncCyberPlan_lib
 
             if (testo_mail != "")
             {
-                Utils.SendMail("it@sauro.net", "codifica@sauro.net", "mail.sauro.net", testo_mail);
+                Utils.SendMail("it@sauro.net", "codifica@sauro.net", testo_mail);
             }
         }
 

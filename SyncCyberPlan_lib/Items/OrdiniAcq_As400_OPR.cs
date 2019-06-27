@@ -261,7 +261,7 @@ namespace SyncCyberPlan_lib
 
             if (testo_mail != "")
             {
-                Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", "mail.sauro.net", testo_mail);
+                Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", testo_mail);
             }
         }
 

@@ -409,12 +409,12 @@ namespace SyncCyberPlan_lib
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             { 
                 //ThreadPool.QueueUserWorkItem(sendmail);
-                Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", "mail.sauro.net", __bulk_message);
+                Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", __bulk_message);
             }
         }
         //void sendmail(Object threadContext)
         //{
-        //    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", __bulk_message);
+        //    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", __bulk_message);
         //}
     }
 }

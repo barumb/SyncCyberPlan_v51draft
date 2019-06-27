@@ -453,7 +453,7 @@ where T.C_CODE is null ";
 
             if (testo_mail != "")
             {
-                Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", testo_mail);
+                Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", testo_mail);
             }
         }
     }

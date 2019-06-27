@@ -88,7 +88,7 @@ namespace SyncCyberPlan_lib
                 {
                     message_error = ART + " ha giacenza totale negativa (magazzino " + magazzino + "): " + PQMQGIA + Utils.NewLineMail();
                     __bulk_message +=  message_error;
-                    //Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", message_error);
+                    //Utils.SendMail("it@sauro.net", destinatari, message_error);
 
                 }                
             } 
@@ -170,7 +170,7 @@ order by PQMCART
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             {
                 string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net";
-                Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", __bulk_message);
+                Utils.SendMail("it@sauro.net", destinatari, __bulk_message);
             }
         }
 

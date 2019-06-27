@@ -252,7 +252,7 @@ namespace SyncCyberPlan_lib
             if (!string.IsNullOrWhiteSpace(__bulk_message))
             {
                 string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net";
-                Utils.SendMail("it@sauro.net", destinatari, "mail.sauro.net", __bulk_message);
+                Utils.SendMail("it@sauro.net", destinatari, __bulk_message);
             }
         }
     }

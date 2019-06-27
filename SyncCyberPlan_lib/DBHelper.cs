@@ -178,8 +178,8 @@ namespace SyncCyberPlan_lib
 
             //if (thereIsMessage)
             //{
-            //    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", "mail.sauro.net", message_error);
-            //    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net,enrico.lidacci@sauro.net", "mail.sauro.net", message_error);
+            //    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", message_error);
+            //    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net,enrico.lidacci@sauro.net", message_error);
             //}
 
             _logger.Debug("---   ended at " + DateTime.Now.ToString());

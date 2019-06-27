@@ -73,6 +73,16 @@ namespace SyncCyberPlan_lib
             }
             return result.Trim();
         }
+        public static void SendMail(string MailFROM, string MailTO, string Msg, bool errore)
+        {
+            string _mailServerSMTP = "mail.sauro.net";
+            SendMail(MailFROM, MailTO, _mailServerSMTP, Msg, errore);
+        }        
+        public static void SendMail(string MailFROM, string MailTO, string Msg)
+        {
+            string _mailServerSMTP = "mail.sauro.net";
+            SendMail(MailFROM, MailTO, _mailServerSMTP, Msg, false);
+        }
         public static void SendMail(string MailFROM, string MailTO, string MailServerSMTP, string Msg, bool errore)
         {
             IPAddress[] localAddress = new IPAddress[0];
@@ -142,10 +152,6 @@ namespace SyncCyberPlan_lib
                 EventLog.WriteEntry("Exception Sync CyberPlan ", Msg);
             }
             //#endif
-        }
-        public static void SendMail(string MailFROM, string MailTO, string MailServerSMTP, string Msg)
-        {
-            SendMail(MailFROM, MailTO, MailServerSMTP, Msg, false);
         }
         public static string NewLineMail()
         {

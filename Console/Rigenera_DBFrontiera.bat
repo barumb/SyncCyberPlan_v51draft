@@ -39,5 +39,6 @@ Console SAURO MBM41LIB_M ALLTIME CIC
 
 
 Console INIT_CYB
+Console FINALCHECK
 Console STOP
 rem fine
