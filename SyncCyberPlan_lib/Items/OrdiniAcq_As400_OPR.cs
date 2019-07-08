@@ -30,6 +30,9 @@ namespace SyncCyberPlan_lib
         public string  MFVUTSE;  //unita di misura tempo di setup
         public decimal MFVASET;  //tempo di setup
 
+        public string MFVWRKC;  //centro di lavoro (Interno/esterno in as400)
+
+
         public OrdiniAcq_As400_OPR(/*string YPOHTYP*/): base("CYB_ORDER")
         {
             //__YPOHTYP_filter = YPOHTYP;
@@ -64,6 +67,7 @@ namespace SyncCyberPlan_lib
                 + ",  " + _tabMFV + ".MFVAMPT" + "\n"
                 + ",  " + _tabMFV + ".MFVUTSE" + "\n"
                 + ",  " + _tabMFV + ".MFVASET" + "\n"
+                + ",  " + _tabMFV + ".MFVWRKC" + "\n"
                 + " FROM " + _tabMFH + "\n"
                 + " INNER JOIN " + _tabMFV + " ON " + "\n"
                                  + _tabMFH + ".MFHTORD = " + _tabMFV + ".MFVTORD " + "\n"
@@ -111,6 +115,8 @@ namespace SyncCyberPlan_lib
             MFVUTSE = getDBV<string>(row[18]);
             MFVASET = getDBV<decimal>(row[19]);
 
+            MFVWRKC = getDBV<string>(row[20]);
+
 
 
 
@@ -119,7 +125,7 @@ namespace SyncCyberPlan_lib
             C_CORDER_CODE         = EscapeSQL(MFHTCOM + MFHACOM.ToString("00") + MFHPCOM.ToString("000000") + MFHSCOM.ToString("0000"), 30);   //varchar 30  
             C_ITEM_CODE           = EscapeSQL(MFHCART, 50);                                        //varchar         50                      
             C_ITEM_PLANT          = EscapeSQL("ITS01", 20);                                        //varchar         20                      
-            C_M_B                 = 'M';                                                           //char             1     // B=buy D=decentrato M = make                
+            C_M_B                 = get_C_M_B(MFVWRKC);//'M';                                                           //char             1     // B=buy D=decentrato M = make                
             C_MRP_TYPE            = getMRP_type(MFHTCOM);                                          //char             1     //F=MTS make to stock (a fabbisogno)  C= MTO make to order (a commessa)                     
             C_QTY                 = MFHQTRC;                                                       //numeric            
             C_COMPL_QTY           = MFHQTPR;                                                       //numeric            
@@ -190,7 +196,18 @@ namespace SyncCyberPlan_lib
             C_USER_DATE04         = null;                                                          //datetime                           
             C_USER_DATE05         = null;                                                          //datetime 
         }
-
+        protected char get_C_M_B(string CDL_As400)
+        {
+            if (CDL_As400 == "CDLEXT")
+                return 'D';  //contolavoro
+            else if (CDL_As400 == "CDLINT")
+                return 'M';  //make
+            else
+            {
+                Utils.SendMail("it@sauro.net", "it@sauro.net", "Errore import OPR in CyberPlan: "+ C_CODE+" ha cdl in as400 diverso da CDLEXT/CDLINT");
+                return '?';
+            }
+        }
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
 

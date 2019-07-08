@@ -21,10 +21,10 @@ namespace Console
 #if DEBUG
             // EseguiTutto();
             
-            Esegui("FINALCHECK".Split(' '));
-            return;
-            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+            //Esegui("FINALCHECK".Split(' '));
+            //return;
+//            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' '));
             return;
 
 
