@@ -71,6 +71,7 @@ namespace SyncCyberPlan_lib
                 && !_ITMREF_0.StartsWith("WSCRM")
                 && !_ITMREF_0.StartsWith("WSARM")
                 && !_ITMREF_0.StartsWith("WS00")
+                && !_ITMREF_0.StartsWith("WR000")//sfrido
                 )
                 {
                     __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " è attivo ma non è associato ad una attrezzatura";
