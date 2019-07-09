@@ -61,7 +61,15 @@ namespace SyncCyberPlan_lib
             _ITMSTA_0 = getDBV<byte>(row[7]);
             _YWCR_0 = getDBV<string>(row[8]);
 
-            if (_YATTCOD_0 is null)
+            if (_YATTCOD_0 is null 
+                && !_ITMREF_0.StartsWith("WSCVF")
+                && !_ITMREF_0.StartsWith("WCVF")
+                && !_ITMREF_0.StartsWith("WSAVF")
+                && !_ITMREF_0.StartsWith("WAVF")
+                && !_ITMREF_0.StartsWith("WSCRM")
+                && !_ITMREF_0.StartsWith("WSARM")
+                && !_ITMREF_0.StartsWith("WS00")
+                )
             {
                 __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " è attivo ma non è associato ad una attrezzatura";
             }
