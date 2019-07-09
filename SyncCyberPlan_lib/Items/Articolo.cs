@@ -775,7 +775,7 @@ namespace SyncCyberPlan_lib
             {
                 if(
                     !(YWCR_0 == "ASSE" || YWCR_0 == "PLAS" || YWCR_0 == "CL" || YWCR_0 == "CTAPE" || 
-                    YWCR_0 == "FILO" || YWCR_0 == "MORS" || YWCR_0 == "TERM" || YWCR_0 == "VITI" )
+                    YWCR_0 == "FILO" || YWCR_0 == "MORS" || YWCR_0 == "TERM" || YWCR_0 == "VITI" || YWCR_0 == "NOGES")
                     )
                 __bulk_message += Utils.NewLineMail() + "articolo " + ITMREF_0 + " con reparto non previsto: " + YWCR_0;
                 return YWCR;
