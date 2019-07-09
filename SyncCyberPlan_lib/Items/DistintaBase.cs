@@ -258,7 +258,11 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "codice =" + getDBV<string>(row[0]) + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + Utils.NewLineMail();
+                string articolo = getDBV<string>(row[0]);
+                if (!articolo.StartsWith("WR000"))
+                {
+                    testo_mail += "codice =" + articolo + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + Utils.NewLineMail();
+                }
             }
 
             if (testo_mail != "")
