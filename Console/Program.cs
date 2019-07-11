@@ -24,7 +24,7 @@ namespace Console
             //Esegui("FINALCHECK".Split(' '));
             //return;
 //            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
+            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
             return;
 
 
@@ -56,6 +56,12 @@ namespace Console
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
             ///
             ///
+
+#if !DEBUG
+         try
+         {
+#endif
+
 
             bool _mode_all = false;
             bool _delete = false;
@@ -108,13 +114,13 @@ namespace Console
                     "      GIAC-ALL giacenze allocate ORR00PF  da as400 a cyb\n" +
                     "      DISBAS distinta base SPR00PF        da as400 a cyb\n" +
                     "      DEM Fabbisogni OPR in corso MFC00PF da as400 a cyb\n" +
-                    
+
                     "\n" +
                     "SyncCyberPlan START     prima di iniziare sync tabelle CyberPlan\n" +
                     "SyncCyberPlan STOP      alla fine del     sync tabelle CyberPlan\n" +
                     "SyncCyberPlan INIT_CYB  per inizializzare tabelle CyberPlan\n" +
                     "SyncCyberPlan FINALCHECK per far partire i controlli finali\n" +
-                    
+
 
                     "COD = WP%  per ottenere un filtro sui codici\n"
                 );
@@ -172,12 +178,12 @@ namespace Console
                     || oggetto == "MAC"
                     || oggetto == "ATT"
                     || oggetto == "CIC"
-                    || oggetto == "BPR" 
-                    || oggetto == "SOH" 
-                    || oggetto == "POH-ODM" 
+                    || oggetto == "BPR"
+                    || oggetto == "SOH"
+                    || oggetto == "POH-ODM"
                     //|| oggetto == "POH-OFA"
                     || oggetto == "OPR"
-                    || oggetto == "GIAC" 
+                    || oggetto == "GIAC"
                     || oggetto == "DISBAS"
                     || oggetto == "DEM"
                     )
@@ -222,67 +228,66 @@ namespace Console
 
                 //SageTable_Manager sm = new SageTable_Manager(dossier);
                 //As400Table_Manager am = new As400Table_Manager();
-#if !DEBUG
-                try
-                {
-#endif
+
                 switch (oggetto)
-                    {
-                        //da sage
-                        case "ITM":
-                            sage.WriteToCyberPlan<Articolo>(_mode_all, codicelike, "", _delete, "");
-                            //aggiunto vista FAMPEX    sm.WriteToCyberPlan<Articolo_Caratteristiche>(_mode_all, codicelike, "", _delete, "");
-                            break;
-                        case "CIC":
-                            //ho aggiunto questo if per timore che quelli di CyberPlan non svuotino le tabelle
-                            //sm.WriteToCyberPlan<Cicli_Routing_Header>(_mode_all, codicelike, "", _delete, "");     
-                            if(_delete)  DBHelper2.EseguiSuDBCyberPlan(ref cyber, "DELETE FROM [CyberPlanFrontiera].[dbo].[CYB_STD_OPERATION] where 1=1 ");
-                            //sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");      
+                {
+                    //da sage
+                    case "ITM":
+                        sage.WriteToCyberPlan<Articolo>(_mode_all, codicelike, "", _delete, "");
+                        //aggiunto vista FAMPEX    sm.WriteToCyberPlan<Articolo_Caratteristiche>(_mode_all, codicelike, "", _delete, "");
+                        break;
+                    case "CIC":
+                        //ho aggiunto questo if per timore che quelli di CyberPlan non svuotino le tabelle
+                        //sm.WriteToCyberPlan<Cicli_Routing_Header>(_mode_all, codicelike, "", _delete, "");     
+                        if (_delete) DBHelper2.EseguiSuDBCyberPlan(ref cyber, "DELETE FROM [CyberPlanFrontiera].[dbo].[CYB_STD_OPERATION] where 1=1 ");
+                        //sm.WriteToCyberPlan<Std_Operation>(_mode_all, codicelike, "", _delete, "");      
 
-                            sage.WriteToCyberPlan<Std_Op_Machine>(_mode_all, codicelike, "", _delete, "");
-                            //sm.WriteToCyberPlan<Std_Op_Machine_ASSE>(_mode_all, codicelike, "", _delete, "");
-                            sage.WriteToCyberPlan<Item_Routing>(_mode_all, codicelike, "", _delete, "");
-                            //sm.WriteToCyberPlan<Item_Routing_ASSE>(_mode_all, codicelike, "", _delete, "");
-                            //sm.WriteToCyberPlan<Item_Routing_PLAS>(_mode_all, codicelike, "", _delete, "");
-                            break;
-                        case "BPR": sage.WriteToCyberPlan<Terzo>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "POH-ODM": sage.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;
-                        //case "POH-OFA": sm.WriteToCyberPlan<OrdiniAcq_OFA>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "MAC": sage.WriteToCyberPlan<Macchina>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "ATT": //sm.WriteToCyberPlan<Attrezzature_ASSE>(_mode_all, codicelike, "", _delete, "");
-                                    sage.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
-                                    sage.WriteToCyberPlan<Attrezzature_ConfigPlas>(_mode_all, codicelike, "", _delete, ""); 
+                        sage.WriteToCyberPlan<Std_Op_Machine>(_mode_all, codicelike, "", _delete, "");
+                        //sm.WriteToCyberPlan<Std_Op_Machine_ASSE>(_mode_all, codicelike, "", _delete, "");
+                        sage.WriteToCyberPlan<Item_Routing>(_mode_all, codicelike, "", _delete, "");
+                        //sm.WriteToCyberPlan<Item_Routing_ASSE>(_mode_all, codicelike, "", _delete, "");
+                        //sm.WriteToCyberPlan<Item_Routing_PLAS>(_mode_all, codicelike, "", _delete, "");
+                        break;
+                    case "BPR": sage.WriteToCyberPlan<Terzo>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "POH-ODM": sage.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;
+                    //case "POH-OFA": sm.WriteToCyberPlan<OrdiniAcq_OFA>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "MAC": sage.WriteToCyberPlan<Macchina>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "ATT": //sm.WriteToCyberPlan<Attrezzature_ASSE>(_mode_all, codicelike, "", _delete, "");
+                        sage.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
+                        sage.WriteToCyberPlan<Attrezzature_ConfigPlas>(_mode_all, codicelike, "", _delete, "");
                         break;
 
 
-                        //da as400                    
-                        case "LOC": as400.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "SOH": as400.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "OPR":
-                            as400.WriteToCyberPlan<OrdiniAcq_As400_OPR>(_mode_all, codicelike, "", _delete, "");
-                            as400.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
+                    //da as400                    
+                    case "LOC": as400.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "SOH": as400.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "OPR":
+                        as400.WriteToCyberPlan<OrdiniAcq_As400_OPR>(_mode_all, codicelike, "", _delete, "");
+                        as400.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
                         break;
-                        case "GIAC": as400.WriteToCyberPlan<Giacenze_ORR00PF>(_mode_all, codicelike, "", _delete, ""); 
-                                     as400.WriteToCyberPlan<Giacenze_PQM00PF>(_mode_all, codicelike, "", _delete, ""); //interne
-                                     as400.WriteToCyberPlan<Giacenze_PQM00PF_esterne>(_mode_all, codicelike, "", _delete, "");
+                    case "GIAC":
+                        as400.WriteToCyberPlan<Giacenze_ORR00PF>(_mode_all, codicelike, "", _delete, "");
+                        as400.WriteToCyberPlan<Giacenze_PQM00PF>(_mode_all, codicelike, "", _delete, ""); //interne
+                        as400.WriteToCyberPlan<Giacenze_PQM00PF_esterne>(_mode_all, codicelike, "", _delete, "");
                         break;
-                        case "DISBAS": as400.WriteToCyberPlan<DistintaBase>(_mode_all, codicelike, "", _delete, ""); break;
-                        case "DEM": as400.WriteToCyberPlan<Demand_OPR_RIGHE>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "DISBAS": as400.WriteToCyberPlan<DistintaBase>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "DEM": as400.WriteToCyberPlan<Demand_OPR_RIGHE>(_mode_all, codicelike, "", _delete, ""); break;
 
 
                     default: _logger.Error(_cur_arg + ": tipo articolo non previsto"); return;
-                    }
-#if !DEBUG
                 }
-                catch (Exception ex)
-                {
 
-                    _logger.Error(string.Join(" ",args) + "\n" + ex.ToString());
-                    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", string.Join(" ", args) + "\n\n\n" + ex.ToString(), true);
-                }
-#endif
             }
             //_logger.Info("END at   " + DateTime.Now.ToString() + " ----------------");
+#if !DEBUG
+        }
+        catch (Exception ex)
+        {
+
+            _logger.Error(string.Join(" ",args) + "\n" + ex.ToString());
+            Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", string.Join(" ", args) + "\n\n\n" + ex.ToString(), true);
+        }
+#endif
             _logger.Info("END ---------------------------------");
         }
         static void EseguiTutto()
