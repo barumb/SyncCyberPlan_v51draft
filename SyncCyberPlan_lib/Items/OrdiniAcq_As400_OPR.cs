@@ -132,8 +132,8 @@ namespace SyncCyberPlan_lib
             C_SCRAP_QTY           = MFVQTSC;                                                       //numeric            qta scartata
             C_HOST_QTY            = 0;                                                             //numeric            
             C_INSERT_DATE         = dateTime_fromDataAs400(MFHDCRE);                               //datetime           
-            C_HOST_STDATE         = dateTime_fromDataAs400(MFVDINI);                               //datetime           
-            C_HOST_DUEDATE        = dateTime_fromDataAs400(MFVDEND);                               //datetime           
+            C_HOST_STDATE         = dateTime_fromDataAs400(MFVDINI);                               //datetime           //data inizio           
+            C_HOST_DUEDATE        = MFVDINI> MFVDEND? dateTime_fromDataAs400(MFVDINI) : dateTime_fromDataAs400(MFVDEND);  //datetime  data fine      Qualche volta in As400 c'è data inizio maggiore di data fine; in tal caso le mettiamo uguali
             C_PROMISE_DATE        = null;                                                          //datetime           
             C_ACT_STDATE          = null;                                                          //datetime           
             C_ACT_DUEDATE         = null;                                                          //datetime           

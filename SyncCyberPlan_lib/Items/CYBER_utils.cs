@@ -40,9 +40,48 @@ namespace SyncCyberPlan_lib
 
         static public void FinalCheck()
         {   
-            FinalCheck_PLAS_senza_cicli();
+            FinalCheck_impieghi_PLAS_senza_cicli();
+            FinalCheck_Ordini_di_Articoli_senza_cicli();
         }
-        static private void FinalCheck_PLAS_senza_cicli()
+        static private void FinalCheck_Ordini_di_Articoli_senza_cicli()
+        {
+            DBHelper2 db = DBHelper2.getCyberDBHelper();
+            string command = @"  Select C_CODE,C_CORDER_CODE,C_ITEM_CODE,C_M_B  --, ope.C_USER_STRING01, ope.C_USER_STRING02
+  from [CyberPlanFrontiera].[dbo].[CYB_ORDER] od
+  left join [CyberPlanFrontiera].[dbo].[CYB_OPERATION] ope
+  on od.C_CODE = ope.C_ORDER_CODE
+  where C_M_B in ('M','D') and ope.C_OPNUM is null 
+  order by C_ITEM_CODE ";
+
+
+            _logger.Info("start execution");
+
+            string testo_mail = "";
+            DBHelper2 cyber = DBHelper2.getCyberDBHelper();
+            DbDataReader dtr = cyber.GetReaderSelectCommand(command);
+            object[] row = new object[dtr.FieldCount];
+
+            string prec_articolo = "";
+            string articolo = "";
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                articolo = (string)row[2];
+
+                string C_M_B = (string)row[3];
+                if (articolo != prec_articolo && C_M_B != "D")  //se è di contolavoro non lo segnalo, non ha ciclo (? in attesa di mail Savietto)
+                {
+                    prec_articolo = articolo;
+                    testo_mail += Utils.NewLineMail() + " codice =" + articolo + "  non ha ciclo ma ha degli ordini di produzione " + Utils.NewLineMail();
+                }
+                testo_mail += (string)row[0] + " " + Utils.NewLineMail();
+            }
+
+
+            Utils.SendMail("it@sauro.net", "luca.biasio@sauro.net,alessandro.andrian@sauro.net", testo_mail);
+            _logger.Info("end execution");
+        }
+        static private void FinalCheck_impieghi_PLAS_senza_cicli()
         {
             DBHelper2 db = DBHelper2.getCyberDBHelper();
             string command = @"SELECT
@@ -57,8 +96,7 @@ namespace SyncCyberPlan_lib
       ,I.[C_USER_STRING01 ]*/
       ,CICLI.C_CODE
 
-  FROM[CyberPlanFrontiera].[dbo].[CYB_DEMAND]
-        D
+  FROM[CyberPlanFrontiera].[dbo].[CYB_DEMAND] D
 left join[CyberPlanFrontiera].[dbo].[CYB_ITEM] I on D.C_ITEM_CODE=I.[C_CODE]
 left join
 (
