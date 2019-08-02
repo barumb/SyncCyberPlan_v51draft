@@ -40,7 +40,7 @@ namespace SyncCyberPlan_lib
 
         static public void FinalCheck()
         {   
-            FinalCheck_impieghi_PLAS_senza_cicli();
+            FinalCheck_PLAS_senza_cicli();
             FinalCheck_Ordini_di_Articoli_senza_cicli();
         }
         static private void FinalCheck_Ordini_di_Articoli_senza_cicli()
@@ -69,19 +69,22 @@ namespace SyncCyberPlan_lib
                 articolo = (string)row[2];
 
                 string C_M_B = (string)row[3];
-                if (articolo != prec_articolo && C_M_B != "D")  //se è di contolavoro non lo segnalo, non ha ciclo (? in attesa di mail Savietto)
+                if (C_M_B != "D")  //se è di contolavoro non lo segnalo, non ha ciclo (? in attesa di mail Savietto)
                 {
-                    prec_articolo = articolo;
-                    testo_mail += Utils.NewLineMail() + " codice =" + articolo + "  non ha ciclo ma ha degli ordini di produzione " + Utils.NewLineMail();
+                    if (articolo != prec_articolo) 
+                    {
+                        prec_articolo = articolo;
+                        testo_mail += Utils.NewLineMail() + " codice =" + articolo + "  non ha ciclo ma ha degli ordini di produzione " + Utils.NewLineMail();
+                    }
+                    testo_mail += (string)row[0] + " " + Utils.NewLineMail();
                 }
-                testo_mail += (string)row[0] + " " + Utils.NewLineMail();
             }
 
 
             Utils.SendMail("it@sauro.net", "luca.biasio@sauro.net,alessandro.andrian@sauro.net", testo_mail);
             _logger.Info("end execution");
         }
-        static private void FinalCheck_impieghi_PLAS_senza_cicli()
+        static private void FinalCheck_PLAS_senza_cicli()
         {
             DBHelper2 db = DBHelper2.getCyberDBHelper();
             string command = @"SELECT
