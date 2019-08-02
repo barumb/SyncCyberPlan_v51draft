@@ -11,7 +11,7 @@ namespace SyncCyberPlan_lib
         public string    _YATTCOD_0;
         public short     _YPRI_0   ;
         public byte      _YENAFLG_0;
-        public DateTime? _YDATRIA_0;
+        public DateTime? _YATTDAT_0;//data Riattivazione dell'ATTREZZATURA
         public short     _YPLAIMP_0;//PLAS
         public byte      _YPLADIV_0;//PLAS
 
@@ -60,6 +60,7 @@ namespace SyncCyberPlan_lib
             //_YCADTEM_0 = getDBV<int>(row[8]);
             _ITMSTA_0 = getDBV<byte>(row[7]);
             _YWCR_0 = getDBV<string>(row[8]);
+            _YATTDAT_0 = getSageDate(row[9]); //data riattivazione dell'attrezzatura
 
             if (_YATTCOD_0 is null)
             {
@@ -94,7 +95,7 @@ namespace SyncCyberPlan_lib
             C_ROUTING_CODE = EscapeSQL(_YATTCOD_0, 51);           //varchar 51
             C_ROUTING_ALT = EscapeSQL(_YPRI_0.ToString(), 9);            //varchar 9
             C_NSEQ = 0;                          //int        
-            C_EFFECTIVE_DATE = _YDATRIA_0;                       //datetime   
+            C_EFFECTIVE_DATE = _YATTDAT_0;                       //datetime   
             C_EXPIRE_DATE = null;                       //datetime   
 
             C_USER_FLAG01 = (byte)(_YPLADIV_0 == 2 ? 1 : 0);
@@ -128,6 +129,7 @@ namespace SyncCyberPlan_lib
 
 		,M.ITMSTA_0
 		,F.YWCR_0
+        ,A.YATTDAT_0
 
         from " + db + @".ITMMASTER M
 		join " + db + @".ITMFACILIT F
