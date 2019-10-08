@@ -112,7 +112,7 @@ namespace SyncCyberPlan_lib
                 //    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", message_error);
                 //    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net,enrico.lidacci@sauro.net", message_error);
                 //}
-                _logger.Info("esportato file " + pathfile);
+                _logger.Info("TaskNumber=" +_task_number +" - esportato file " + pathfile);
             }
             else
             {

@@ -60,6 +60,10 @@ namespace SyncCyberPlan_lib
         {
             throw new NotImplementedException();
         }
+        /// <summary>
+        /// Ritorna una riga per il Modello di Import YMESMFO
+        /// </summary>
+        /// <returns></returns>
         public override string getSageImportString()
         {
             throw new NotImplementedException(); 

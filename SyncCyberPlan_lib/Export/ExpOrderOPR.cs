@@ -25,7 +25,10 @@ namespace SyncCyberPlan_lib
             //C_M_B = D Distribuited contolavoro
         }
 
-
+        /// <summary>
+        /// Ritorna una riga per il Modello di Import YMFG
+        /// </summary>
+        /// <returns></returns>
         public override string getSageImportString()
         {
             //"ITS01",1,"ABF030LT-0V",270819,270819,1001,"","WWCICLO00","1","C","1"
@@ -36,11 +39,33 @@ namespace SyncCyberPlan_lib
                 __SEP + string.Format("{0:ddMMyy}", C_STDATE) +
                 __SEP + string.Format("{0:ddMMyy}", C_DUEDATE) +
                 __SEP + C_QTY +
-                __SEP + "" +
+                __SEP + getMFG_Num(C_CODE) +
                 __SEP + "WWCICLO00" +
                 __SEP + "1" +
-                __SEP + "C" +
+                __SEP + getCreateModifyFlag(C_CODE) +
                 __SEP + "1";
+        }
+        string getMFG_Num(string C_CODE)
+        {
+            if (C_CODE.ToUpper().StartsWith("OPR"))
+            {
+                return C_CODE; //OPR già esistente, simao in modifica
+            }
+            else
+            {
+                return ""; //Proposta nuova, non esistente, simao in creazione
+            }
+        }
+        string getCreateModifyFlag(string C_CODE)
+        {
+            if (C_CODE.ToUpper().StartsWith("OPR"))
+            {
+                return "M"; //flag di modifica
+            }
+            else
+            {
+                return "C"; //flag di creazione
+            }
         }
     }
 }
