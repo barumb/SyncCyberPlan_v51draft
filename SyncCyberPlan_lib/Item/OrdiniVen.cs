@@ -451,10 +451,7 @@ where T.C_CODE is null ";
                 testo_mail += "ODV =" + getDBV<string>(row[0]) + "  non caricato; manca codice cliente =" + getDBV<string>(row[1]) + Utils.NewLineMail();
             }
 
-            if (testo_mail != "")
-            {
-                Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", testo_mail);
-            }
+            Utils.SendMail_IT(Settings.GetSettings(), testo_mail);
         }
     }
 }

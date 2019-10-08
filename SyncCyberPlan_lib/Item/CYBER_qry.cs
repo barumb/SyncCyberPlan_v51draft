@@ -6,7 +6,7 @@ using System.Data.Common;
 
 namespace SyncCyberPlan_lib
 {
-    public static class CYBER_utils 
+    public static class CYBER_qry 
     {
         static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
         public enum Status
@@ -68,20 +68,23 @@ namespace SyncCyberPlan_lib
                 dtr.GetValues(row);
                 articolo = (string)row[2];
 
-                string C_M_B = (string)row[3];
+                string C_M_B = (string)row[3];                
                 if (C_M_B != "D")  //se è di contolavoro non lo segnalo, non ha ciclo (? in attesa di mail Savietto)
                 {
-                    if (articolo != prec_articolo) 
+                    if (articolo != prec_articolo)
                     {
                         prec_articolo = articolo;
                         testo_mail += Utils.NewLineMail() + " codice =" + articolo + "  non ha ciclo ma ha degli ordini di produzione " + Utils.NewLineMail();
+                        if (articolo == "WM0662-03")
+                        {
+                            testo_mail += "WM0662-03: questo articolo non ha attrezzatura in As400, quindi non viene creato il ciclo; OK" + Utils.NewLineMail(); 
+                        }
                     }
                     testo_mail += (string)row[0] + " " + Utils.NewLineMail();
                 }
             }
 
-
-            Utils.SendMail("it@sauro.net", "luca.biasio@sauro.net,alessandro.andrian@sauro.net", testo_mail);
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail);
             _logger.Info("end execution");
         }
         static private void FinalCheck_PLAS_senza_cicli()
@@ -141,7 +144,7 @@ order by D.C_ITEM_CODE ";
             }
 
 
-            Utils.SendMail("it@sauro.net", "luca.biasio@sauro.net,alessandro.andrian@sauro.net", testo_mail);
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail);
             _logger.Info("end execution");
         }
     }

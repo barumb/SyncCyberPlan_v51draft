@@ -406,11 +406,8 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            if (!string.IsNullOrWhiteSpace(__bulk_message))
-            { 
-                //ThreadPool.QueueUserWorkItem(sendmail);
-                Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", __bulk_message);
-            }
+            //ThreadPool.QueueUserWorkItem(sendmail);
+            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message);
         }
         //void sendmail(Object threadContext)
         //{

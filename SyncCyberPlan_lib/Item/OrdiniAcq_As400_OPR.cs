@@ -12,25 +12,25 @@ namespace SyncCyberPlan_lib
         public decimal MFHAORD;
         public decimal MFHPORD;
         public string  MFHTCOM;
-        public decimal MFHACOM;//anno ODV
-        public decimal MFHPCOM;//progressivo ODV
-        public decimal MFHSCOM; //riga ODV
+        public decimal MFHACOM; // anno ODV
+        public decimal MFHPCOM; // progressivo ODV
+        public decimal MFHSCOM; // riga ODV
         public string  MFHCART;
         public decimal MFHQTRC;
-        public decimal MFHDCRE; //DATA
+        public decimal MFHDCRE; // DATA
         public string  MFHSTAT;
         public decimal MFVDINI; // DATA
         public decimal MFVDEND; // DATA
         public string  MFVSTAV; // stato riga  MFVSTAV  se =ST ordine in corso, se vuoto ordine in attesa
         public decimal MFHQTPR; // qta prodotta
-        public decimal MFVQTSC; //qta scartata
+        public decimal MFVQTSC; // qta scartata
 
-        public string  MFVUTLM;  //unita di misura tempo per un pezzo/via  1=ORE  2=100MI-HR   3 Minuti 4 giorni  5 settimane
-        public decimal MFVAMPT;  //tempo per un pezzo/via
-        public string  MFVUTSE;  //unita di misura tempo di setup
-        public decimal MFVASET;  //tempo di setup
+        public string  MFVUTLM; // unita di misura tempo per un pezzo/via  1=ORE  2=100MI-HR   3 Minuti 4 giorni  5 settimane
+        public decimal MFVAMPT; // tempo per un pezzo/via
+        public string  MFVUTSE; // unita di misura tempo di setup
+        public decimal MFVASET; // tempo di setup
 
-        public string MFVWRKC;  //centro di lavoro (Interno/esterno in as400)
+        public string MFVWRKC;  // centro di lavoro (Interno/esterno in as400)
 
 
         public OrdiniAcq_As400_OPR(/*string YPOHTYP*/): base("CYB_ORDER")
@@ -204,7 +204,7 @@ namespace SyncCyberPlan_lib
                 return 'M';  //make
             else
             {
-                Utils.SendMail("it@sauro.net", "it@sauro.net", "Errore import OPR in CyberPlan: "+ C_CODE+" ha cdl in as400 diverso da CDLEXT/CDLINT");
+                Utils.SendMail_IT(Settings.GetSettings(), "Errore import OPR in CyberPlan: "+ C_CODE+" ha cdl in as400 diverso da CDLEXT/CDLINT");
                 return '?';
             }
         }
@@ -276,10 +276,7 @@ namespace SyncCyberPlan_lib
             //invio mail
             //
 
-            if (testo_mail != "")
-            {
-                Utils.SendMail("it@sauro.net", "leonardo.macabri@sauro.net,cristian.scarso@sauro.net", testo_mail);
-            }
+            Utils.SendMail_Plan(Settings.GetSettings(), testo_mail);
         }
 
         char getMRP_type(string MFHTCOM)

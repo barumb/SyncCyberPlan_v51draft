@@ -73,85 +73,94 @@ namespace SyncCyberPlan_lib
             }
             return result.Trim();
         }
-        public static void SendMail(string MailFROM, string MailTO, string Msg, bool errore)
+        public static void SendMail_IT(Settings s, string Msg, bool errore)
         {
-            string _mailServerSMTP = "mail.sauro.net";
-            SendMail(MailFROM, MailTO, _mailServerSMTP, Msg, errore);
+            SendMail(s.Mailfrom, s.Mailto_IT, s.ServerSmtp, Msg, errore);
         }        
-        public static void SendMail(string MailFROM, string MailTO, string Msg)
+        public static void SendMail_IT(Settings s, string Msg)
         {
-            string _mailServerSMTP = "mail.sauro.net";
-            SendMail(MailFROM, MailTO, _mailServerSMTP, Msg, false);
+            SendMail(s.Mailfrom, s.Mailto_IT, s.ServerSmtp, Msg, false);
+        }
+        public static void SendMail_Plan(Settings s, string Msg)
+        {
+            SendMail(s.Mailfrom, s.Mailto_pianificazione, s.ServerSmtp, Msg, false);
+        }
+        public static void SendMail_Anag(Settings s, string Msg)
+        {
+            SendMail(s.Mailfrom, s.Mailto_anagrafica, s.ServerSmtp, Msg, false);
         }
         public static void SendMail(string MailFROM, string MailTO, string MailServerSMTP, string Msg, bool errore)
         {
-            IPAddress[] localAddress = new IPAddress[0];
-            IPHostEntry hostInfo = new IPHostEntry();
-            String strHostName = "";
+            if (!string.IsNullOrWhiteSpace(Msg))
+            {
+                IPAddress[] localAddress = new IPAddress[0];
+                IPHostEntry hostInfo = new IPHostEntry();
+                String strHostName = "";
 
 
 #if DEBUG
                 MailTO = "francesco.chiminazzo@sauro.net";
 #endif
-            MailTO = "francesco.chiminazzo@sauro.net";   //PROVVISORIO
-            try
-            {
-                // Get the local computer info.
-                strHostName = Dns.GetHostName();
-                hostInfo = Dns.GetHostEntry(strHostName);
-                localAddress = hostInfo.AddressList;
-
-                //MailAddress from = new MailAddress(_MailFROM);
-                //MailAddress to = new MailAddress(_MailTO);
-                MailMessage Message = new MailMessage(MailFROM, MailTO);
-                //Message.IsBodyHtml = false;
-
-                if (errore)
+                MailTO = "francesco.chiminazzo@sauro.net";   //PROVVISORIO
+                try
                 {
-                    Message.Subject = "ERRORE sincronizzazione CyberPlan (" + hostInfo.HostName + ")";
+                    // Get the local computer info.
+                    strHostName = Dns.GetHostName();
+                    hostInfo = Dns.GetHostEntry(strHostName);
+                    localAddress = hostInfo.AddressList;
+
+                    //MailAddress from = new MailAddress(_MailFROM);
+                    //MailAddress to = new MailAddress(_MailTO);
+                    MailMessage Message = new MailMessage(MailFROM, MailTO);
+                    //Message.IsBodyHtml = false;
+
+                    if (errore)
+                    {
+                        Message.Subject = "ERRORE sincronizzazione CyberPlan (" + hostInfo.HostName + ")";
+                    }
+                    else
+                    {
+                        Message.Subject = "CyberPlan: c'è un problema da sistemare";
+                    }
+
+                    //((IPEndPoint)server.LocalEndpoint).Address.ToString() + " - " +  System.DateTime.Now + " - " + Msg;				
+                    Message.Body =
+                          "Avviso da Sincronizzazione CyberPlan (" + System.DateTime.Now + " - " + hostInfo.HostName + ")"
+                          //+ System.Environment.NewLine                      
+                          //+ System.Environment.NewLine + "Host Name:             " + hostInfo.HostName
+                          //+ System.Environment.NewLine + "\t NetBIOS Machine Name:  " + System.Environment.MachineName + "  "
+                          //+ System.Environment.NewLine + "\t OS Version:            " + System.Environment.OSVersion + "  "
+                          //+ System.Environment.NewLine + "\t Domain Name:           " + System.Environment.UserDomainName + "  "
+                          //+ System.Environment.NewLine + "\t User Thread Name:      " + System.Environment.UserName + "  "
+                          //+ System.Environment.NewLine + "\t CLR version:           " + System.Environment.Version + "  "
+                          //+ System.Environment.NewLine + "\t Memoria fisica associata al contesto:  " + System.Environment.WorkingSet + "  "
+
+                          + Utils.NewLineMail() + Utils.NewLineMail() + Msg
+                        ;
+
+                    Message.Bcc.Add("francesco.chiminazzo@sauro.net"); //PROVVISORIO mettere it@
+
+                    //for (int i = 0; i < localAddress.Length; i++)
+                    //{
+                    //    Message.Body += System.Environment.NewLine + "\t IP Address " + i + "-  " + localAddress[i].ToString();
+                    //}
+
+                    //Message.Priority = mp; //, System.Net.Mail.MailPriority mp
+
+
+                    //System.Net.Mail.SmtpClient 
+                    SmtpClient client = new SmtpClient(MailServerSMTP);
+                    client.Send(Message);
+                    //SmtpMail.SmtpServer = _MailServerSMTP;
+                    //SmtpMail.Send(Message);				
                 }
-                else
+                catch (Exception)
                 {
-                    Message.Subject = "CyberPlan: c'è un problema da sistemare";
+                    //ToLog(true, "MAIL", "---" + " Exception From:" + e.Source + " Message:" + e.Message + "\n Messaggio CAMM : " + Msg);//e.ToString()
+                    EventLog.WriteEntry("Exception Sync CyberPlan ", Msg);
                 }
-
-                //((IPEndPoint)server.LocalEndpoint).Address.ToString() + " - " +  System.DateTime.Now + " - " + Msg;				
-                Message.Body =
-                      "Avviso da Sincronizzazione CyberPlan (" + System.DateTime.Now + " - " + hostInfo.HostName + ")"
-                      //+ System.Environment.NewLine                      
-                      //+ System.Environment.NewLine + "Host Name:             " + hostInfo.HostName
-                      //+ System.Environment.NewLine + "\t NetBIOS Machine Name:  " + System.Environment.MachineName + "  "
-                      //+ System.Environment.NewLine + "\t OS Version:            " + System.Environment.OSVersion + "  "
-                      //+ System.Environment.NewLine + "\t Domain Name:           " + System.Environment.UserDomainName + "  "
-                      //+ System.Environment.NewLine + "\t User Thread Name:      " + System.Environment.UserName + "  "
-                      //+ System.Environment.NewLine + "\t CLR version:           " + System.Environment.Version + "  "
-                      //+ System.Environment.NewLine + "\t Memoria fisica associata al contesto:  " + System.Environment.WorkingSet + "  "
-
-                      + Utils.NewLineMail() + Utils.NewLineMail() + Msg
-                    ;
-
-                Message.Bcc.Add("francesco.chiminazzo@sauro.net");
-
-                //for (int i = 0; i < localAddress.Length; i++)
-                //{
-                //    Message.Body += System.Environment.NewLine + "\t IP Address " + i + "-  " + localAddress[i].ToString();
-                //}
-
-                //Message.Priority = mp; //, System.Net.Mail.MailPriority mp
-
-
-                //System.Net.Mail.SmtpClient 
-                SmtpClient client = new SmtpClient(MailServerSMTP);
-                client.Send(Message);
-                //SmtpMail.SmtpServer = _MailServerSMTP;
-                //SmtpMail.Send(Message);				
+                //#endif
             }
-            catch (Exception)
-            {
-                //ToLog(true, "MAIL", "---" + " Exception From:" + e.Source + " Message:" + e.Message + "\n Messaggio CAMM : " + Msg);//e.ToString()
-                EventLog.WriteEntry("Exception Sync CyberPlan ", Msg);
-            }
-            //#endif
         }
         public static string NewLineMail()
         {

@@ -65,14 +65,14 @@ namespace SyncCyberPlan_lib
             if (_YATTCOD_0 is null)
             {
                 if (
-                   !_ITMREF_0.StartsWith("WSCVF")
-                && !_ITMREF_0.StartsWith("WCVF")
-                && !_ITMREF_0.StartsWith("WSAVF")
-                && !_ITMREF_0.StartsWith("WAVF")
-                && !_ITMREF_0.StartsWith("WSCRM")
-                && !_ITMREF_0.StartsWith("WSARM")
+                   !_ITMREF_0.StartsWith("WR000")//sfrido
+                // && !_ITMREF_0.StartsWith("WSCVF")
+                // && !_ITMREF_0.StartsWith("WCVF")
+                // && !_ITMREF_0.StartsWith("WSAVF")
+                // && !_ITMREF_0.StartsWith("WAVF")
+                // && !_ITMREF_0.StartsWith("WSCRM")
+                // && !_ITMREF_0.StartsWith("WSARM")
                 && !_ITMREF_0.StartsWith("WS00")
-                && !_ITMREF_0.StartsWith("WR000")//sfrido
                 )
                 {
                     __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " è attivo ma non è associato ad una attrezzatura";
@@ -81,6 +81,7 @@ namespace SyncCyberPlan_lib
             else if (!_YWCR_0.StartsWith(_YATTTYP_0))
             {
                 if (!(
+                    _YATTTYP_0=="CL" ||
                     (_YWCR_0 == "ASSE" && _YATTTYP_0 == "STA") ||
                     (_YWCR_0 == "ASSE" && _YATTTYP_0 == "ETI") ||
                     (_YWCR_0 == "PLAS" && _YATTTYP_0 == "PC")
@@ -143,6 +144,7 @@ namespace SyncCyberPlan_lib
          and M.ITMREF_0 not like 'WWACQ%' 
          and M.ITMREF_0 not like 'WWVEN%' 
          and M.ITMREF_0 not like 'WWDPI%' 
+         and M.ITMREF_0 not like 'WWCIC%' 
 		 and M.ITMSTA_0=1 
 		 and M.PHAFLG_0=1
 		 and F.REOCOD_0<>2
@@ -263,11 +265,7 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            if (!string.IsNullOrWhiteSpace(__bulk_message))
-            {
-                string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net";
-                Utils.SendMail("it@sauro.net", destinatari, __bulk_message);
-            }
+            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message);
         }
     }
 }

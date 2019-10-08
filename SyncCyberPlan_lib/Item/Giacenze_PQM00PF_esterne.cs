@@ -167,11 +167,7 @@ order by PQMCART
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            if (!string.IsNullOrWhiteSpace(__bulk_message))
-            {
-                string destinatari = "leonardo.macabri@sauro.net,cristian.scarso@sauro.net";
-                Utils.SendMail("it@sauro.net", destinatari, __bulk_message);
-            }
+            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message);
         }
 
     }

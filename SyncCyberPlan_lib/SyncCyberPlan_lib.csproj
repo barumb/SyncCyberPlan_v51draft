@@ -35,8 +35,16 @@
       <HintPath>lib\log4net.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,45 +52,129 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CifraData.cs" />
+    <Compile Include="Connected Services\SageX3WS_old\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="DBHelper.cs" />
+    <Compile Include="Export\ExpOperation.cs" />
+    <Compile Include="Export\ExpDemand.cs" />
+    <Compile Include="Export\ExpCorder.cs" />
+    <Compile Include="Export\ExpOrderOCL.cs" />
+    <Compile Include="Export\ExpOrderOPR.cs" />
+    <Compile Include="Export\ExpOrder.cs" />
+    <Compile Include="Export\Export.cs" />
+    <Compile Include="Export\ExportItem.cs" />
     <Compile Include="Item.cs" />
-    <Compile Include="Items\Giacenze_XERI00F_opr.cs" />
-    <Compile Include="Items\Giacenze_PQM00PF_esterne.cs" />
-    <Compile Include="Items\Operations.cs" />
-    <Compile Include="Items\Demand_OPR_Righe.cs" />
-    <Compile Include="Items\Articolo_Caratteristiche.cs" />
-    <Compile Include="Items\Giacenze.cs" />
-    <Compile Include="Items\OrdiniAcq_POHODM.cs" />
-    <Compile Include="Items\Std_Op_Machine.cs" />
-    <Compile Include="Items\Item_Routing.cs" />
-    <Compile Include="Items\Std_Operation.cs" />
-    <Compile Include="Items\Attrezzature.cs" />
-    <Compile Include="Items\Locazione.cs" />
-    <Compile Include="Items\Articolo.cs" />
-    <Compile Include="Items\Giacenze_PQM00PF.cs" />
-    <Compile Include="Items\Giacenze_ORR00PF.cs" />
-    <Compile Include="Items\DistintaBase.cs" />
-    <Compile Include="Items\OrdiniAcq.cs" />
-    <Compile Include="Items\OrdiniAcq_As400_OPR.cs" />
-    <Compile Include="Items\OrdiniVen_as400.cs" />
-    <Compile Include="Items\OrdiniVen.cs" />
-    <Compile Include="Items\OrdiniAcq_POHOFA.cs" />
-    <Compile Include="Items\CYBER_utils.cs" />
-    <Compile Include="Items\OrdiniAcq_POH.cs" />
-    <Compile Include="Items\Macchina.cs" />
-    <Compile Include="Items\Attrezzature_ConfigPlas.cs" />
-    <Compile Include="Items\Terzo.cs" />
+    <Compile Include="Item\Giacenze_XERI00F_opr.cs" />
+    <Compile Include="Item\Giacenze_PQM00PF_esterne.cs" />
+    <Compile Include="Item\Operations.cs" />
+    <Compile Include="Item\Demand_OPR_Righe.cs" />
+    <Compile Include="Item\Articolo_Caratteristiche.cs" />
+    <Compile Include="Item\Giacenze.cs" />
+    <Compile Include="Item\OrdiniAcq_POHODM.cs" />
+    <Compile Include="Item\Std_Op_Machine.cs" />
+    <Compile Include="Item\Item_Routing.cs" />
+    <Compile Include="Item\Std_Operation.cs" />
+    <Compile Include="Item\Attrezzature.cs" />
+    <Compile Include="Item\Locazione.cs" />
+    <Compile Include="Item\Articolo.cs" />
+    <Compile Include="Item\Giacenze_PQM00PF.cs" />
+    <Compile Include="Item\Giacenze_ORR00PF.cs" />
+    <Compile Include="Item\DistintaBase.cs" />
+    <Compile Include="Item\OrdiniAcq.cs" />
+    <Compile Include="Item\OrdiniAcq_As400_OPR.cs" />
+    <Compile Include="Item\OrdiniVen_as400.cs" />
+    <Compile Include="Item\OrdiniVen.cs" />
+    <Compile Include="Item\OrdiniAcq_POHOFA.cs" />
+    <Compile Include="Item\CYBER_qry.cs" />
+    <Compile Include="Item\OrdiniAcq_POH.cs" />
+    <Compile Include="Item\Macchina.cs" />
+    <Compile Include="Item\Attrezzature_ConfigPlas.cs" />
+    <Compile Include="Item\Terzo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Utils.cs" />
+    <Compile Include="Web References\SageX3WS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="WebServices\X3WS_BasicAuth.cs" />
+    <Compile Include="WebServices\X3WSUtils.cs" />
+    <Compile Include="WebServices\X3WS.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lib\log4net.dll" />
-    <Content Include="lib\log4net.xml" />
-    <Content Include="lib\Newtonsoft.Json.dll" />
-    <Content Include="lib\Newtonsoft.Json.pdb" />
-    <Content Include="lib\Newtonsoft.Json.xml" />
+    <None Include="Connected Services\SageX3WS_old\configuration91.svcinfo" />
+    <None Include="Connected Services\SageX3WS_old\configuration.svcinfo" />
+    <None Include="Connected Services\SageX3WS_old\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="lib\log4net.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\log4net.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\Newtonsoft.Json.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\Newtonsoft.Json.pdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="lib\Newtonsoft.Json.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Connected Services\SageX3WS_old\SyncCyberPlan_lib.SageX3WS_old.CAdxResultXml.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\SageX3WS\CAdxResultXml.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\SageX3WS\CAdxWebServiceXmlCC.wsdl" />
+    <None Include="Web References\SageX3WS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Connected Services\SageX3WS_old\CAdxWebServiceXmlCC.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\SageX3WS_old\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://sage.sauro.dmn/soap-wsdl/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC%3fwsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\SageX3WS\</RelPath>
+      <UpdateFromURL>http://sage.sauro.dmn/soap-wsdl/syracuse/collaboration/syracuse/CAdxWebServiceXmlCC%3fwsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>SyncCyberPlan_lib_SageX3WS_CAdxWebServiceXmlCCService</CachedSettingsPropName>
+    </WebReferenceUrl>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -264,11 +264,7 @@ namespace SyncCyberPlan_lib
                     testo_mail += "codice =" + articolo + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + Utils.NewLineMail();
                 }
             }
-
-            if (testo_mail != "")
-            {
-                Utils.SendMail("it@sauro.net", "codifica@sauro.net", testo_mail);
-            }
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail);
         }
 
         protected void LastAction_RiferimentiFornitori(ref DBHelper2 cm)

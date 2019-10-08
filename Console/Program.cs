@@ -14,36 +14,50 @@ namespace Console
         // inizializzo logger di questa classe
         //protected static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
         protected static readonly ILog _logger = LogManager.GetLogger("");
-
+        
         static void Main(string[] args)
         {
-            log4net.Config.XmlConfigurator.Configure();
-#if DEBUG
-            // EseguiTutto();
-            
-            //Esegui("FINALCHECK".Split(' '));
-            //return;
-//            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
-            return;
+            try
+            {
+
+                log4net.Config.XmlConfigurator.Configure();
+                Settings.WriteExampleConfig();
+
+#if DEBUG                
+                Esegui("X3WS SAUROTEST MRP".Split(' '));
+                return;
+                // EseguiTutto();
+
+                //Esegui("FINALCHECK".Split(' '));
+                //return;
+                //            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
+                Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+                return;
 
 
-            Esegui("SAURO MBM41LIB_M DELETE POH-OFA".Split(' '));
-            //Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM COD=IT001-ODM180062%".Split(' '));
-            //Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA COD=IT001-OFA180063%".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM ".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA ".Split(' '));
-            return;
-            
-            Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
-            Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
-            Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
-            //Esegui("SAURO MBM41LIB_M ALLTIME DISBAS COD=MSB02005-0%".Split(' '));
-            Esegui("SAURO MBM41LIB_M LAST=20 DISBAS".Split(' '));
-            
+                Esegui("SAURO MBM41LIB_M DELETE POH-OFA".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM COD=IT001-ODM180062%".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA COD=IT001-OFA180063%".Split(' '));
+                Esegui("SAURO MBM41LIB_M ALLTIME POH-ODM ".Split(' '));
+                Esegui("SAURO MBM41LIB_M ALLTIME POH-OFA ".Split(' '));
+                return;
+
+                Esegui("SAURO MBM41LIB_M DELETE CIC".Split(' '));
+                Esegui("SAURO MBM41LIB_M ALLTIME CIC".Split(' '));
+                Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME DISBAS COD=MSB02005-0%".Split(' '));
+                Esegui("SAURO MBM41LIB_M LAST=20 DISBAS".Split(' '));
+
 #else
             Esegui(args);
-#endif     
+#endif
+
+            }
+            catch (Exception ex)
+            {
+                int test = System.Runtime.InteropServices.Marshal.GetHRForException(ex);
+                Utils.SendMail_IT(Settings.GetSettings(), ex.Message, true);
+            }
         }
 
         static void Esegui(string[] args)
@@ -61,34 +75,53 @@ namespace Console
          try
          {
 #endif
-
-
+            bool help = false;
             bool _mode_all = false;
             bool _delete = false;
 
             //_logger.Info("START at " + DateTime.Now.ToString() + " ----------------argomenti: " + string.Join(" ", args) + " ------------------");
             _logger.Info("START - argomenti: " + string.Join(" ", args) + " ------------------");
             if (args[0].ToUpper() == "INIT_CYB")
-            {   
-                    CYBER_utils.Init();
-                    return;   
+            {
+                CYBER_qry.Init();
+                return;   
             }
             else if (args[0].ToUpper() == "START")
             {
-                CYBER_utils.SetStatus("Running");
+                CYBER_qry.SetStatus("Running");
                 return;
             }
             else if (args[0].ToUpper() == "STOP")
             {
-                CYBER_utils.SetStatus("Completed");
+                CYBER_qry.SetStatus("Completed");
                 return;
             }
             else if (args[0].ToUpper() == "FINALCHECK")
             {
-                CYBER_utils.FinalCheck();
+                CYBER_qry.FinalCheck();
                 return;
             }
-            if (args.Length < 4)
+            else if (args[0].ToUpper() == "X3WS")
+            {
+                help = true;
+                if (args.Length == 3)
+                {
+                    string dossier = args[1];
+                    if (dossier == "SAURO" || dossier == "SAURODEV" || dossier == "SAUROTEST" || dossier == "SAUROINT")
+                    {
+                        string tmparg = args[2];
+                        if (tmparg == "MRP")
+                        {
+                            Export exp = new Export();
+                            exp.ExportAllTaskNumber(dossier);
+                            return;
+                        }
+                    }
+                }
+            }
+
+
+            if (args.Length < 4 || help==true)
             {
                 _logger.Info("\n\n\nSintassi:\n" +
                     "SyncCyberPlan DOSSIER LIBRERIAAS400 DELETE|ALLTIME|LAST=N OGG [COD=CODICELIKE]\n\n" +   //parametri opzionali alla fine
@@ -114,15 +147,16 @@ namespace Console
                     "      GIAC-ALL giacenze allocate ORR00PF  da as400 a cyb\n" +
                     "      DISBAS distinta base SPR00PF        da as400 a cyb\n" +
                     "      DEM Fabbisogni OPR in corso MFC00PF da as400 a cyb\n" +
-
+                    "COD = WP%  per ottenere un filtro sui codici\n" +
                     "\n" +
                     "SyncCyberPlan START     prima di iniziare sync tabelle CyberPlan\n" +
                     "SyncCyberPlan STOP      alla fine del     sync tabelle CyberPlan\n" +
                     "SyncCyberPlan INIT_CYB  per inizializzare tabelle CyberPlan\n" +
-                    "SyncCyberPlan FINALCHECK per far partire i controlli finali\n" +
+                    "SyncCyberPlan FINALCHECK per far partire i controlli finali\n\n" +
 
-
-                    "COD = WP%  per ottenere un filtro sui codici\n"
+                    "SyncCyberPlan X3WS DOSSIER [MRP|] per chiamate ai WebService di X3 \n" +
+                    "      MRP     scatena import da CyberPlan verso X3\n" 
+                    
                 );
             }
             else
@@ -147,13 +181,11 @@ namespace Console
                 {
                     _logger.Debug(_cur_arg);
                     _delete = true;
-
                 }
                 else if (_cur_arg == "ALLTIME")
                 {
                     _logger.Debug(_cur_arg);
                     _mode_all = true;
-
                 }
                 else if (_cur_arg.StartsWith("LAST="))
                 {
@@ -219,6 +251,9 @@ namespace Console
                 }
                 if (nomefile == "") nomefile = nomefileTMP;
                 _logger.Debug(" nome file = " + nomefile);
+
+                ///////////////////FINE ARG 
+                ///////////////////FINE ARG 
                 ///////////////////FINE ARG 
 
 
