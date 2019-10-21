@@ -24,8 +24,8 @@ namespace Console
                 Settings.WriteExampleConfig();
 
 #if DEBUG                
-                Esegui("X3WS SAUROTEST MRP".Split(' '));
-                return;
+                //Esegui("X3WS SAUROTEST MRP".Split(' '));
+                //return;
                 // EseguiTutto();
 
                 //Esegui("FINALCHECK".Split(' '));
@@ -155,7 +155,7 @@ namespace Console
                     "SyncCyberPlan FINALCHECK per far partire i controlli finali\n\n" +
 
                     "SyncCyberPlan X3WS DOSSIER [MRP|] per chiamate ai WebService di X3 \n" +
-                    "      MRP     scatena import da CyberPlan verso X3\n" 
+                    "      MRP     scatena import da CyberPlan verso X3\n"                     
                     
                 );
             }
@@ -250,7 +250,7 @@ namespace Console
                     }
                 }
                 if (nomefile == "") nomefile = nomefileTMP;
-                _logger.Debug(" nome file = " + nomefile);
+                _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + "  nome file = " + nomefile);
 
                 ///////////////////FINE ARG 
                 ///////////////////FINE ARG 

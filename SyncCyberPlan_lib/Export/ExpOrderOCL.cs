@@ -14,14 +14,13 @@ namespace SyncCyberPlan_lib
     /// </summary>
     public class ExpOrderOCL : ExpOrder
     {
-        public ExpOrderOCL()
+        public ExpOrderOCL():base("OCL")
         {
-            _file_prefix = "OCL";
         }
 
         protected override string WhereCondition()
         {
-            return " AND C_M_B='D' ";
+            return " AND O.C_M_B='D' ";
 
             //C_M_B = M Make  produzione
             //C_M_B = B Buy acquisto

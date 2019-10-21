@@ -196,21 +196,33 @@ namespace SyncCyberPlan_lib
             string XMLRequest = X3WSUtils.XMLBuildReq("PARAM", "FLD", KeyValue);
             XMLresult = RunSubprog(X3WSUtils.X3WS_PublicName_ImpOpr, XMLRequest);
 
-            _logger.Info("XMLresult.status="+ XMLresult.status + "[0=errore, 1 ok]");
+            
+            //status
+            
+            //1 chiamata eseguita
+            int _chk = XMLresult.status;
+            if (XMLresult.status == 0)
+            {
+                //cause possibili sperimentate finora
+                //- non esiste chiamata
+                //- modello import non esistente
+                //- errori nel codice (tipo incompatibile)
+                _logger.Error("XMLresult.status=0, controllare log");
+            }
+            else
+            {
+                _logger.Info("XMLresult.status=" + XMLresult.status + " [0=errore, 1 ok]");
+            }            
+
+            //trascrivo sul file di log i messaggi di log (ECR_TRACE from GESECRAN) impostati sul sorgente YIMPOPR
             if (XMLresult.messages != null && XMLresult.messages.Length > 0)
             {
                 foreach (var msg in XMLresult.messages)
                 {
                     _logger.Info(msg.message);
                 }
-            }
-
-            //status
-            //0 non esiste chiamata
-            //1 chiamata eseguita
-            int _chk = XMLresult.status;
-
-            // Se arrivo qui vuol dire che è tutto OK
+            }            
+            
             string QryResponse = XMLresult.resultXml;
 
             //Dal flusso di ritorno estrapolo le info che mi servono

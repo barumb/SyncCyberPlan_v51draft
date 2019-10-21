@@ -12,15 +12,17 @@ using System.IO;
 
 namespace SyncCyberPlan_lib
 {
-	public class DBHelper2
-	{
-		// inizializzo logger di questa classe
-		protected static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
+    public class DBHelper2
+    {
+        // inizializzo logger di questa classe
+        protected static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 
-		//protected string _connectionString;		
+        //protected string _connectionString;		
         protected string _libreria_dossier;
-		protected DbConnection  _connection;
-		protected DbCommand _cmdSql;
+        protected DbConnection _connection;
+        protected DbCommand _cmdSql;
+
+        public string LibreriaDossier { get { return _libreria_dossier; } }
 
         // Server=myServerName\myInstanceName;Database=myDataBase;User Id=myUsername; Password=myPassword;
         public DBHelper2(DbConnection conn)
@@ -37,7 +39,7 @@ namespace SyncCyberPlan_lib
 		}		
 		public void OpenConnection()
 		{
-			_logger.Debug("---start---");
+			_logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---start---");
 			if (_connection == null)
 			{
                 throw new NullReferenceException("_connection è null");
@@ -52,21 +54,22 @@ namespace SyncCyberPlan_lib
 					index_pwd = connectionString.IndexOf("Password=") + 9;
 				}
 				string public_cs = connectionString.Substring(0, index_pwd) + "XXXXXX;";
-				_logger.Debug("_connection is not open: opening with cs = " + public_cs);
+				_logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " _connection is not open: opening with cs = " + public_cs);
 				_connection.Open();
 			}
-			_logger.Debug("---end---");
+			_logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---end---");
 		}
 		
 		public DbDataReader GetReaderSelectCommand(string command)
 		{
-			_logger.Debug("---start---");
+			_logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " start---");
+            _connection.Close();
 			OpenConnection();
 
 			_cmdSql = _connection.CreateCommand();
 			_cmdSql.CommandType = CommandType.Text;
 			_cmdSql.CommandText = command;
-			_logger.Debug("Command created : " + command);
+			_logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Command created : " + command);
 
 			try
 			{
@@ -76,7 +79,7 @@ namespace SyncCyberPlan_lib
 			{
 				_logger.Error("", ex);
 			}
-			_logger.Debug("---end---");
+			_logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " end---");
 			return null;
 		}
         public int ExecuteCommand(string command)
@@ -86,7 +89,7 @@ namespace SyncCyberPlan_lib
         public int ExecuteCommand(string command, int timeout)
         {
             int res =-2;
-            _logger.Debug("---start---");
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " start---");
             OpenConnection();
 
             _cmdSql = _connection.CreateCommand();
@@ -96,7 +99,7 @@ namespace SyncCyberPlan_lib
             }
             _cmdSql.CommandType = CommandType.Text;
             _cmdSql.CommandText = command;
-            _logger.Debug("Command created : " + command);
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Command created : " + command);
 
             try
             {
@@ -116,7 +119,7 @@ namespace SyncCyberPlan_lib
                 _logger.Error("", ex);
                 throw ex;
             }
-            _logger.Debug("---end---");
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " end---");
             return res;
         }
 
@@ -126,14 +129,14 @@ namespace SyncCyberPlan_lib
             string startedAt = DateTime.Now.ToString();
             string message_error = "Command started at " + startedAt + "  " +
                 "\n Parameters: mode_all=" + mode_all + ", codice_like=" + codice_like + ", filtro=" + filtro + ", delete=" + delete + ", option=" + option + "\n\n";            
-            _logger.Debug("--- started at " + startedAt);
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " --- started at " + startedAt);
             T tmp = new T();
             _logger.Info("Oggetto: " + typeof(T).ToString().PadRight(60) + " su tabella " + tmp._CP_tabella);
             DBHelper2 cm = DBHelper2.getCyberDBHelper();
             if (delete)
             {
                 DBHelper2.EseguiSuDBCyberPlan(ref cm, tmp.GetDeletedAllQuery());
-                _logger.Debug("---   deleting ended at " + DateTime.Now.ToString());
+                _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   deleting ended at " + DateTime.Now.ToString());
                 return;
             }
 
@@ -182,7 +185,7 @@ namespace SyncCyberPlan_lib
             //    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net,enrico.lidacci@sauro.net", message_error);
             //}
 
-            _logger.Debug("---   ended at " + DateTime.Now.ToString());
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   ended at " + DateTime.Now.ToString());
         }
 
         void scriviRiga_WL(StreamWriter sw, string str)
@@ -203,7 +206,7 @@ namespace SyncCyberPlan_lib
         public static DBHelper2 getSageDBHelper(string dossier)
         {
             DBHelper2 ret = null;
-            _logger.Debug("--- started at " + DateTime.Now.ToString());
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " --- started");
             dossier = dossier.Trim().ToUpper();
             if (dossier == "SAURO" || dossier == "SAURODEV" || dossier == "SAUROTEST" || dossier == "SAUROINT")
             {
@@ -217,12 +220,12 @@ namespace SyncCyberPlan_lib
                 throw new ArgumentException("dossier non previsto: " + dossier);
             }
 
-            _logger.Debug("---   ended at " + DateTime.Now.ToString());
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   ended");
             return ret;
         }
         public static DBHelper2 getAs400DBHelper(string libreria)
         {
-            _logger.Debug("--- started at " + DateTime.Now.ToString());
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " --- started");
             DBHelper2 ret = null;
             libreria = libreria.Trim().ToUpper();
             if (libreria == "MBM41LIB_M" || libreria == "MBM41LIBMT")
@@ -236,19 +239,19 @@ namespace SyncCyberPlan_lib
             {
                 throw new ArgumentException("libreria non previsto: " + libreria);
             }
-            _logger.Debug("---   ended at " + DateTime.Now.ToString());
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   ended");
             return ret;
         }
         public static DBHelper2 getCyberDBHelper()
         {
             DBHelper2 ret = null;
-            _logger.Debug("--- started at " + DateTime.Now.ToString());
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " --- started");
 
             SqlConnection conn = new SqlConnection();
                 conn.ConnectionString = @"Server=srvsql1,1433\MSSQLSERVER;Database=CyberPlanFrontiera;User Id=Cyberplan; Password=C18£3r:okboo;";
                 ret = new DBHelper2(conn);
 
-            _logger.Debug("---   ended at " + DateTime.Now.ToString());
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   ended");
             return ret;
         }
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query)
@@ -258,7 +261,7 @@ namespace SyncCyberPlan_lib
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query, int timeout)
         {
 #if DEBUG
-            return 1;
+            //return 1;
 #endif
             int ret = -99;
             if (!string.IsNullOrWhiteSpace(query))

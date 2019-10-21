@@ -346,27 +346,27 @@ namespace SyncCyberPlan_lib
             C_PROD_LOT_QTY                       = (float)YQTAPREANT_0;
 
 
-            if (datiContoLavoro.ContainsKey(ITMREF_0))
-            {
-                //fatto da CyberPlan if (datiContoLavoro[ITMREF_0].Item1 != 0)
-                //fatto da CyberPlan {
-                //fatto da CyberPlan     //modifico solo se diverso da zero; così è possibile mettere 0 sull'attrezzatura e fissare articolo per articolo il LeadTime
-                //fatto da CyberPlan     C_FIXED_LEAD_TIME = datiContoLavoro[ITMREF_0].Item1;
-                //fatto da CyberPlan }
-                //fatto da CyberPlan C_SUPPLIER_CODE = datiContoLavoro[ITMREF_0].Item2;
-                //controllo
-                if (C_M_B != 'D')
-                {
-                    __bulk_message += Utils.NewLineMail() + " articolo " + ITMREF_0 + " assegnato ad attrezzatura di contolavoro, ma ha tipo proposta " + REOCOD_0;
-                }
-            }
-            else
-            {
-                if (C_M_B == 'D')
-                {
-                    __bulk_message += Utils.NewLineMail() + " articolo " + ITMREF_0 + " non assegnato ad attrezzatura di contolavoro, ma ha tipo proposta Contolavoro";
-                }
-            }
+           // if (datiContoLavoro.ContainsKey(ITMREF_0))
+           // {
+           //     //fatto da CyberPlan if (datiContoLavoro[ITMREF_0].Item1 != 0)
+           //     //fatto da CyberPlan {
+           //     //fatto da CyberPlan     //modifico solo se diverso da zero; così è possibile mettere 0 sull'attrezzatura e fissare articolo per articolo il LeadTime
+           //     //fatto da CyberPlan     C_FIXED_LEAD_TIME = datiContoLavoro[ITMREF_0].Item1;
+           //     //fatto da CyberPlan }
+           //     //fatto da CyberPlan C_SUPPLIER_CODE = datiContoLavoro[ITMREF_0].Item2;
+           //     //controllo
+           //     if (C_M_B != 'D')
+           //     {
+           //         __bulk_message += Utils.NewLineMail() + " articolo " + ITMREF_0 + " assegnato ad attrezzatura di contolavoro, ma ha tipo proposta " + REOCOD_0;
+           //     }
+           // }
+           // else
+           // {
+           //     if (C_M_B == 'D')
+           //     {
+           //         __bulk_message += Utils.NewLineMail() + " articolo " + ITMREF_0 + " non assegnato ad attrezzatura di contolavoro, ma ha tipo proposta Contolavoro";
+           //     }
+           // }
 
 
             if (
@@ -531,10 +531,10 @@ namespace SyncCyberPlan_lib
 
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string tipo)
         {
-            if (datiContoLavoro == null)
-            {
-                datiContoLavoro = DatiArticoliContolavoro(dossier);
-            }
+            //if (datiContoLavoro == null)
+            //{
+            //    datiContoLavoro = DatiArticoliContolavoro(dossier);
+            //}
             //metodo statico creato per poter essere richiamato senza modificare tabella statica _dataTable
             return SelectQuery(mode, dossier, codice_like, tipo);
         }
@@ -804,6 +804,7 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
+            __bulk_message += CheckArticoliContolavoro(sage);
             Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message);
         }
 
@@ -957,12 +958,180 @@ namespace SyncCyberPlan_lib
             return sage_query;
         }
 
-        static public Dictionary<string, Tuple<short, string, string>> DatiArticoliContolavoro(string dossier)
+        static public string CheckArticoliContolavoro(DBHelper2 sage)
+        {
+            /*Recupero articoli contolavoro solo per check coerenza*/
+            bool first = true;
+            string ret1 = "";
+            //DBHelper2 sage = DBHelper2.getSageDBHelper(dossier);
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " start...");
+            string db = "x3." + sage.LibreriaDossier;
+            string qry = @"select 
+  P.ITMREF_0
+, F.REOCOD_0
+, P.YATTCOD_0
+, A.YATTLEATIM_0
+, AM.MAC_0
+, AM.MACREP_0
+, AM.MACMRPCDL_0
+, AM.BPS_0
+, AM.CONFGRUPPO_0
+--, YCONCAD_0, YCONCADTIM_0,YCONENAFLG_0, MAC_0, MACREP_0, MACMRPCDL_0, BPS_0, MACOBSO_0 
+from " + db + @".YPRDITM P
+join " + db + @".ITMMASTER M
+	on M.ITMREF_0 = P.ITMREF_0
+join " + db + @".YPRDATT A 
+	on P.YATTCOD_0 = A.YATTCOD_0
+join " + db + @".YPRDAM AM on AM.YCONATT_0= A.YATTCOD_0 
+join " + db + @".ITMFACILIT F on F.ITMREF_0=P.ITMREF_0   ";
+
+            string where= @"where M.ITMSTA_0=1 and P.YENAFLG_0=2 and A.YATTENAFLG_0=2 and AM.YCONENAFLG_0=2 and
+( 	AM.MACMRPCDL_0 like 'CL%' or AM.MACMRPCDL_0 like 'ASSE%' or AM.MACMRPCDL_0 like 'PLAE%' or AM.MACMRPCDL_0 like 'CTAE%' )
+and F.STOFCY_0 ='ITS01' and REOCOD_0<>5";
+
+
+
+            DbDataReader dtr = sage.GetReaderSelectCommand(qry + where + " order by P.ITMREF_0");
+            object[] row = new object[dtr.FieldCount];
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                string itmref = (string)row[0];
+                string attr = (string)row[2];
+                string macc = (string)row[4];
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO con attrezzatura di contolavoro (" + attr + " su " + macc + ") ma tipo proposta diversa da contolavoro: " + itmref;
+            }
+
+
+
+
+
+
+
+
+
+
+            where = @"where M.ITMSTA_0=1 and P.YENAFLG_0=2 and A.YATTENAFLG_0=2 and AM.YCONENAFLG_0=2 and NOT
+( 	AM.MACMRPCDL_0 like 'CL%' or AM.MACMRPCDL_0 like 'ASSE%' or AM.MACMRPCDL_0 like 'PLAE%' or AM.MACMRPCDL_0 like 'CTAE%' )
+and F.STOFCY_0 ='ITS01' and REOCOD_0=5";
+
+
+            dtr = sage.GetReaderSelectCommand(qry + where + " order by P.ITMREF_0");
+            row = new object[dtr.FieldCount];
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                string itmref = (string)row[0];
+                string attr = (string)row[2];
+                string macc = (string)row[4];
+                if (first)
+                {
+                    ret1 += Utils.NewLineMail() + Utils.NewLineMail();
+                    first = false;
+                }
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO con attrezzatura NON di contolavoro (" + attr + " su " + macc + ") ma tipo proposta di contolavoro: " + itmref;
+            }
+            first = true;
+
+
+
+
+
+
+            where = @"where M.ITMSTA_0=1 and P.YENAFLG_0 = 2 and A.YATTENAFLG_0 = 2 and AM.YCONENAFLG_0 = 2 and
+      --not(AM.MACMRPCDL_0 like 'CL%' or AM.MACMRPCDL_0 like 'ASSE%' or AM.MACMRPCDL_0 like 'PLAE%' or AM.MACMRPCDL_0 like 'CTAE%')
+F.STOFCY_0 = 'ITS01'
+and REOCOD_0<>5
+and REOCOD_0<>3 ";
+
+            dtr = sage.GetReaderSelectCommand(qry + where + " order by P.ITMREF_0");
+            row = new object[dtr.FieldCount];
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                string itmref = (string)row[0];
+                string attr = (string)row[2];
+                string macc = (string)row[4];
+                if (first)
+                {
+                    ret1 += Utils.NewLineMail() + Utils.NewLineMail();
+                    first = false;
+                }
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO associato ad attrezzatura (" + attr + " su " + macc + ") ma ha come tipo proposta né Contolavoro né Produzione: " + itmref;
+            }
+            first = true;
+
+
+
+            qry = @"select
+  M.ITMREF_0
+, F.REOCOD_0
+, YLIVTRAS_0
+, P.YATTCOD_0
+
+from x3.SAUROTEST.ITMMASTER M
+join x3.SAUROTEST.YITMINF Y on M.ITMREF_0 = Y.ITMREF_0
+join x3.SAUROTEST.ITMFACILIT F  on M.ITMREF_0 = F.ITMREF_0
+full join x3.SAUROTEST.YPRDITM P on F.ITMREF_0 = P.ITMREF_0 ";
+
+            where = @" where F.STOFCY_0 = 'ITS01' and ITMSTA_0 = 1
+ -- and YLIVTRAS_0<>'MP' and YLIVTRAS_0<> 'SF' and YLIVTRAS_0<> 'IM' and YLIVTRAS_0<> 'ME' and YLIVTRAS_0<> 'MC' and YLIVTRAS_0<> 'MK'
+and(YLIVTRAS_0 = 'SL' or YLIVTRAS_0 = 'PF' or YLIVTRAS_0 = 'SC')
+--P.YENAFLG_0 = 2 and
+  and P.YATTCOD_0 is not null
+and not (REOCOD_0 = 3 or REOCOD_0 = 5) ";
+
+            dtr = sage.GetReaderSelectCommand(qry + where + " order by M.ITMREF_0");
+            row = new object[dtr.FieldCount];
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                string itmref = (string)row[0];
+                if (first)
+                {
+                    ret1 += Utils.NewLineMail() + Utils.NewLineMail();
+                    first = false;
+                }
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO associato ad attrezzatura ma NON ha come tipo proposta Contolavoro o Produzione: " + itmref;
+            }
+            first = true;
+
+
+            /*  CONTROLLO GIà fatto in ITME ROUTING
+             *  
+            where = @" where F.STOFCY_0 = 'ITS01' and ITMSTA_0 = 1
+ -- and YLIVTRAS_0<>'MP' and YLIVTRAS_0<> 'SF' and YLIVTRAS_0<> 'IM' and YLIVTRAS_0<> 'ME' and YLIVTRAS_0<> 'MC' and YLIVTRAS_0<> 'MK'
+and(YLIVTRAS_0 = 'SL' or YLIVTRAS_0 = 'PF' or YLIVTRAS_0 = 'SC')
+--P.YENAFLG_0 = 2 and
+  and P.YATTCOD_0 is null
+and (REOCOD_0 = 3 or REOCOD_0 = 5) ";
+
+            dtr = sage.GetReaderSelectCommand(qry + where + " order by M.ITMREF_0");
+            row = new object[dtr.FieldCount];
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                string itmref = (string)row[0];
+                if (first)
+                {
+                    ret1 += Utils.NewLineMail() + Utils.NewLineMail();
+                    first = false;
+                }
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO NON è associato ad attrezzatura ma ha come tipo proposta Contolavoro o Produzione: " + itmref;
+            }
+            first = true;
+            */
+
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " end");
+
+            return ret1;
+        }
+        static public Dictionary<string, Tuple<short, string, string>> DatiArticoliContolavoro_old(string dossier)
         {
 /*Recupero articoli contolavoro solo per check coerenza*/
 
             DBHelper2 sage = DBHelper2.getSageDBHelper(dossier);
-            _logger.Debug("DatiArticoliContolavoro...");
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " start...");
             string db = "x3." + dossier;
             string qry =
 @"select 
@@ -980,7 +1149,7 @@ join " + db + @".YPRDCONF C
 	on C.YCONATT_0=A.YATTCOD_0
 join " + db + @".WORKSTATIO W 
     on W.WST_0= C.YCONCDL_0
-where P.YENAFLG_0=2 and A.YATTENAFLG_0=2 and 
+where P.YENAFLG_0=2 and A.YATTENAFLG_0=2 and C.YCONENAFLG_0=2 and
 (
 	W.YMRPCDL_0 like 'CL%' 	or W.YMRPCDL_0 like 'ASSE%' or W.YMRPCDL_0 like 'PLAE%' or W.YMRPCDL_0 like 'CTAE%'
 )"
@@ -1004,7 +1173,7 @@ where P.YENAFLG_0=2 and A.YATTENAFLG_0=2 and
                     itm_CL.Add(itmref, new Tuple<short, string, string>((short)row[2], (string)row[6], (string)row[5])); //  Articolo + (leadTime, Fornitore, cdl_mrp)
                 }
             }
-            _logger.Debug("DatiArticoliContolavoro... end");
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " end");
             return itm_CL;
         }
     }

@@ -12,112 +12,67 @@ namespace SyncCyberPlan_lib
 {
     public abstract class ExportItem
     {
-        protected readonly string __SEP = ","; //separatore
+        protected readonly string __SEP = ";"; //separatore
         protected static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 
-        protected string _CyberPLan_tabella;
         protected string _file_prefix;
         protected string _dossier;
-        protected int? _task_number = null;
         protected DBHelper2 _db = null;
 
-        public int? TaskNumber { get { return _task_number; } }
-
-        public ExportItem(string CyberPLan_tabella, string file_prefix)
+        public ExportItem(string file_prefix)
         {
-            _CyberPLan_tabella = CyberPLan_tabella;
             _file_prefix = file_prefix;
             _db = DBHelper2.getCyberDBHelper();
         }
 
-        public string GetQuery()
-        {
-            if (_task_number.HasValue)
-            {
-                return GetSelectTaskNumberQuery()
-                    + "FROM [CyberPlanFrontiera].[dbo].[" + _CyberPLan_tabella + "] " +
-                    " where TASK_NUMBER=" + _task_number + " " + WhereCondition();
-            }
-            else
-            {
-                throw new NullReferenceException("TaskNumber is null");
-            }
-        }
-        protected abstract string GetSelectTaskNumberQuery();
+        protected abstract string GetSelectQuery(int TaskNumber);
         protected abstract string WhereCondition();
         public abstract void Init(object[] row);
         public abstract string getSageImportString();
-       
 
-        public void RefreshFirstTaskNumber()
-        {
-            string qry = @"SELECT top 1 [TASK_NUMBER] FROM [CyberPlanFrontiera].[dbo].[" + _CyberPLan_tabella + "] order by TASK_NUMBER asc";
-            //DBHelper2.EseguiSuDBCyberPlan(ref _db, qry);
-            DbDataReader dtr = _db.GetReaderSelectCommand(qry);
-            object[] row = new object[dtr.FieldCount];
 
-            if (dtr.HasRows)
-            {
-                while (dtr.Read())
-                {
-                    dtr.GetValues(row);
-                    _task_number = (int)row[0];
-                    _logger.Debug("Refresh task number=" + _task_number);
-                    break;
-                }
-            }
-            else
-            {
-                _logger.Debug("task number = null");
-            }
-            dtr.Close();
-        }
+
         public string WriteToFile(string dossier, int taskNumberToExport) //where T : ExportItem, new()
         {
             _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "  start...");
             string pathfile = null;
             string startedAt = DateTime.Now.ToString();
-            if (_task_number.HasValue && _task_number.Value== taskNumberToExport)
+
+            _logger.Info("Oggetto: " + this.GetType().ToString());
+
+            string qry = GetSelectQuery(taskNumberToExport);
+            DbDataReader dtr = _db.GetReaderSelectCommand(qry);
+            object[] row = new object[dtr.FieldCount];
+
+            int i = 0;
+
+            if (dtr.HasRows)
             {
-                _logger.Info("Oggetto: " + this.GetType().ToString() + " su tabella " + _CyberPLan_tabella);
-
-                string qry = GetQuery();
-                DbDataReader dtr = _db.GetReaderSelectCommand(qry);
-                object[] row = new object[dtr.FieldCount];
-
-                int i = 0;
-
-                if (dtr.HasRows)
+                string timing = string.Format("{0:yyMMdd_hhmmss}", System.DateTime.Now);
+                //pathfile = @"S:\Sage\SAGEX3\folders\" + dossier + @"\YSAURO\IMPEXP\MRP\" + _file_prefix + "_task" + _task_number + "_" + timing + ".txt";
+                pathfile = @"\\srvx3app1\S$\Sage\SAGEX3\folders\" + dossier + @"\YSAURO\IMPEXP\MRP\" + _file_prefix + "_task" + taskNumberToExport + "_" + timing + ".txt";
+                using (System.IO.StreamWriter fs = new System.IO.StreamWriter(pathfile, false))
                 {
-                    string timing = string.Format("{0:yyMMdd_hhmmss}", System.DateTime.Now);
-                    //pathfile = @"S:\Sage\SAGEX3\folders\" + dossier + @"\YSAURO\IMPEXP\MRP\" + _file_prefix + "_task" + _task_number + "_" + timing + ".txt";
-                    pathfile = @"\\srvx3app1\S$\Sage\SAGEX3\folders\" + dossier + @"\YSAURO\IMPEXP\MRP\" + _file_prefix + "_task" + _task_number + "_" + timing + ".txt";
-                    using (System.IO.StreamWriter fs = new System.IO.StreamWriter(pathfile, false))
+                    while (dtr.Read())
                     {
-                        while (dtr.Read())
-                        {
-                            i++;
-                            dtr.GetValues(row);
-                            Init(row);
-                            fs.WriteLine(getSageImportString());
-                            //_logger.Info(i + " items... [" + tmp.GetID() + "]");
-                        }
+                        i++;
+                        dtr.GetValues(row);
+                        Init(row);
+                        fs.WriteLine(getSageImportString());
+                        //_logger.Info(i + " items... [" + tmp.GetID() + "]");
                     }
                 }
-                dtr.Close();
+            }
+            dtr.Close();
 
 
-                //if (thereIsMessage)
-                //{
-                //    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", message_error);
-                //    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net,enrico.lidacci@sauro.net", message_error);
-                //}
-                _logger.Info("TaskNumber=" +_task_number +" - esportato file " + pathfile);
-            }
-            else
-            {
-                _logger.Debug("Export vuoto; taskNumberToExport=" + taskNumberToExport);
-            }
+            //if (thereIsMessage)
+            //{
+            //    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", message_error);
+            //    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net,enrico.lidacci@sauro.net", message_error);
+            //}
+            _logger.Info("TaskNumber=" + taskNumberToExport + " - esportato file " + pathfile);
+
             _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "  end");
             return pathfile;
         }
@@ -126,17 +81,9 @@ namespace SyncCyberPlan_lib
         /// per sicurezza si fa passare il TaskNumber e controlla che coincida con il corrente
         /// </summary>
         /// <param name="taskNumberToDelete"></param>
-        public void DeleteTaskNumber(int taskNumberToDelete)
-        {
-            if (_task_number.HasValue && _task_number == taskNumberToDelete)
-            {
-                string qry = @"DELETE FROM [CyberPlanFrontiera].[dbo].[" + _CyberPLan_tabella + "] WHERE [TASK_NUMBER] = " + _task_number;
-                DBHelper2.EseguiSuDBCyberPlan(ref _db, qry);
-                _logger.Info("task number deleted =" + _task_number);
-            }
-        }
+        public abstract void DeleteTaskNumber(int taskNumberToDelete);
 
-        protected T getDBV<T>(object obj)
+        protected T getDBV<T>(object obj, string param_name)
         {
             T ret;
             if (!DBNull.Value.Equals(obj))
@@ -154,11 +101,12 @@ namespace SyncCyberPlan_lib
             else
             {
                 ret = default(T);
-                _logger.Debug("un valore di " + typeof(T).ToString() + " is DBnull ");
+                //_logger.Debug("valore di " + (param_name + "  " + typeof(T).ToString()).Trim() + " is DBnull ");
+                _logger.Debug("valore DBnull di " + param_name );
             }
             return ret;
         }
-        protected  DateTime? getSqlDate(object data)
+        protected  DateTime? getSqlDate(object data, string param_name)
         {
             if (data is System.DBNull)
             {
@@ -167,10 +115,46 @@ namespace SyncCyberPlan_lib
             DateTime tmp = (DateTime)data;
             if (tmp == System.Data.SqlTypes.SqlDateTime.MinValue)
             {
+                _logger.Debug("valore DBnull di " + param_name);
                 return null;
             }
             else return tmp;
         }
 
+
+
+        public static int? GetMinTaskNumber()
+        {
+            int? task_number = null;
+
+            string qry =
+@"      select * from (select top 1 TASK_NUMBER from [CyberPlanFrontiera].[dbo].EXP_CORDER order by TASK_NUMBER asc) A
+union select * from (select top 1 TASK_NUMBER from [CyberPlanFrontiera].[dbo].EXP_ORDER order by TASK_NUMBER asc) B
+union select * from (select top 1 TASK_NUMBER from [CyberPlanFrontiera].[dbo].EXP_OPERATION order by TASK_NUMBER asc) C
+union select * from (select top 1 TASK_NUMBER from [CyberPlanFrontiera].[dbo].EXP_DEMAND order by TASK_NUMBER asc) D ";
+
+
+
+            DBHelper2 db = DBHelper2.getCyberDBHelper();
+            DbDataReader dtr = db.GetReaderSelectCommand(qry);
+            object[] row = new object[dtr.FieldCount];
+
+            if (dtr.HasRows)
+            {
+                while (dtr.Read())
+                {
+                    dtr.GetValues(row);
+                    task_number = (int)row[0];
+                    _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Refresh min task number=" + task_number);
+                    break;
+                }
+            }
+            else
+            {
+                _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " task number = null");
+            }
+            dtr.Close();
+            return task_number;
+        }
     }
 }

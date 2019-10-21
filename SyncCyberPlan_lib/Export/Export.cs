@@ -11,20 +11,8 @@ namespace SyncCyberPlan_lib
     {
         static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 
-        //tabelle di export di CyberPlan
-        ExpCorder cord;
-        ExpDemand dem;
-        ExpOrderOPR opr;
-        ExpOperation ope;
-
         public Export()
         {
-            cord = new ExpCorder();
-            dem = new ExpDemand();
-            opr = new ExpOrderOPR();
-            ope = new ExpOperation();
-
-            //taskNumber_toExport = GetFirstTaskNumberAllTable();
         }
         /// <summary>
         /// TaskNumber è il numero con cui CyberPLan identifica gli export
@@ -49,45 +37,27 @@ namespace SyncCyberPlan_lib
                     _logger.Info("Dossier non previsto per i WebServices\n");
                     return;
                     //break;
-            }            
+            }
 
+            //tabelle di export di CyberPlan
+            ExpCorder cord = new ExpCorder();
+            ExpOrderOPR opr = new ExpOrderOPR();
+
+            service = new X3WS(pool); //inizializzo il Ws
             bool res= true;
             while (res)
             {
-                res = false;
-                int? firstTaskNumber = GetFirstTaskNumberAllTable();
+                int? firstTaskNumber = ExportItem.GetMinTaskNumber(); 
                 if (firstTaskNumber.HasValue)
                 {
-                    //inizializzo il Ws solo la prima volta
-                    if (service == null)
-                    {
-                        service = new X3WS(pool);
-                    }
-                    res = ExportTaskNumber(dossier, service, firstTaskNumber.Value);
+                    res &= ExportTaskNumber(dossier, service, firstTaskNumber.Value, opr);
+                    //res &= ExportTaskNumber(dossier, service, firstTaskNumber.Value, cord);                    
                 }
                 else
                 {
                     _logger.Info("Nessun TaskNumber da esportare");
                 }
             }
-        }
-        /// <summary>
-        /// Esporta tutti i dati relativi ad un singolo taskNumber verso Sage
-        /// </summary>
-        /// <param name="dossier"></param>
-        /// <param name="service"></param>
-        /// <param name="taskNumberToExport"></param>
-        /// <returns></returns>
-        protected bool ExportTaskNumber(string dossier, X3WS service, int taskNumberToExport)
-        {
-            bool result = true;
-
-            //result &= ExportTaskNumber(dossier, service, taskNumberToExport, cord);
-            //result &= ExportTaskNumber(dossier, service, taskNumberToExport, dem);
-            result &= ExportTaskNumber(dossier, service, taskNumberToExport, opr);
-            //result &= ExportTaskNumber(dossier, service, taskNumberToExport, ope);
-
-            return result;
         }
         static protected bool ExportTaskNumber(string dossier, X3WS service, int taskNumberToExport, ExportItem expitm)
         {
@@ -104,45 +74,17 @@ namespace SyncCyberPlan_lib
                 ret = service.ImportOprFile(System.IO.Path.GetFileName(file));
                 if (ret)
                 {
-                    expitm.DeleteTaskNumber(taskNumberToExport-100);
+                    expitm.DeleteTaskNumber(taskNumberToExport);
                     //expitm.DeleteTaskNumber(taskNumberToExport);   PER EVITARE DI CANCELLARE I DATI ho messo -100
                 }
                 else
                 {
                     Settings s = Settings.GetSettings();
                     //il fallimento si basa sul ritorno del WS; quindi lascio al codice del WS la segnalazione eventuale via mail agli operatori
-                    Utils.SendMail_Anag(s, "Errore Import da CyberPlan via WS");
+                    Utils.SendMail_Plan(s, "Errore Import da CyberPlan via WS, file " + file);
                 }
             }
             return ret;
-        }
-        int? GetFirstTaskNumberAllTable()
-        {
-            int? taskNumberAllTable = null;
-
-            cord.RefreshFirstTaskNumber();
-            dem.RefreshFirstTaskNumber();
-            opr.RefreshFirstTaskNumber();
-            ope.RefreshFirstTaskNumber();
-
-            GetMinTaskNumber(ref taskNumberAllTable, cord.TaskNumber);
-            GetMinTaskNumber(ref taskNumberAllTable, dem.TaskNumber);
-            GetMinTaskNumber(ref taskNumberAllTable, opr.TaskNumber);
-            GetMinTaskNumber(ref taskNumberAllTable, ope.TaskNumber);
-
-            return taskNumberAllTable;
-        }
-
-        private void GetMinTaskNumber(ref int? tn, int? newtn)
-        {
-            if (tn.HasValue)
-            {
-                if (newtn.HasValue && newtn.Value < tn) tn = newtn.Value;
-            }
-            else if(newtn.HasValue)
-            {
-                tn = newtn;
-            }
         }
     }
 }

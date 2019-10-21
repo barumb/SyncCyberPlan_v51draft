@@ -59,8 +59,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="DBHelper.cs" />
-    <Compile Include="Export\ExpOperation.cs" />
-    <Compile Include="Export\ExpDemand.cs" />
     <Compile Include="Export\ExpCorder.cs" />
     <Compile Include="Export\ExpOrderOCL.cs" />
     <Compile Include="Export\ExpOrderOPR.cs" />
