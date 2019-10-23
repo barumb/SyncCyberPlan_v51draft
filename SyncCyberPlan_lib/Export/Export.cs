@@ -81,7 +81,7 @@ namespace SyncCyberPlan_lib
                 {
                     Settings s = Settings.GetSettings();
                     //il fallimento si basa sul ritorno del WS; quindi lascio al codice del WS la segnalazione eventuale via mail agli operatori
-                    Utils.SendMail_Plan(s, "Errore Import da CyberPlan via WS, file " + file);
+                    Utils.SendMail_Plan(s, "Errore Import da CyberPlan via WS, file " + file, "errore import");
                 }
             }
             return ret;

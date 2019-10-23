@@ -75,33 +75,33 @@ namespace SyncCyberPlan_lib
         }
         public static void SendMail_IT(Settings s, string Msg, bool errore)
         {
-            SendMail(s.Mailfrom, s.Mailto_IT, s.ServerSmtp, Msg, errore);
+            SendMail(s.Mailfrom, s.Mailto_IT, s.ServerSmtp, "", Msg, errore);
         }        
-        public static void SendMail_IT(Settings s, string Msg)
+        public static void SendMail_IT(Settings s, string Msg, string postTitolo)
         {
-            SendMail(s.Mailfrom, s.Mailto_IT, s.ServerSmtp, Msg, false);
+            SendMail(s.Mailfrom, s.Mailto_IT, s.ServerSmtp, postTitolo,  Msg, false);
         }
-        public static void SendMail_Plan(Settings s, string Msg)
+        public static void SendMail_Plan(Settings s, string Msg, string postTitolo)
         {
-            SendMail(s.Mailfrom, s.Mailto_pianificazione, s.ServerSmtp, Msg, false);
+            SendMail(s.Mailfrom, s.Mailto_pianificazione, s.ServerSmtp, postTitolo, Msg, false);
         }
-        public static void SendMail_Anag(Settings s, string Msg)
+        public static void SendMail_Anag(Settings s, string Msg, string postTitolo)
         {
-            SendMail(s.Mailfrom, s.Mailto_anagrafica, s.ServerSmtp, Msg, false);
+            SendMail(s.Mailfrom, s.Mailto_anagrafica, s.ServerSmtp, postTitolo, Msg, false);
         }
-        public static void SendMail(string MailFROM, string MailTO, string MailServerSMTP, string Msg, bool errore)
+        public static void SendMail(string MailFROM, string MailTO, string MailServerSMTP, string postTitolo, string Msg, bool errore)
         {
             if (!string.IsNullOrWhiteSpace(Msg))
             {
                 IPAddress[] localAddress = new IPAddress[0];
                 IPHostEntry hostInfo = new IPHostEntry();
                 String strHostName = "";
+                if (postTitolo == null) postTitolo = "";
 
 
 #if DEBUG
                 MailTO = "francesco.chiminazzo@sauro.net";
-#endif
-                MailTO = "francesco.chiminazzo@sauro.net";   //PROVVISORIO
+#endif                
                 try
                 {
                     // Get the local computer info.
@@ -116,11 +116,11 @@ namespace SyncCyberPlan_lib
 
                     if (errore)
                     {
-                        Message.Subject = "ERRORE sincronizzazione CyberPlan (" + hostInfo.HostName + ")";
+                        Message.Subject = "[CyberPLan] ERRORE sincronizzazione (" + hostInfo.HostName + ")" + postTitolo;
                     }
                     else
                     {
-                        Message.Subject = "CyberPlan: c'è un problema da sistemare";
+                        Message.Subject = "[CyberPlan] problema da sistemare: " + postTitolo;
                     }
 
                     //((IPEndPoint)server.LocalEndpoint).Address.ToString() + " - " +  System.DateTime.Now + " - " + Msg;				
@@ -138,7 +138,7 @@ namespace SyncCyberPlan_lib
                           + Utils.NewLineMail() + Utils.NewLineMail() + Msg
                         ;
 
-                    Message.Bcc.Add("francesco.chiminazzo@sauro.net"); //PROVVISORIO mettere it@
+                    Message.Bcc.Add(MailFROM); 
 
                     //for (int i = 0; i < localAddress.Length; i++)
                     //{

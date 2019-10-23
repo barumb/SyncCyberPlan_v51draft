@@ -153,7 +153,7 @@ namespace SyncCyberPlan_lib
             else
             {
                 string msg = "Configurazione Attrezzatura/Macchina: più di una riga presente " + _YCONATT_0 + "/" + _WST_0;
-                Utils.SendMail_IT(Settings.GetSettings(), msg);
+                Utils.SendMail_IT(Settings.GetSettings(), msg, "attrezzatura/macchina");
                 var tmp = _dataTable.NewRow();
                 tmp["C_ROUTING_CODE"] = _YCONATT_0;
                 tmp["MACHINE_CODE"]= _WST_0;

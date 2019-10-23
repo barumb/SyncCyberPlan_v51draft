@@ -26,12 +26,12 @@ namespace Console
 #if DEBUG                
                 //Esegui("X3WS SAUROTEST MRP".Split(' '));
                 //return;
-                // EseguiTutto();
+                 EseguiTutto();
 
                 //Esegui("FINALCHECK".Split(' '));
                 //return;
                 //            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-                Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
                 return;
 
 
@@ -320,7 +320,7 @@ namespace Console
         {
 
             _logger.Error(string.Join(" ",args) + "\n" + ex.ToString());
-            Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", string.Join(" ", args) + "\n\n\n" + ex.ToString(), true);
+            Utils.SendMail_IT(Settings.GetSettings(), string.Join(" ", args) + "\n\n\n" + ex.ToString(), true);
         }
 #endif
             _logger.Info("END ---------------------------------");

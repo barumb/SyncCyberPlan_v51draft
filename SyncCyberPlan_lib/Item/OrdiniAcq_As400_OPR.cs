@@ -204,7 +204,7 @@ namespace SyncCyberPlan_lib
                 return 'M';  //make
             else
             {
-                Utils.SendMail_IT(Settings.GetSettings(), "Errore import OPR in CyberPlan: "+ C_CODE+" ha cdl in as400 diverso da CDLEXT/CDLINT");
+                Utils.SendMail_IT(Settings.GetSettings(), "Errore import OPR in CyberPlan: "+ C_CODE+" ha cdl in as400 diverso da CDLEXT/CDLINT","OPR As400");
                 return '?';
             }
         }
@@ -276,7 +276,7 @@ namespace SyncCyberPlan_lib
             //invio mail
             //
 
-            Utils.SendMail_Plan(Settings.GetSettings(), testo_mail);
+            Utils.SendMail_Plan(Settings.GetSettings(), testo_mail, "OPR");
         }
 
         char getMRP_type(string MFHTCOM)

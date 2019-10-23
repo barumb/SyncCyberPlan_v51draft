@@ -433,7 +433,7 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            //CONTROLLO che il terzo dell'ODV sia presente nell'anagrfaica terzi
+            //CONTROLLO che il terzo dell'ODV sia presente nell'anagrafica terzi
             string testo_mail = "";
             string chk_query = 
 @"SELECT distinct O.C_CODE
@@ -451,7 +451,7 @@ where T.C_CODE is null ";
                 testo_mail += "ODV =" + getDBV<string>(row[0]) + "  non caricato; manca codice cliente =" + getDBV<string>(row[1]) + Utils.NewLineMail();
             }
 
-            Utils.SendMail_IT(Settings.GetSettings(), testo_mail);
+            Utils.SendMail_IT(Settings.GetSettings(), testo_mail, "ODV");
         }
     }
 }

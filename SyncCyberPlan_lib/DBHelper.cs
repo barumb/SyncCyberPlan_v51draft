@@ -128,7 +128,7 @@ namespace SyncCyberPlan_lib
             Item.ResetMailMessage();
             string startedAt = DateTime.Now.ToString();
             string message_error = "Command started at " + startedAt + "  " +
-                "\n Parameters: mode_all=" + mode_all + ", codice_like=" + codice_like + ", filtro=" + filtro + ", delete=" + delete + ", option=" + option + "\n\n";            
+                "\n Parameters: mode_all=" + mode_all + ", codice_like=" + codice_like + ", filtro=" + filtro + ", delete=" + delete + ", option=" + option + "\n\n";
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " --- started at " + startedAt);
             T tmp = new T();
             _logger.Info("Oggetto: " + typeof(T).ToString().PadRight(60) + " su tabella " + tmp._CP_tabella);
@@ -144,14 +144,14 @@ namespace SyncCyberPlan_lib
             //{
             //    codice_like = "%";
             //}
-            
+
             string qry = tmp.GetSelectQuery(mode_all, _libreria_dossier, codice_like, filtro);
             DbDataReader dtr = GetReaderSelectCommand(qry);
             object[] row = new object[dtr.FieldCount];
 
             int i = 0;
             int j = 0;
-            
+
             while (dtr.Read())
             {
                 i++;
@@ -164,17 +164,17 @@ namespace SyncCyberPlan_lib
                 if (j % 1000 == 0)
                 {
                     //int res= DBHelper2.EseguiSuDBCyberPlan(ref cm, tmp_qry);
-                    int res = DBHelper2.EseguiSuDBCyberPlan_Bulk(ref cm,tmp._CP_tabella,  Item._dataTable);
+                    int res = DBHelper2.EseguiSuDBCyberPlan_Bulk(ref cm, tmp._CP_tabella, Item._dataTable);
                     _logger.Info(i + " items... [" + tmp.GetID() + "]");
                     j = 0;
                 }
             }
             int added = tmp.AddLastCyberRows();
-            if (j > 0 || added >0)
-            {                
+            if (j > 0 || added > 0)
+            {
                 //DBHelper2.EseguiSuDBCyberPlan(ref cm, tmp_qry);
                 int res = DBHelper2.EseguiSuDBCyberPlan_Bulk(ref cm, tmp._CP_tabella, Item._dataTable);
-                _logger.Info(i+added + " items [last= " + tmp.GetID() + "]");
+                _logger.Info(i + added + " items [last= " + tmp.GetID() + "]");
             }
             tmp.DoLastAction(ref cm, this);
             dtr.Close();
@@ -261,7 +261,7 @@ namespace SyncCyberPlan_lib
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query, int timeout)
         {
 #if DEBUG
-            //return 1;
+            return 1;
 #endif
             int ret = -99;
             if (!string.IsNullOrWhiteSpace(query))

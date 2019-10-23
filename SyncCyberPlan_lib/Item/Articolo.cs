@@ -804,8 +804,11 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            __bulk_message += CheckArticoliContolavoro(sage);
-            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message);
+            if (this.GetType().Name == "Articolo")
+            {
+                __bulk_message += CheckArticoliContolavoro(sage);
+                Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, "contolavoro");
+            }
         }
 
         static public string SelectQuery(bool mode, string dossier, string codice_like, string tipo)
@@ -999,7 +1002,7 @@ and F.STOFCY_0 ='ITS01' and REOCOD_0<>5";
                 string itmref = (string)row[0];
                 string attr = (string)row[2];
                 string macc = (string)row[4];
-                ret1 += Utils.NewLineMail() + "articolo ATTIVO con attrezzatura di contolavoro (" + attr + " su " + macc + ") ma tipo proposta diversa da contolavoro: " + itmref;
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO con attrezzatura di contolavoro (" + attr + " su " + macc + ") ma TipoProposta <> Contolavoro: " + itmref;
             }
 
 
@@ -1029,7 +1032,7 @@ and F.STOFCY_0 ='ITS01' and REOCOD_0=5";
                     ret1 += Utils.NewLineMail() + Utils.NewLineMail();
                     first = false;
                 }
-                ret1 += Utils.NewLineMail() + "articolo ATTIVO con attrezzatura NON di contolavoro (" + attr + " su " + macc + ") ma tipo proposta di contolavoro: " + itmref;
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO con attrezzatura NON di contolavoro (" + attr + " su " + macc + ") ma TipoProposta = contolavoro: " + itmref;
             }
             first = true;
 
@@ -1057,7 +1060,7 @@ and REOCOD_0<>3 ";
                     ret1 += Utils.NewLineMail() + Utils.NewLineMail();
                     first = false;
                 }
-                ret1 += Utils.NewLineMail() + "articolo ATTIVO associato ad attrezzatura (" + attr + " su " + macc + ") ma ha come tipo proposta né Contolavoro né Produzione: " + itmref;
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO associato ad attrezzatura (" + attr + " su " + macc + ") ma con TipoProposta <> (Contolavoro,Produzione): " + itmref;
             }
             first = true;
 
@@ -1092,7 +1095,7 @@ and not (REOCOD_0 = 3 or REOCOD_0 = 5) ";
                     ret1 += Utils.NewLineMail() + Utils.NewLineMail();
                     first = false;
                 }
-                ret1 += Utils.NewLineMail() + "articolo ATTIVO associato ad attrezzatura ma NON ha come tipo proposta Contolavoro o Produzione: " + itmref;
+                ret1 += Utils.NewLineMail() + "articolo ATTIVO associato ad attrezzatura ma TipoProposta non coerente (dovrebbe avere Contolavoro o Produzione): " + itmref;
             }
             first = true;
 

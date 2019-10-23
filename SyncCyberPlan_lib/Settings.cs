@@ -50,7 +50,7 @@ namespace SyncCyberPlan_lib
             {
                 ApplicationName = "NomeApplicativo",
                 Mailfrom = "it@sauro.net",
-                Mailto_IT = "enrico.lidacci@sauro.net,francesco.chiminazzo@sauro.net",
+                Mailto_IT = "umberto.baratto@sauro.net,francesco.chiminazzo@sauro.net",
                 Mailto_anagrafica = "luca.biasio@sauro.net,alessandro.andrian@sauro.net",
                 Mailto_pianificazione = "leonardo.macabri@sauro.net,cristian.scarso",
                 ServerSmtp = "mail.sauro.net",

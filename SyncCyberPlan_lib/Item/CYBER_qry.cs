@@ -84,7 +84,7 @@ namespace SyncCyberPlan_lib
                 }
             }
 
-            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail);
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "Ordini di articoli senza ciclo");
             _logger.Info("end execution");
         }
         static private void FinalCheck_PLAS_senza_cicli()
@@ -144,7 +144,7 @@ order by D.C_ITEM_CODE ";
             }
 
 
-            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail);
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "WP senza ciclo");
             _logger.Info("end execution");
         }
     }

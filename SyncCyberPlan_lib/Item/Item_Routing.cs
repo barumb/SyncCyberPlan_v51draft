@@ -75,7 +75,7 @@ namespace SyncCyberPlan_lib
                 && !_ITMREF_0.StartsWith("WS00")
                 )
                 {
-                    __bulk_message += Utils.NewLineMail() + "Articolo " + _ITMREF_0 + " è attivo ma non è associato ad una attrezzatura";
+                    __bulk_message += Utils.NewLineMail() + "Articolo attivo ma non associato ad una attrezzatura: " + _ITMREF_0;
                 }
             }
             else if (!_YWCR_0.StartsWith(_YATTTYP_0))
@@ -265,7 +265,7 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message);
+            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, "cicli");
         }
     }
 }

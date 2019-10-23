@@ -407,7 +407,7 @@ namespace SyncCyberPlan_lib
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
             //ThreadPool.QueueUserWorkItem(sendmail);
-            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message);
+            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, "operations");
         }
         //void sendmail(Object threadContext)
         //{

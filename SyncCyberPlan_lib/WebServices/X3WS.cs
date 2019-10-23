@@ -84,7 +84,6 @@ namespace SyncCyberPlan_lib
         protected void GetDescription(string PublicName)
         {
             _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "  start...");
-            string wsResponse = "";
             SageX3WS.CAdxResultXml _resultXML = new SageX3WS.CAdxResultXml();
             try
             {
@@ -104,7 +103,7 @@ namespace SyncCyberPlan_lib
             {
                 _resultXML = _webService.query(_context, pPublicName, _paramKeyValue, pListSize);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -121,7 +120,7 @@ namespace SyncCyberPlan_lib
             {
                 _resultXML = _webService.query(_context, pPublicName, _paramKeyValue, pListSize);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -137,9 +136,8 @@ namespace SyncCyberPlan_lib
             {
                 _resultXML = _webService.read(_context, pPublicName, _paramKeyValue);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
                 throw;
             }
             _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "  end");
@@ -153,7 +151,7 @@ namespace SyncCyberPlan_lib
             {
                 _resultXML = _webService.save(_context, pPublicName, pXmlObject);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -168,7 +166,7 @@ namespace SyncCyberPlan_lib
             {
                 _resultXML = _webService.run(_context, pPublicName, pXmlObject);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

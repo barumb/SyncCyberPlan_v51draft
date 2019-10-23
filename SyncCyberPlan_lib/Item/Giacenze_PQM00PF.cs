@@ -204,7 +204,7 @@ order by PQMCART
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message);
+            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, "Giacenze As400");
         }
 
     }
