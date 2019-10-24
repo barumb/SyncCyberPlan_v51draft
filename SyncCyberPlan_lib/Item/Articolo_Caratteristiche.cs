@@ -30,11 +30,11 @@ namespace SyncCyberPlan_lib
         {
             _ID_COUNTER++;
             _ID = _ID_COUNTER;
-            _ITMREF    = getDBV<string>(row[0]); 
-            _VALCOD    = getDBV<string>(row[1]); 
-            _VALVAL    = getDBV<decimal>(row[2]); 
-            _VALTXT    = getDBV<string>(row[3]); 
-            _PRIORITA  = getDBV<int>(row[4]); 
+            _ITMREF    = getDBV<string> (row[0],"ITMREF  "); 
+            _VALCOD    = getDBV<string> (row[1],"VALCOD  "); 
+            _VALVAL    = getDBV<decimal>(row[2],"VALVAL  "); 
+            _VALTXT    = getDBV<string> (row[3],"VALTXT  "); 
+            _PRIORITA  = getDBV<int>    (row[4],"PRIORITA"); 
         }
         public override DataRow GetCyberRow()
         {

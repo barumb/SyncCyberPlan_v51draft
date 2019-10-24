@@ -21,7 +21,7 @@ namespace SyncCyberPlan_lib
         public byte _YATTMARTYC_0;        //Flag Marchio (PLAS)
         public byte _YATTMARHAR_0;        //Flag Marchio (PLAS)
         public short _YATTQUA_0;         //livello qualità (PLAS numero stampo)
-        public string YATTTYP;        //tipo attrezzatura
+        public string _YATTTYP;        //tipo attrezzatura
         public DateTime? _YATTDATSAU_0;  //data riattivazione MArchio Sauro
         public DateTime? _YATTDATTYC_0;  //data riattivazione MArchio Tyco
         public DateTime? _YATTDATHAR_0;  //data riattivazione MArchio Harting
@@ -36,25 +36,25 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            _YATTCOD_0    = getDBV<string>(row[0]);
-            _YATTDES_0    = getDBV<string>(row[1]);
-            _QTY          = getDBV<short>(row[2]);
-            _YATTVIN_0    = getDBV<string>(row[3]);
+            _YATTCOD_0    = getDBV<string>(row[0],"YATTCOD_0");
+            _YATTDES_0    = getDBV<string>(row[1],"YATTDES_0");
+            _QTY          = getDBV<short>( row[2],"QTY      ");
+            _YATTVIN_0    = getDBV<string>(row[3],"YATTVIN_0");
 
-            _YATTMAT_0     = getDBV<decimal>(row[4]);       //peso materozzza (PLAS)
-            _YATTFLGPA66_0 = getDBV<byte>(row[5]);          //flag pa66 (PLAS)
-            _YATTFLGSTH_0  = getDBV<byte>(row[6]);          //flag STH (PLAS)
-            _YATTMARSAU_0  = getDBV<byte>(row[7]);          //Flag Marchio (PLAS)
-            _YATTMARTYC_0  = getDBV<byte>(row[8]);          //Flag Marchio (PLAS)
-            _YATTMARHAR_0  = getDBV<byte>(row[9]);         //Flag Marchio (PLAS)
-            _YATTQUA_0     = getDBV<short>(row[10]);        //livello qualità
-            YATTTYP     = getDBV<string>(row[11]);       
+            _YATTMAT_0     = getDBV<decimal>(row[4] , "YATTMAT_0    ");       //peso materozzza (PLAS)
+            _YATTFLGPA66_0 = getDBV<byte>(   row[5] , "YATTFLGPA66_0");       //flag pa66 (PLAS)
+            _YATTFLGSTH_0  = getDBV<byte>(   row[6] , "YATTFLGSTH_0 ");       //flag STH (PLAS)
+            _YATTMARSAU_0  = getDBV<byte>(   row[7] , "YATTMARSAU_0 ");       //Flag Marchio (PLAS)
+            _YATTMARTYC_0  = getDBV<byte>(   row[8] , "YATTMARTYC_0 ");       //Flag Marchio (PLAS)
+            _YATTMARHAR_0  = getDBV<byte>(   row[9] , "YATTMARHAR_0 ");       //Flag Marchio (PLAS)
+            _YATTQUA_0     = getDBV<short>(  row[10], "YATTQUA_0    ");        //livello qualità
+            _YATTTYP       = getDBV<string>( row[11], "YATTTYP      ");       
 
-            _YATTDATSAU_0 = getSageDate(row[12]);
-            _YATTDATTYC_0 = getSageDate(row[13]);
-            _YATTDATHAR_0 = getSageDate(row[14]);
-            _YATTLOTUM_0     = (row[15] == System.DBNull.Value) ? ' ' : getDBV<string>(row[15])[0];
-            _YATTLEATIM_0 = getDBV<short>(row[16]);
+            _YATTDATSAU_0 = getSageDate(row[12], "YATTDATSAU_0");
+            _YATTDATTYC_0 = getSageDate(row[13], "YATTDATTYC_0");
+            _YATTDATHAR_0 = getSageDate(row[14], "YATTDATHAR_0");
+            _YATTLOTUM_0     = (row[15] == System.DBNull.Value) ? ' ' : getDBV<string>(row[15], "YATTLOTUM_0")[0];
+            _YATTLEATIM_0 = getDBV<short>(row[16], "YATTLEATIM_0");
 
 
             C_CODE                               = EscapeSQL(_YATTCOD_0, 50);      // varchar 50
@@ -119,9 +119,9 @@ namespace SyncCyberPlan_lib
             C_USER_FLAG02                        = 0;                                // bit	
             C_USER_FLAG03                        = 0;                                // bit	
             C_USER_STRING01                      = EscapeSQL(_YATTVIN_0, 29);                // varchar 29
-            C_USER_STRING02                      = getMarchi(YATTTYP, _YATTMARSAU_0,_YATTMARTYC_0,_YATTMARHAR_0);                // varchar 29
+            C_USER_STRING02                      = getMarchi(_YATTTYP, _YATTMARSAU_0,_YATTMARTYC_0,_YATTMARHAR_0);                // varchar 29
             C_USER_STRING03                      = EscapeSQL("", 29);                // varchar 29  SEZIONE per FILO
-            C_USER_STRING04                      = Attrezzature.GetTipoPLastica(YATTTYP, _YATTFLGSTH_0,_YATTFLGPA66_0);                // varchar 29
+            C_USER_STRING04                      = Attrezzature.GetTipoPLastica(_YATTTYP, _YATTFLGSTH_0,_YATTFLGPA66_0);                // varchar 29
             C_USER_STRING05                      = EscapeSQL("", 29);                // varchar 29
             C_USER_STRING06                      = EscapeSQL("", 29);                // varchar 29
             C_USER_STRING07                      = EscapeSQL("", 29);                // varchar 29

@@ -30,22 +30,22 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            ORRTORD = getDBV<string>(row[0]);
-            ORRANNO = getDBV<decimal>(row[1]);
-            ORRPROG = getDBV<decimal>(row[2]);
-            ORRNRIG = getDBV<decimal>(row[3]);
-            ORRCART = getDBV<string>(row[4]);
-            ORRQTAO = getDBV<decimal>(row[5]);
-            ORRQTAS = getDBV<decimal>(row[6]);
-            ORRDCRE = getDBV<decimal>(row[7]);  //DATA
-            ORRDTCO = getDBV<decimal>(row[8]);  //DATA
-            ORRDTUC = getDBV<decimal>(row[9]);  //DATA
-            ORVDTRF = getDBV<decimal>(row[10]); //DATA
-            ORRSTAT = getDBV<string>(row[11]);
-            ORRFLO2 = getDBV<string>(row[12]);
-            ORVOPER = getDBV<string>(row[13]);
-            ORVSTAT = getDBV<string>(row[14]);
-            BPSNUM  = getDBV<string>(row[15]);
+            ORRTORD = getDBV<string>(row[0], "ORRTORD");
+            ORRANNO = getDBV<decimal>(row[1], "ORRANNO");
+            ORRPROG = getDBV<decimal>(row[2], "ORRPROG");
+            ORRNRIG = getDBV<decimal>(row[3], "ORRNRIG");
+            ORRCART = getDBV<string>(row[4], "ORRCART");
+            ORRQTAO = getDBV<decimal>(row[5], "ORRQTAO");
+            ORRQTAS = getDBV<decimal>(row[6], "ORRQTAS");
+            ORRDCRE = getDBV<decimal>(row[7], "ORRDCRE");  //DATA
+            ORRDTCO = getDBV<decimal>(row[8], "ORRDTCO");  //DATA
+            ORRDTUC = getDBV<decimal>(row[9], "ORRDTUC");  //DATA
+            ORVDTRF = getDBV<decimal>(row[10], "ORVDTRF"); //DATA
+            ORRSTAT = getDBV<string>(row[11], "ORRSTAT");
+            ORRFLO2 = getDBV<string>(row[12], "ORRFLO2");
+            ORVOPER = getDBV<string>(row[13], "ORVOPER");
+            ORVSTAT = getDBV<string>(row[14], "ORVSTAT");
+            BPSNUM = getDBV<string>(row[15], "BPSNUM");
 
 
 

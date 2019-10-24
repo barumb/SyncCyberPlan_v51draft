@@ -91,14 +91,14 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            _MFCTORD = getDBV<string>(row[0]);
-            _MFCAORD = getDBV<decimal>(row[1]);
-            _MFCPORD = getDBV<decimal>(row[2]);
-            _MFCCART = getDBV<string>(row[3]);
-            _MFCCOMP = getDBV<string>(row[4]);
-            _MFCQTRC = getDBV<decimal>(row[5]);
-            _MFCSTAT = getDBV<string>(row[6]);
-            _MFVWKCT = getDBV<string>(row[7]);
+            _MFCTORD = getDBV<string>(row[0], "MFCTORD");
+            _MFCAORD = getDBV<decimal>(row[1], "MFCAORD");
+            _MFCPORD = getDBV<decimal>(row[2], "MFCPORD");
+            _MFCCART = getDBV<string>(row[3], "MFCCART");
+            _MFCCOMP = getDBV<string>(row[4], "MFCCOMP");
+            _MFCQTRC = getDBV<decimal>(row[5], "MFCQTRC");
+            _MFCSTAT = getDBV<string>(row[6], "MFCSTAT");
+            _MFVWKCT = getDBV<string>(row[7], "MFVWKCT");
 
 
 

@@ -99,21 +99,21 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            SOHNUM_0 = getDBV<string>(row[0]);
-            SOPLIN_0 = getDBV<int>(row[1]);
-            POHTYP_0 = getDBV<byte>(row[2]);
-            ITMREF_0 = getDBV<string>(row[3]);
-            SALFCY_0 = getDBV<string>(row[4]);
-            QTY_0 = getDBV<decimal>(row[5]);
-            DLVQTY_0 = getDBV<decimal>(row[6]);
+            SOHNUM_0 = getDBV<string>(row[0], "SOHNUM_0");
+            SOPLIN_0 = getDBV<int>(row[1], "SOPLIN_0");
+            POHTYP_0 = getDBV<byte>(row[2], "POHTYP_0");
+            ITMREF_0 = getDBV<string>(row[3], "ITMREF_0");
+            SALFCY_0 = getDBV<string>(row[4], "SALFCY_0");
+            QTY_0 = getDBV<decimal>(row[5], "QTY_0");
+            DLVQTY_0 = getDBV<decimal>(row[6], "DLVQTY_0");
             CREDAT_0 = (DateTime)row[7];
             SHIDAT_0 = (DateTime)row[8];
             DEMDLVDAT_0 = (DateTime)row[9];
             EXTDLVDAT_0 = (DateTime)row[10];
             YORDDAT_0 = (DateTime)row[11];
             SOQSTA_0 = (int)row[12];
-            CREUSR_0 = getDBV<string>(row[13]);
-            BPSNUM_0 = getDBV<string>(row[14]);
+            CREUSR_0 = getDBV<string>(row[13], "CREUSR_0");
+            BPSNUM_0 = getDBV<string>(row[14], "BPSNUM_0");
 
 
             C_CODE                     = EscapeSQL(SOHNUM_0 + SOPLIN_0.ToString("000000"), 30); //varchar  30
@@ -448,7 +448,7 @@ where T.C_CODE is null ";
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "ODV =" + getDBV<string>(row[0]) + "  non caricato; manca codice cliente =" + getDBV<string>(row[1]) + Utils.NewLineMail();
+                testo_mail += "ODV =" + getDBV<string>(row[0], "C_CODE") + "  non caricato; manca codice cliente =" + getDBV<string>(row[1], "C_CUSTOMER_CODE") + Utils.NewLineMail();
             }
 
             Utils.SendMail_IT(Settings.GetSettings(), testo_mail, "ODV");

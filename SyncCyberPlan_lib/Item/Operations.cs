@@ -101,35 +101,35 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            MFHTORD = getDBV<string>(row[0]);
-            MFHAORD = getDBV<decimal>(row[1]);
-            MFHPORD = getDBV<decimal>(row[2]);
-            MFHTCOM = getDBV<string>(row[3]);
-            MFHACOM = getDBV<decimal>(row[4]);
-            MFHPCOM = getDBV<decimal>(row[5]);
-            MFHSCOM = getDBV<decimal>(row[6]);
-            MFHCART = getDBV<string>(row[7]);
-            MFHQTRC = getDBV<decimal>(row[8]);
-            MFHDCRE = getDBV<decimal>(row[9]);
-            MFHSTAT = getDBV<string>(row[10]);
-            MFVDINI = getDBV<decimal>(row[11]);
-            MFVDEND = getDBV<decimal>(row[12]);
-            MFVSTAV = getDBV<string>(row[13]);
-            MFHQTPR = getDBV<decimal>(row[14]);
-            MFVQTSC = getDBV<decimal>(row[15]);
-            MFVMACN = getDBV<string>(row[16]);
-            MFVCSTM = getDBV<string>(row[17]);
-            MFVWRKC = getDBV<string>(row[18]);
-            MFVWKCT = getDBV<string>(row[19]);
+            MFHTORD = getDBV<string>(row[0], "MFHTORD");
+            MFHAORD = getDBV<decimal>(row[1], "MFHAORD");
+            MFHPORD = getDBV<decimal>(row[2], "MFHPORD");
+            MFHTCOM = getDBV<string>(row[3], "MFHTCOM");
+            MFHACOM = getDBV<decimal>(row[4], "MFHACOM");
+            MFHPCOM = getDBV<decimal>(row[5], "MFHPCOM");
+            MFHSCOM = getDBV<decimal>(row[6], "MFHSCOM");
+            MFHCART = getDBV<string>(row[7], "MFHCART");
+            MFHQTRC = getDBV<decimal>(row[8], "MFHQTRC");
+            MFHDCRE = getDBV<decimal>(row[9], "MFHDCRE");
+            MFHSTAT = getDBV<string>(row[10], "MFHSTAT");
+            MFVDINI = getDBV<decimal>(row[11], "MFVDINI");
+            MFVDEND = getDBV<decimal>(row[12], "MFVDEND");
+            MFVSTAV = getDBV<string>(row[13], "MFVSTAV");
+            MFHQTPR = getDBV<decimal>(row[14], "MFHQTPR");
+            MFVQTSC = getDBV<decimal>(row[15], "MFVQTSC");
+            MFVMACN = getDBV<string>(row[16], "MFVMACN");
+            MFVCSTM = getDBV<string>(row[17], "MFVCSTM");
+            MFVWRKC = getDBV<string>(row[18], "MFVWRKC");
+            MFVWKCT = getDBV<string>(row[19], "MFVWKCT");
 
-            MFVUTLM = getDBV<string>(row[20]);   //unita di misura tempo per un pezzo/via  1=ORE  2=100MI-HR   3 Minuti 4 giorni  5 settimane
-            MFVAMPT = getDBV<decimal>(row[21]);  //tempo per un pezzo/via
-            MFVUTSE = getDBV<string>(row[22]);   //unita di misura tempo di setup
-            MFVASET = getDBV<decimal>(row[23]);  //tempo di setup
+            MFVUTLM = getDBV<string>(row[20], "MFVUTLM");   //unita di misura tempo per un pezzo/via  1=ORE  2=100MI-HR   3 Minuti 4 giorni  5 settimane
+            MFVAMPT = getDBV<decimal>(row[21], "MFVAMPT");  //tempo per un pezzo/via
+            MFVUTSE = getDBV<string>(row[22], "MFVUTSE");   //unita di misura tempo di setup
+            MFVASET = getDBV<decimal>(row[23], "MFVASET");  //tempo di setup
 
-            FLVPZ = getDBV<string>(row[24]);  //flag vie pezzi dell'attrezzatura
+            FLVPZ = getDBV<string>(row[24], "FLVPZ");  //flag vie pezzi dell'attrezzatura
 
-            NRVIE = (int)getDBV<decimal>(row[25]);     //numero vie totali dell'articolo
+            NRVIE = (int)getDBV<decimal>(row[25], "NRVIE");     //numero vie totali dell'articolo
 
 
             C_ORDER_CODE              = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30); 

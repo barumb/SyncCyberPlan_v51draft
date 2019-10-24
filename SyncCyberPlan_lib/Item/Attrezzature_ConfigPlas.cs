@@ -31,17 +31,16 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-
-            YATTCOD_0        = getDBV<string>(row[0]) ;
-            YATPVER_0        = getDBV<string>(row[1]) ;
-            YINDICE_0        = getDBV<short>(row[2])  ;
-            YATPIMP_0        = getDBV<string>(row[3]) ;
-            YATPLENMIN_0     = getDBV<decimal>(row[4]);
-            YATPLENMAX_0     = getDBV<decimal>(row[5]);
-            YATPVIEMIN_0     = getDBV<short>(row[6]);
-            YATPVIEMAX_0     = getDBV<short>(row[7]);
-            YATPSTA_0        = getDBV<byte>(row[8]);
-            YATPDATRIA_0     = getSageDate(row[9]);
+            YATTCOD_0        = getDBV<string>(row[0], "YATTCOD_0");
+            YATPVER_0        = getDBV<string>(row[1], "YATPVER_0");
+            YINDICE_0        = getDBV<short>(row[2], "YINDICE_0");
+            YATPIMP_0        = getDBV<string>(row[3], "YATPIMP_0");
+            YATPLENMIN_0     = getDBV<decimal>(row[4], "YATPLENMIN_0");
+            YATPLENMAX_0     = getDBV<decimal>(row[5], "YATPLENMAX_0");
+            YATPVIEMIN_0     = getDBV<short>(row[6], "YATPVIEMIN_0");
+            YATPVIEMAX_0     = getDBV<short>(row[7], "YATPVIEMAX_0");
+            YATPSTA_0        = getDBV<byte>(row[8], "YATPSTA_0");
+            YATPDATRIA_0     = getSageDate(row[9], "YATPDATRIA_0");
         }
         public override DataRow GetCyberRow()
         {

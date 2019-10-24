@@ -48,12 +48,12 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            SPRCART = getDBV<string>(row[0]);
-            SPRCOMP = getDBV<string>(row[1]);
-            SPRSEQU = getDBV<string>(row[2]);
-            SPRFLPH = getDBV<string>(row[3])[0];
-            SPRQIMP = getDBV<decimal>(row[4]);
-            SPRSTAT = getDBV<string>(row[5]);
+            SPRCART = getDBV<string> (row[0], "SPRCART");
+            SPRCOMP = getDBV<string> (row[1], "SPRCOMP");
+            SPRSEQU = getDBV<string> (row[2], "SPRSEQU");
+            SPRFLPH = getDBV<string> (row[3], "SPRFLPH")[0];
+            SPRQIMP = getDBV<decimal>(row[4], "SPRQIMP");
+            SPRSTAT = getDBV<string> (row[5], "SPRSTAT");
 
             int tmp;
             if (!int.TryParse(SPRSEQU, out tmp))
@@ -217,7 +217,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "codice =" + getDBV<string>(row[0]) + "  componente=" + getDBV<string>(row[1]) + ";  il componente non è presente in anagrafica o non è rilasciato" + Utils.NewLineMail();
+                testo_mail += "codice =" + getDBV<string>(row[0], "C_BOM_CODE") + "  componente =" + getDBV<string>(row[1], "C_COMPONENT_CODE") + ";  il componente non è presente in anagrafica o non è rilasciato" + Utils.NewLineMail();
             }
 
             //--verifico che tutti i codici con distinta base siano presenti in anagrafica
@@ -234,7 +234,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "codice =" + getDBV<string>(row[0]) + " ha distinta base ma non è presente in anagrafica o non è rilasciato" + Utils.NewLineMail();
+                testo_mail += "codice =" + getDBV<string>(row[0], "C_BOM_CODE") + " ha distinta base ma non è presente in anagrafica o non è rilasciato" + Utils.NewLineMail();
             }
 
 
@@ -258,7 +258,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                string articolo = getDBV<string>(row[0]);
+                string articolo = getDBV<string>(row[0], "C_CODE");
                 if (!articolo.StartsWith("WR000"))
                 {
                     testo_mail += "codice =" + articolo + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + Utils.NewLineMail();
@@ -342,7 +342,7 @@ C_WAREHOUSE_CODE = '" + __MAGAZZINO_INTERNO + @"' and C_BOM_CODE ='%%2%%' ";
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                _lista_articoli_rilasciati_in_sage.Add(Item.GetDBV<string>(row[0]));
+                _lista_articoli_rilasciati_in_sage.Add(Item.GetDBV<string>(row[0],"articolo"));
             }
             return _lista_articoli_rilasciati_in_sage;
         }
@@ -363,7 +363,7 @@ C_WAREHOUSE_CODE = '" + __MAGAZZINO_INTERNO + @"' and C_BOM_CODE ='%%2%%' ";
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                _lista_articoli_fornitori_sage.Add(Item.GetDBV<string>(row[0]), Item.GetDBV<string>(row[1]));
+                _lista_articoli_fornitori_sage.Add(Item.GetDBV<string>(row[0], "ITMREF_0"), Item.GetDBV<string>(row[1], "BPSNUM_0"));
             }
             return _lista_articoli_fornitori_sage;
         }

@@ -56,22 +56,22 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            _WST_0      = getDBV<string>(row[0]); //macchina (CDL in sage)
-            _TEXTE_0    = getDBV<string>(row[1]); //
-            _WCR_0      = getDBV<string>(row[2]); //reparto (CDC in Sage)
-            _YGRP_0     = getDBV<string>(row[3]); //gruppo macchine
-            _YBPS_0     = getDBV<string>(row[4]); //fornitore
-            _YMRPCDL_0  = getDBV<string>(row[5]); //CDL per mrp
+            _WST_0      = getDBV<string>(row[0], "WST_0"); //macchina (CDL in sage)
+            _TEXTE_0    = getDBV<string>(row[1], "TEXTE_0"); //
+            _WCR_0      = getDBV<string>(row[2], "WCR_0"); //reparto (CDC in Sage)
+            _YGRP_0     = getDBV<string>(row[3], "YGRP_0"); //gruppo macchine
+            _YBPS_0     = getDBV<string>(row[4], "YBPS_0"); //fornitore
+            _YMRPCDL_0  = getDBV<string>(row[5], "YMRPCDL_0"); //CDL per mrp
 
-            _YPLASTH_0    = getDBV<byte>(row[6]);
-            _YPLAPA66_0   = getDBV<byte>(row[7]);
-            _YPLADIV_0    = getDBV<byte>(row[8]);
-            _YPLAGRMIN_0  = getDBV<decimal>(row[9]);
-            _YPLAGRMAX_0  = getDBV<decimal>(row[10]);
-            _YQTASETCLF   = getDBV<int>(row[11]);
-            _WSTTYP_0     = getDBV<byte>(row[12]);
-            _YMACLIN_0    = getDBV<string>(row[13]);
-            _YPIEFLG_0    = getDBV<byte>(row[14]);
+            _YPLASTH_0    = getDBV<byte>(row[6], "YPLASTH_0");
+            _YPLAPA66_0   = getDBV<byte>(row[7], "YPLAPA66_0");
+            _YPLADIV_0    = getDBV<byte>(row[8], "YPLADIV_0");
+            _YPLAGRMIN_0  = getDBV<decimal>(row[9], "YPLAGRMIN_0");
+            _YPLAGRMAX_0  = getDBV<decimal>(row[10], "YPLAGRMAX_0");
+            _YQTASETCLF   = getDBV<int>(row[11], "YQTASETCLF");
+            _WSTTYP_0     = getDBV<byte>(row[12], "WSTTYP_0");
+            _YMACLIN_0    = getDBV<string>(row[13], "YMACLIN_0");
+            _YPIEFLG_0    = getDBV<byte>(row[14], "YPIEFLG_0");
 
 
             C_CODE = _WST_0;           //varchar](30) NOT NULL,

@@ -154,7 +154,7 @@ namespace SyncCyberPlan_lib
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected T getDBV<T>(object obj)
+        protected T getDBV<T>(object obj, string nomecampo)
         {
             T ret;
             if (!DBNull.Value.Equals(obj))
@@ -172,18 +172,20 @@ namespace SyncCyberPlan_lib
             else
             {
                 ret = default(T);
-                _logger.Debug(GetID() + " campo " + typeof(T).ToString() + " is DBnull ");
+                //_logger.Debug(GetID() + " campo " + typeof(T).ToString() + " is DBnull ");
+                _logger.Debug(" campo " + nomecampo + " (" + typeof(T).Name + ") is DBnull ");
             }
             return ret;
         }
-        protected char getDBV_char(object obj)
+        protected char getDBV_char(object obj, string nomecampo)
         {
-            return (obj == System.DBNull.Value) ? ' ' : getDBV<string>(obj)[0];
+            return (obj == System.DBNull.Value) ? ' ' : getDBV<string>(obj, nomecampo)[0];
         }
-        protected DateTime? getSageDate(object data)
+        protected DateTime? getSageDate(object data, string nomecampo)
         {
             if (data is System.DBNull)
             {
+                _logger.Debug(" campo " + nomecampo + " (datetime) is DBnull ");
                 return null;
             }
             DateTime tmp = (DateTime)data;
@@ -193,7 +195,7 @@ namespace SyncCyberPlan_lib
             }
             else return tmp;
         }
-        static public T GetDBV<T>(object obj)
+        static public T GetDBV<T>(object obj, string nomecampo)
         {
             T ret ;
             if (!DBNull.Value.Equals(obj))
@@ -208,7 +210,8 @@ namespace SyncCyberPlan_lib
             else
             {
                 ret = default(T);
-                _logger.Debug(" campo " + typeof(T).ToString()+ " is DBnull ");
+                //_logger.Debug(" campo " + typeof(T).Name + " is DBnull ");
+                _logger.Debug(" campo " + nomecampo + " (" + typeof(T).Name + ") is DBnull ");
             }
             return ret;
         }

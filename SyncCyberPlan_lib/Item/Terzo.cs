@@ -38,14 +38,14 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            BPRNUM_0 = getDBV<string>(row[0]); //codice terzo
-            BPRNAM_0 = getDBV<string>(row[1]); //ragione sociale
-            BPCFLG_0 = getDBV<byte>(row[2]);  //is customer if 2
-            BPSFLG_0 = getDBV<byte>(row[3]);  //is supplier if 2
-            BPAADDLIG_0 = getDBV<string>(row[4]); //righe indirizzo
-            BPAADDLIG_1 = getDBV<string>(row[5]); //righe indirizzo
-            BPAADDLIG_2 = getDBV<string>(row[6]);
-            YBPSOLD_0   = getDBV<string>(row[7]);
+            BPRNUM_0 = getDBV<string>(row[0], "BPRNUM_0"); //codice terzo
+            BPRNAM_0 = getDBV<string>(row[1], "BPRNAM_0"); //ragione sociale
+            BPCFLG_0 = getDBV<byte>(row[2], "BPCFLG_0");  //is customer if 2
+            BPSFLG_0 = getDBV<byte>(row[3], "BPSFLG_0");  //is supplier if 2
+            BPAADDLIG_0 = getDBV<string>(row[4], "BPAADDLIG_0"); //righe indirizzo
+            BPAADDLIG_1 = getDBV<string>(row[5], "BPAADDLIG_1"); //righe indirizzo
+            BPAADDLIG_2 = getDBV<string>(row[6], "BPAADDLIG_2");
+            YBPSOLD_0   = getDBV<string>(row[7], "YBPSOLD_0");
 
 
 

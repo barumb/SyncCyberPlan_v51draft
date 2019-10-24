@@ -93,29 +93,29 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            MFHTORD = getDBV<string>(row[0]);
-            MFHAORD = getDBV<decimal>(row[1]);
-            MFHPORD = getDBV<decimal>(row[2]);
-            MFHTCOM = getDBV<string>(row[3]);
-            MFHACOM = getDBV<decimal>(row[4]);
-            MFHPCOM = getDBV<decimal>(row[5]);
-            MFHSCOM = getDBV<decimal>(row[6]);
-            MFHCART = getDBV<string>(row[7]);
-            MFHQTRC = getDBV<decimal>(row[8]);
-            MFHDCRE = getDBV<decimal>(row[9]);
-            MFHSTAT = getDBV<string>(row[10]);   
-            MFVDINI = getDBV<decimal>(row[11]);
-            MFVDEND = getDBV<decimal>(row[12]);
-            MFVSTAV = getDBV<string>(row[13]);
-            MFHQTPR = getDBV<decimal>(row[14]);
-            MFVQTSC = getDBV<decimal>(row[15]);
+            MFHTORD = getDBV<string>(row[0], "MFHTORD");
+            MFHAORD = getDBV<decimal>(row[1], "MFHAORD");
+            MFHPORD = getDBV<decimal>(row[2], "MFHPORD");
+            MFHTCOM = getDBV<string>(row[3], "MFHTCOM");
+            MFHACOM = getDBV<decimal>(row[4], "MFHACOM");
+            MFHPCOM = getDBV<decimal>(row[5], "MFHPCOM");
+            MFHSCOM = getDBV<decimal>(row[6], "MFHSCOM");
+            MFHCART = getDBV<string>(row[7], "MFHCART");
+            MFHQTRC = getDBV<decimal>(row[8], "MFHQTRC");
+            MFHDCRE = getDBV<decimal>(row[9], "MFHDCRE");
+            MFHSTAT = getDBV<string>(row[10], "MFHSTAT");
+            MFVDINI = getDBV<decimal>(row[11], "MFVDINI");
+            MFVDEND = getDBV<decimal>(row[12], "MFVDEND");
+            MFVSTAV = getDBV<string>(row[13], "MFVSTAV");
+            MFHQTPR = getDBV<decimal>(row[14], "MFHQTPR");
+            MFVQTSC = getDBV<decimal>(row[15], "MFVQTSC");
 
-            MFVUTLM = getDBV<string>(row[16]);
-            MFVAMPT = getDBV<decimal>(row[17]);
-            MFVUTSE = getDBV<string>(row[18]);
-            MFVASET = getDBV<decimal>(row[19]);
+            MFVUTLM = getDBV<string>(row[16], "MFVUTLM");
+            MFVAMPT = getDBV<decimal>(row[17], "MFVAMPT");
+            MFVUTSE = getDBV<string>(row[18], "MFVUTSE");
+            MFVASET = getDBV<decimal>(row[19], "MFVASET");
 
-            MFVWRKC = getDBV<string>(row[20]);
+            MFVWRKC = getDBV<string>(row[20], "MFVWRKC");
 
 
 
@@ -231,7 +231,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con ordine di vendita non presente (forse già chiuso)" + Utils.NewLineMail();
+                testo_mail += "OPR =" + getDBV<string>(row[0], "C_CODE") + "  ODV =" + getDBV<string>(row[1], "C_CORDER_CODE") + "  articolo " + getDBV<string>(row[2], "C_ITEM_CODE") + "; OPR aperto con ordine di vendita non presente (forse già chiuso)" + Utils.NewLineMail();
             }
 
 
@@ -260,7 +260,7 @@ namespace SyncCyberPlan_lib
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                testo_mail += "OPR =" + getDBV<string>(row[0]) + "  ODV=" + getDBV<string>(row[1]) + "  articolo " + getDBV<string>(row[2]) + "; OPR aperto con articolo non rilasciato" + Utils.NewLineMail();
+                testo_mail += "OPR =" + getDBV<string>(row[0], "C_CODE") + "  ODV =" + getDBV<string>(row[1], "C_CORDER_CODE") + "  articolo " + getDBV<string>(row[2],"C_ITEM_CODE") + "; OPR aperto con articolo non rilasciato" + Utils.NewLineMail();
             }
 
 

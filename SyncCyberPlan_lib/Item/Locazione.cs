@@ -28,9 +28,9 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            _TABCTAB = getDBV<string>(row[0]);
-            _TABSTAB = getDBV<string>(row[1]);
-            _TABDESC = getDBV<string>(row[2]);
+            _TABCTAB = getDBV<string>(row[0], "TABCTAB");
+            _TABSTAB = getDBV<string>(row[1],"TABSTAB");
+            _TABDESC = getDBV<string>(row[2],"TABDESC");
             //_TABDESI = getDBV<string>(row[3]);
             //_TABDAGG = getDBV<string>(row[4]);
             //_TABFLG1 = getDBV<string>(row[5]);

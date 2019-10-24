@@ -197,7 +197,7 @@ order by PQMCART
             while (dtr.Read())
             {
                 dtr.GetValues(row);
-                ret.Add(Item.GetDBV<string>(row[0]), Item.GetDBV<decimal>(row[1]));
+                ret.Add(Item.GetDBV<string>(row[0], "ORRCART"), Item.GetDBV<decimal>(row[1], "Sum(ORRQACA)"));
             }
             return ret;
         }

@@ -49,18 +49,18 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            _ITMREF_0 = getDBV<string>(row[0]);
-            _YATTCOD_0 = getDBV<string>(row[1]);
-            _YPRI_0 = getDBV<short>(row[2]);
-            _YENAFLG_0 = getDBV<byte>(row[3]);
-            _YATTTYP_0  = getDBV<string>(row[4]);
-            _YPLAIMP_0 = getDBV<short>(row[5]);
-            _YPLADIV_0 = getDBV<byte>(row[6]);
-            //_YCAD_0 = getDBV<decimal>(row[7]);
-            //_YCADTEM_0 = getDBV<int>(row[8]);
-            _ITMSTA_0 = getDBV<byte>(row[7]);
-            _YWCR_0 = getDBV<string>(row[8]);
-            _YATTDAT_0 = getSageDate(row[9]); //data riattivazione dell'attrezzatura
+            _ITMREF_0             = getDBV<string>(row[0], "ITMREF_0");
+            _YATTCOD_0            = getDBV<string>(row[1], "YATTCOD_0");
+            _YPRI_0               = getDBV<short>(row[2], "YPRI_0");
+            _YENAFLG_0            = getDBV<byte>(row[3], "YENAFLG_0");
+            _YATTTYP_0            = getDBV<string>(row[4], "YATTTYP_0");
+            _YPLAIMP_0            = getDBV<short>(row[5], "YPLAIMP_0");
+            _YPLADIV_0            = getDBV<byte>(row[6], "YPLADIV_0");
+            //_YCAD_0             = getDBV<decimal>(row[7], "");
+            //_YCADTEM_0          = getDBV<int>(row[8], "");
+            _ITMSTA_0             = getDBV<byte>(row[7], "ITMSTA_0");
+            _YWCR_0               = getDBV<string>(row[8], "YWCR_0");
+            _YATTDAT_0            = getSageDate(row[9], "YATTDAT_0"); //data riattivazione dell'attrezzatura
 
             if (_YATTCOD_0 is null)
             {

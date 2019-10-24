@@ -48,16 +48,16 @@ namespace SyncCyberPlan_lib
         }
         public override void Init(object[] row)
         {
-            _YCONATT_0        = getDBV<string>(row[0]);
-            _YCONGRP_0        = getDBV<string>(row[1]);
-            _WST_0            = getDBV<string>(row[2]);
-            _YCONLOTSIZ_0     = getDBV<decimal>(row[3]);
-            //_YCONLOTUM_0      = getDBV<string>(row[4]);
-            _YCONCAD_0        = getDBV<decimal>(row[4]);
-            _YCONCADTIM_0     = getDBV<int>(row[5]);
-            _YCONENAFLG_0     = getDBV<byte>(row[6]);
-            _YCONDATRIA_0     = getSageDate(row[7]);
-            _WCR_0            = getDBV<string>(row[8]);
+            _YCONATT_0        = getDBV<string>(row[0], "YCONATT_0");
+            _YCONGRP_0        = getDBV<string>(row[1], "YCONGRP_0");
+            _WST_0            = getDBV<string>(row[2], "WST_0");
+            _YCONLOTSIZ_0     = getDBV<decimal>(row[3], "YCONLOTSIZ_0");
+            //_YCONLOTUM_0      = getDBV<string>(row[4], "");
+            _YCONCAD_0        = getDBV<decimal>(row[4], "YCONCAD_0");
+            _YCONCADTIM_0     = getDBV<int>(row[5], "YCONCADTIM_0");
+            _YCONENAFLG_0     = getDBV<byte>(row[6], "YCONENAFLG_0");
+            _YCONDATRIA_0     = getSageDate(row[7], "YCONDATRIA_0");
+            _WCR_0            = getDBV<string>(row[8], "WCR_0");
 
 
             C_ROUTING_CODE = EscapeSQL(_YCONATT_0, 51);      // varchar 51  

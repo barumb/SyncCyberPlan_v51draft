@@ -29,20 +29,20 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            POHNUM_0 = getDBV<string>(row[0]);
-            POPLIN_0 = getDBV<int>(row[1]);
-            POHTYP_0 = getDBV<byte>(row[2]);
-            ITMREF_0 = getDBV<string>(row[3]);
-            POHFCY_0 = getDBV<string>(row[4]);
-            QTYSTU_0 = getDBV<decimal>(row[5]);
-            RCPQTYSTU_0 = getDBV<decimal>(row[6]);
-            CREDAT_0 = getSageDate(row[7]);
-            ORDDAT_0 = getSageDate(row[8]);
-            EXTRCPDAT_0 = getSageDate(row[9]);
-            LINCLEFLG_0 = getDBV<byte>(row[10]);
-            LINAMT_0 = (float)getDBV<decimal>(row[11]);
-            BPSNUM_0 = getDBV<string>(row[12]);
-            YPOHTYP_0 = getDBV<string>(row[13]);
+            POHNUM_0 = getDBV<string>(row[0], "POHNUM_0");
+            POPLIN_0 = getDBV<int>(row[1], "POPLIN_0");
+            POHTYP_0 = getDBV<byte>(row[2], "POHTYP_0");
+            ITMREF_0 = getDBV<string>(row[3], "ITMREF_0");
+            POHFCY_0 = getDBV<string>(row[4], "POHFCY_0");
+            QTYSTU_0 = getDBV<decimal>(row[5], "QTYSTU_0");
+            RCPQTYSTU_0 = getDBV<decimal>(row[6], "RCPQTYSTU_0");
+            CREDAT_0 = getSageDate(row[7], "CREDAT_0");
+            ORDDAT_0 = getSageDate(row[8], "ORDDAT_0");
+            EXTRCPDAT_0 = getSageDate(row[9], "EXTRCPDAT_0");
+            LINCLEFLG_0 = getDBV<byte>(row[10], "LINCLEFLG_0");
+            LINAMT_0 = (float)getDBV<decimal>(row[11], "LINAMT_0");
+            BPSNUM_0 = getDBV<string>(row[12], "BPSNUM_0");
+            YPOHTYP_0 = getDBV<string>(row[13], "YPOHTYP_0");
 
 
 

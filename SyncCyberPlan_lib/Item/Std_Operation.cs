@@ -61,18 +61,18 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            _COD_ATTREZZ          = getDBV<string>(row[0]);
-            _DESC_ATTREZZ         = getDBV<string>(row[1]);
-            _YSTAIMP_0            = (int)getDBV<short>(row[2]);
-            _YSTASETUP_0          = getDBV<decimal>(row[3]);
-            _YSTACONFIG_0         = getDBV<decimal>(row[4]);
-            _YCONLOTSIZ_0         = getDBV<decimal>(row[5]);
-            _YGRP_0               = getDBV<string>(row[6]);      // Centro di lavoro
-            _YCONCADTIM_0         = getDBV<int>(row[7]);          // tempo della CADENZA 
-            _YATTLOTUM_0          = getDBV<string>(row[8]);      // Vie/pezzo
-            _Yfornitore_BPS_0     = getDBV<string>(row[9]);      // fornitore
-            _YATTWCR_0           = getDBV<string>(row[10]);     // reparto 
-            _YCONCAD_0            = getDBV<decimal>(row[11]);   //  CADENZA            
+            _COD_ATTREZZ          = getDBV<string>(row[0], "COD_ATTREZZ");
+            _DESC_ATTREZZ         = getDBV<string>(row[1], "DESC_ATTREZZ");
+            _YSTAIMP_0            = (int)getDBV<short>(row[2], "YSTAIMP_0");
+            _YSTASETUP_0          = getDBV<decimal>(row[3], "YSTASETUP_0");
+            _YSTACONFIG_0         = getDBV<decimal>(row[4], "YSTACONFIG_0");
+            _YCONLOTSIZ_0         = getDBV<decimal>(row[5], "YCONLOTSIZ_0");
+            _YGRP_0               = getDBV<string>(row[6], "YGRP_0");      // Centro di lavoro
+            _YCONCADTIM_0         = getDBV<int>(row[7], "YCONCADTIM_0");          // tempo della CADENZA 
+            _YATTLOTUM_0          = getDBV<string>(row[8], "YATTLOTUM_0");      // Vie/pezzo
+            _Yfornitore_BPS_0     = getDBV<string>(row[9], "Yfornitore_BPS_0");      // fornitore
+            _YATTWCR_0           = getDBV<string>(row[10], "YATTWCR_0");     // reparto 
+            _YCONCAD_0            = getDBV<decimal>(row[11], "YCONCAD_0");   //  CADENZA          
 
             C_ROUTING_CODE = EscapeSQL(_COD_ATTREZZ, 51);                    //varchar    51
             C_ROUTING_ALT = EscapeSQL("0", 9);                              //varchar    9

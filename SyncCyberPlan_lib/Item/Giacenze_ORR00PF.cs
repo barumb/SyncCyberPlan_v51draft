@@ -24,14 +24,14 @@ namespace SyncCyberPlan_lib
 
         public override void Init(object[] row)
         {
-            ORRTORD = getDBV<string>(row[0]);
+            ORRTORD = getDBV<string>(row[0], "ORRTORD");
             ORRANNO = (decimal)row[1];
             ORRPROG = (decimal)row[2];
             ORRNRIG = (decimal)row[3];
-            ORRCART = getDBV<string>(row[4]);
-            ORRSTAT = getDBV<string>(row[5]);
+            ORRCART = getDBV<string>(row[4], "ORRCART");
+            ORRSTAT = getDBV<string>(row[5], "ORRSTAT");
             ORRQACA = (decimal)row[6];
-            ORVSTAT = getDBV<string>(row[7]);
+            ORVSTAT = getDBV<string>(row[7], "ORVSTAT");
 
 
             C_CODE = EscapeSQL(ORRTORD + ORRANNO.ToString("00") + ORRPROG.ToString("000000") + ORRNRIG.ToString("0000"), 30);                          //varchar  30
