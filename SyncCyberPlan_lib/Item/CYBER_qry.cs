@@ -39,14 +39,73 @@ namespace SyncCyberPlan_lib
 
 
         static public void FinalCheck()
-        {   
+        {
+            FinalCheck_ARTICOLI_con_reparto_non_coerente();
+            FinalCheck_ATTR_senza_macchina();
             FinalCheck_PLAS_senza_cicli();
             FinalCheck_Ordini_di_Articoli_senza_cicli();
+        }
+        static private void FinalCheck_ARTICOLI_con_reparto_non_coerente()
+        {
+            DBHelper2 db = DBHelper2.getSageDBHelper("SAURO");
+            string command = @" select F.YWCR_0, F.ITMREF_0, AM.MACREP_0, AM.MAC_0 from SAURO.ITMFACILIT F
+join SAURO.ITMMASTER M on F.ITMREF_0=M.ITMREF_0
+left join SAURO.YPRDITM P on P.ITMREF_0=F.ITMREF_0 
+left join SAURO.YPRDAM AM on P.YATTCOD_0=AM.YCONATT_0
+where F.STOFCY_0='ITS01' and F.YWCR_0<>AM.MACREP_0 and MACREP_0<>'CL' and ITMSTA_0=1
+order by F.YWCR_0, AM.MACREP_0 ";
+
+            _logger.Info("start execution");
+
+            string testo_mail = "";
+            DbDataReader dtr = db.GetReaderSelectCommand(command);
+            object[] row = new object[dtr.FieldCount];
+
+            string reparto_articolo = "", articolo = "";
+            string reparto_macchina="", macchina = "";
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                reparto_articolo = (string)row[0];
+                articolo = (string)row[1];
+                reparto_macchina= (string)row[2];
+                macchina = (string)row[3];
+                testo_mail += articolo.PadRight(40) + " ha reparto " + reparto_articolo.PadRight(10) + " ma la macchina " + macchina.PadRight(20) + " ha reparto " + reparto_macchina+ Utils.NewLineMail();
+            }
+
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "Articoli ATTIVI con reparto non coerente con reparto macchina");
+            _logger.Info("end execution");
+        }
+        static private void FinalCheck_ATTR_senza_macchina()
+        {
+            DBHelper2 db = DBHelper2.getSageDBHelper("SAURO");
+            string command = @" select YATTCOD_0, YATTDES_0 from SAURO.YPRDATT A
+left join SAURO.YPRDCONF C on A.YATTCOD_0=C.YCONATT_0 and C.YCONENAFLG_0=2
+where A.YATTENAFLG_0=2 and C.YCONATT_0 is null
+order by YSTACOD_0 ";
+
+            _logger.Info("start execution");
+
+            string testo_mail = "";
+            DbDataReader dtr = db.GetReaderSelectCommand(command);
+            object[] row = new object[dtr.FieldCount];
+
+            string attrezzatura = "", desc="";
+            while (dtr.Read())
+            {
+                dtr.GetValues(row);
+                attrezzatura = (string)row[0];
+                desc = (string)row[1];
+                testo_mail += "attrezzatura senza macchine associate: " + attrezzatura.PadRight(40) + desc + Utils.NewLineMail();
+            }
+
+            Utils.SendMail_Plan(Settings.GetSettings(), testo_mail, "Attrezzature ATTIVE senza macchine associate");
+            _logger.Info("end execution");
         }
         static private void FinalCheck_Ordini_di_Articoli_senza_cicli()
         {
             DBHelper2 db = DBHelper2.getCyberDBHelper();
-            string command = @"  Select C_CODE,C_CORDER_CODE,C_ITEM_CODE,C_M_B  --, ope.C_USER_STRING01, ope.C_USER_STRING02
+            string command = @"  Select C_CODE,C_CORDER_CODE,C_ITEM_CODE,C_M_B --,ope.C_OPNUM, ope.C_USER_STRING01 AS Attrezzatura, ope.C_USER_STRING02 as Macchina
   from [CyberPlanFrontiera].[dbo].[CYB_ORDER] od
   left join [CyberPlanFrontiera].[dbo].[CYB_OPERATION] ope
   on od.C_CODE = ope.C_ORDER_CODE
@@ -69,7 +128,7 @@ namespace SyncCyberPlan_lib
                 articolo = (string)row[2];
 
                 string C_M_B = (string)row[3];                
-                if (C_M_B != "D")  //se è di contolavoro non lo segnalo, non ha ciclo (? in attesa di mail Savietto)
+                if (C_M_B != "D")  //se è di contolavoro non lo segnalo: devono avere il ciclo solo gli articolo di CL a capacità Finita, ma da qui non si riesce a suddividere in base al Cdl_MRP, quindi non riesco a fare il controllo
                 {
                     if (articolo != prec_articolo)
                     {
@@ -77,7 +136,7 @@ namespace SyncCyberPlan_lib
                         testo_mail += Utils.NewLineMail() + " codice =" + articolo + "  non ha ciclo ma ha degli ordini di produzione " + Utils.NewLineMail();
                         if (articolo == "WM0662-03")
                         {
-                            testo_mail += "WM0662-03: questo articolo non ha attrezzatura in As400, quindi non viene creato il ciclo; OK" + Utils.NewLineMail(); 
+                            testo_mail += articolo+ ": questo articolo non ha attrezzatura in As400, quindi non viene creato il ciclo; OK" + Utils.NewLineMail(); 
                         }
                     }
                     testo_mail += (string)row[0] + " " + Utils.NewLineMail();

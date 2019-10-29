@@ -89,7 +89,7 @@ namespace SyncCyberPlan_lib
 
                 if ( PQMQGIA_Sum < soglia)
                 {
-                    message_error = ART + " ha giacenza totale negativa (magazzino " + magazzino + "): " + PQMQGIA_Sum + Utils.NewLineMail();
+                    message_error = ART + " ha giacenza totale negativa (magazzino " + magazzino + "): " + PQMQGIA_Sum.ToString("#.#,##") + Utils.NewLineMail();
                     __bulk_message += message_error;
                     //Utils.SendMail("it@sauro.net", destinatari, message_error);
 

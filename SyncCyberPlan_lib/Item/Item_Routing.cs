@@ -75,7 +75,7 @@ namespace SyncCyberPlan_lib
                 && !_ITMREF_0.StartsWith("WS00")
                 )
                 {
-                    __bulk_message += Utils.NewLineMail() + "Articolo attivo ma non associato ad una attrezzatura: " + _ITMREF_0;
+                    __bulk_message += Utils.NewLineMail() + "Articolo attivo con Tipoproposta<>Acquisto ma non associato ad una attrezzatura: " + _ITMREF_0;
                 }
             }
             else if (!_YWCR_0.StartsWith(_YATTTYP_0))

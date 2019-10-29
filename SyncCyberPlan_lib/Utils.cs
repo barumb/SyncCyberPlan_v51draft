@@ -75,21 +75,21 @@ namespace SyncCyberPlan_lib
         }
         public static void SendMail_IT(Settings s, string Msg, bool errore)
         {
-            SendMail(s.Mailfrom, s.Mailto_IT, s.ServerSmtp, "", Msg, errore);
+            SendMail(s.Mailfrom, s.Mailto_IT, "", s.ServerSmtp, "", Msg, errore);
         }        
         public static void SendMail_IT(Settings s, string Msg, string postTitolo)
         {
-            SendMail(s.Mailfrom, s.Mailto_IT, s.ServerSmtp, postTitolo,  Msg, false);
+            SendMail(s.Mailfrom, s.Mailto_IT, "", s.ServerSmtp, postTitolo, Msg, false);
         }
         public static void SendMail_Plan(Settings s, string Msg, string postTitolo)
         {
-            SendMail(s.Mailfrom, s.Mailto_pianificazione, s.ServerSmtp, postTitolo, Msg, false);
+            SendMail(s.Mailfrom, s.Mailto_pianificazione, s.Mailto_IT, s.ServerSmtp, postTitolo, Msg, false);
         }
         public static void SendMail_Anag(Settings s, string Msg, string postTitolo)
         {
-            SendMail(s.Mailfrom, s.Mailto_anagrafica, s.ServerSmtp, postTitolo, Msg, false);
+            SendMail(s.Mailfrom, s.Mailto_anagrafica, s.Mailto_IT, s.ServerSmtp, postTitolo, Msg, false);
         }
-        public static void SendMail(string MailFROM, string MailTO, string MailServerSMTP, string postTitolo, string Msg, bool errore)
+        public static void SendMail(string MailFROM, string MailTO, string mailBCC, string MailServerSMTP, string postTitolo, string Msg, bool errore)
         {
             if (!string.IsNullOrWhiteSpace(Msg))
             {
@@ -138,7 +138,7 @@ namespace SyncCyberPlan_lib
                           + Utils.NewLineMail() + Utils.NewLineMail() + Msg
                         ;
 
-                    Message.Bcc.Add(MailFROM); 
+                    Message.Bcc.Add(mailBCC); 
 
                     //for (int i = 0; i < localAddress.Length; i++)
                     //{
