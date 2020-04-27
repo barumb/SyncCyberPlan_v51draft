@@ -145,7 +145,7 @@ namespace SyncCyberPlan_lib
             //    codice_like = "%";
             //}
 
-            string qry = tmp.GetSelectQuery(mode_all, _libreria_dossier, codice_like, filtro);
+            string qry = tmp.GetSelectQuery(mode_all, _libreria_dossier+"TEST", codice_like, filtro);
             DbDataReader dtr = GetReaderSelectCommand(qry);
             object[] row = new object[dtr.FieldCount];
 
@@ -261,7 +261,7 @@ namespace SyncCyberPlan_lib
         static public int EseguiSuDBCyberPlan(ref DBHelper2 cm, string query, int timeout)
         {
 #if DEBUG
-            return 1;
+            //return 1;
 #endif
             int ret = -99;
             if (!string.IsNullOrWhiteSpace(query))

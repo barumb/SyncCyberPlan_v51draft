@@ -23,14 +23,14 @@ namespace SyncCyberPlan_lib
         /// Per questo vanno esportati un TaskNumber alla volta, nel giusto ordine (nel caso che per qualche motivo ci siano più task number presenti)
         /// </summary>
         /// <param name="dossier"></param>
-        public void ExportAllTaskNumber(string dossier)
+        public void ExportAllTaskNumber(string dossier, bool creaOprDaAs400)
         {
             X3WS service = null;
             string pool = "";
 
             switch (dossier)
             {
-                case "SAURO": pool = X3WSUtils.X3WS_poolAlias+ "_BLOCCO_PER_SICUREZZA_FINO_A_RELEASE"; break;
+                case "SAURO": pool = X3WSUtils.X3WS_poolAlias+ "TOGLIMI_____BLOCCO_PER_SICUREZZA_FINO_A_RELEASE"; break;
                 case "SAUROTEST": pool = X3WSUtils.X3WS_poolAliasTest; break;
                 case "SAURODEV": pool = X3WSUtils.X3WS_poolAliasDev; break;
                 default:
@@ -41,17 +41,23 @@ namespace SyncCyberPlan_lib
 
             //tabelle di export di CyberPlan
             ExpCorder cord = new ExpCorder();
-            ExpOrderOPR opr = new ExpOrderOPR();
+            ExpOrderOPR opr = new ExpOrderOPR(creaOprDaAs400);
 
-            service = new X3WS(pool); //inizializzo il Ws
             bool res= true;
             while (res)
             {
+                res = false;
                 int? firstTaskNumber = ExportItem.GetMinTaskNumber(); 
                 if (firstTaskNumber.HasValue)
                 {
-                    res &= ExportTaskNumber(dossier, service, firstTaskNumber.Value, opr);
-                    //res &= ExportTaskNumber(dossier, service, firstTaskNumber.Value, cord);                    
+                    if (service == null)
+                    {
+                        service = new X3WS(pool); //inizializzo il Ws solo se necessario
+                    }
+                    res |= ExportTaskNumber(dossier, service, firstTaskNumber.Value, opr);
+                    res |= ExportTaskNumber(dossier, service, firstTaskNumber.Value, cord);
+
+                    service.ExportMfgToAs400(firstTaskNumber.Value);//export verso As400 dell'intero TaskNUmber
                 }
                 else
                 {
@@ -64,14 +70,14 @@ namespace SyncCyberPlan_lib
             bool ret = false;
             string file = null;
 
-            //crea file OPR
+            //crea file 
             file = expitm.WriteToFile(dossier, taskNumberToExport);
             if (file != null)
             {
                 //import WS opr
                 //ret = service.ImportOprFile("opr_aaaaa.txt", "201909315959");
-                
-                ret = service.ImportOprFile(System.IO.Path.GetFileName(file));
+
+                ret = service.ImportFile(expitm.Tipo, System.IO.Path.GetFileName(file));
                 if (ret)
                 {
                     expitm.DeleteTaskNumber(taskNumberToExport);
@@ -83,6 +89,10 @@ namespace SyncCyberPlan_lib
                     //il fallimento si basa sul ritorno del WS; quindi lascio al codice del WS la segnalazione eventuale via mail agli operatori
                     Utils.SendMail_Plan(s, "Errore Import da CyberPlan via WS, file " + file, "errore import");
                 }
+            }
+            else
+            {
+                ret = true;//non c'è niente da esportare
             }
             return ret;
         }

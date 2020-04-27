@@ -119,7 +119,71 @@ namespace SyncCyberPlan_lib
         {
             //string libreria = "MBM41LIB_M";  //libreria = "MBM41LIBMT"  TRAC;  //libreria = "MBM41LIB_M";  
             string __libreriaAs400 = dossier;
+            /* query per test per ACCESS
+             
+             .MFH00PF -> [MBM41LIB_M_MFH00PF OPR]
+.MFV00PF -> [MBM41LIB_M_MFV00PF OPR data]
+.VOOS00F -> MBM41LIB_M_VOOS00F
+.RSHD00F -> [MBM41LIB_M_RSHD00F stampi]
+.PFHD00F -> MBM41LIB_M_PFHD00F
+      
+      
+SELECT 
+                [MBM41LIB_M_MFH00PF OPR].MFHTORD
+                ,[MBM41LIB_M_MFH00PF OPR].MFHAORD
+                ,[MBM41LIB_M_MFH00PF OPR].MFHPORD
+                ,[MBM41LIB_M_MFH00PF OPR].MFHTCOM
+                ,[MBM41LIB_M_MFH00PF OPR].MFHACOM
+                ,[MBM41LIB_M_MFH00PF OPR].MFHPCOM
+                ,[MBM41LIB_M_MFH00PF OPR].MFHSCOM
+                ,[MBM41LIB_M_MFH00PF OPR].MFHCART
+                ,[MBM41LIB_M_MFH00PF OPR].MFHQTRC
+                ,[MBM41LIB_M_MFH00PF OPR].MFHDCRE
+                ,[MBM41LIB_M_MFH00PF OPR].MFHSTAT
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVDINI
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVDEND
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVSTAV
+                ,[MBM41LIB_M_MFH00PF OPR].MFHQTPR
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVQTSC
 
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVUTLM
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVAMPT
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVUTSE
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVASET
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVWRKC
+                ,MBM41LIB_M_VOOS00F.SOHNR
+                ,MBM41LIB_M_VOOS00F.SOLNR
+
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVMACN 
+                ,[MBM41LIB_M_MFV00PF OPR data].MFVCSTM
+
+                ,[MBM41LIB_M_RSHD00F stampi].FLVPZ
+                ,MBM41LIB_M_PFHD00F.NRVIE
+
+                 FROM 
+(((                 
+                 [MBM41LIB_M_MFH00PF OPR] 
+                 INNER JOIN  [MBM41LIB_M_MFV00PF OPR data]  ON 
+                                 [MBM41LIB_M_MFH00PF OPR].MFHTORD =  [MBM41LIB_M_MFV00PF OPR data].MFVTORD 
+                        AND  [MBM41LIB_M_MFH00PF OPR].MFHAORD =  [MBM41LIB_M_MFV00PF OPR data].MFVAORD 
+                        AND  [MBM41LIB_M_MFH00PF OPR].MFHPORD =  [MBM41LIB_M_MFV00PF OPR data].MFVPORD 
+)
+                left JOIN  MBM41LIB_M_VOOS00F  ON 
+                                 MBM41LIB_M_VOOS00F.TPOVE =  [MBM41LIB_M_MFH00PF OPR].MFHTCOM 
+                        AND  MBM41LIB_M_VOOS00F.AAOVE =  [MBM41LIB_M_MFH00PF OPR].MFHACOM 
+                        AND  MBM41LIB_M_VOOS00F.NROVE =  [MBM41LIB_M_MFH00PF OPR].MFHPCOM 
+                        AND  MBM41LIB_M_VOOS00F.LNOVE =  [MBM41LIB_M_MFH00PF OPR].MFHSCOM 
+)
+                 INNER JOIN  [MBM41LIB_M_RSHD00F stampi]  ON 
+                                 [MBM41LIB_M_RSHD00F stampi].CDSTM =  [MBM41LIB_M_MFV00PF OPR data].MFVCSTM 
+)
+                 INNER JOIN  MBM41LIB_M_PFHD00F  ON 
+                                 MBM41LIB_M_PFHD00F.CDART =  [MBM41LIB_M_MFH00PF OPR].MFHCART 
+
+                 WHERE  [MBM41LIB_M_MFH00PF OPR].MFHSTAT = 'RI'      
+                 and    [MBM41LIB_M_MFV00PF OPR data].MFVSTAT = 'RI' 
+                 and    [MBM41LIB_M_MFV00PF OPR data].MFVSTAV <> 'CH'
+             */
 
             string _tabORR = __libreriaAs400 + ".ORR00PF";
             string _tabORV = __libreriaAs400 + ".ORV00PF";

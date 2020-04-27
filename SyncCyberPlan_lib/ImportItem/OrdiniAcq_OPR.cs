@@ -6,139 +6,134 @@ using System.Data.Common;
 
 namespace SyncCyberPlan_lib
 {
-    public class OrdiniAcq_As400_OPR : OrdiniAcq
+    public class OrdiniAcq_OPR : OrdiniAcq
     {
-        public string  MFHTORD;
-        public decimal MFHAORD;
-        public decimal MFHPORD;
-        public string  MFHTCOM;
-        public decimal MFHACOM; // anno ODV
-        public decimal MFHPCOM; // progressivo ODV
-        public decimal MFHSCOM; // riga ODV
-        public string  MFHCART;
-        public decimal MFHQTRC;
-        public decimal MFHDCRE; // DATA
-        public string  MFHSTAT;
-        public decimal MFVDINI; // DATA
-        public decimal MFVDEND; // DATA
-        public string  MFVSTAV; // stato riga  MFVSTAV  se =ST ordine in corso, se vuoto ordine in attesa
-        public decimal MFHQTPR; // qta prodotta
-        public decimal MFVQTSC; // qta scartata
+        public string  H_MFGNUM_0;
+        public string  H_MFGFCY_0;
+        public string  H_YCYBCOD_0;
+        public int     H_YCYBTSK_0;
+        public string  I_ITMREF_0;
+        public string  I_MFGFCY_0;
+        public string  I_VCRNUMORI_0;  //-- valori di As400 da modificare con i legami in fase di import in Sage
+        public int     I_VCRLINORI_0;  //-- valori di As400 da modificare con i legami in fase di import in Sage
+        public DateTime?  H_CREDAT_0;  
+        public byte      H_MFGSTA_0;     //--MFGSTA 1=Confermato  2= Pianificato  3=Suggerito 4=Chiuso
+        public DateTime? H_STRDAT_0;  
+        public DateTime? H_ENDDAT_0;  
+        public byte    I_ITMSTA_0;      //-- 1= in attesa  2= in corso 3= saldato  4= Escluso
+        public byte    I_MFITRKFLG_0;   //-- 1= in attesa  4= in corso 5= saldato
+        public decimal I_EXTQTY_0;      //--qta prevista
+        public decimal I_CPLQTY_0;      //--qta prodotta
+        public decimal I_REJCPLQTY_0;   //-- qta scartata        
+        public string  I_TCLCOD_0; 
+        public int     I_MFGLIN_0;  
+        public string  M_ITMREF_0;  
+        public decimal M_RETQTY_0;       //--qta necessaria BOM
+        public byte    O_SCOCOD_0;
+        //-- public short   M_BOMSEQ_0;  
+        //-- public decimal M_BOMQTY_0;  
+        //public string ;                 //-- Buy Make o Decentrato
 
-        public string  MFVUTLM; // unita di misura tempo per un pezzo/via  1=ORE  2=100MI-HR   3 Minuti 4 giorni  5 settimane
-        public decimal MFVAMPT; // tempo per un pezzo/via
-        public string  MFVUTSE; // unita di misura tempo di setup
-        public decimal MFVASET; // tempo di setup
 
-        public string MFVWRKC;  // centro di lavoro (Interno/esterno in as400)
-
-
-        public OrdiniAcq_As400_OPR(/*string YPOHTYP*/): base("CYB_ORDER")
+        public OrdiniAcq_OPR(/*string YPOHTYP*/): base("CYB_ORDER")
         {
             //__YPOHTYP_filter = YPOHTYP;
         }
 
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string filtro)
         {
-            string __libreriaAs400 = dossier;
-
-            string _tabMFH = __libreriaAs400 + ".MFH00PF";
-            string _tabMFV = __libreriaAs400 + ".MFV00PF";
-
-            string query = "SELECT " + "\n"
-                + "  " + _tabMFH + ".MFHTORD" + "\n"
-                + ",  " + _tabMFH + ".MFHAORD" + "\n"
-                + ",  " + _tabMFH + ".MFHPORD" + "\n"
-                + ",  " + _tabMFH + ".MFHTCOM" + "\n"
-                + ",  " + _tabMFH + ".MFHACOM" + "\n"
-                + ",  " + _tabMFH + ".MFHPCOM" + "\n"
-                + ",  " + _tabMFH + ".MFHSCOM" + "\n"
-                + ",  " + _tabMFH + ".MFHCART" + "\n"
-                + ",  " + _tabMFH + ".MFHQTRC" + "\n"
-                + ",  " + _tabMFH + ".MFHDCRE" + "\n"
-                + ",  " + _tabMFH + ".MFHSTAT" + "\n"
-                + ",  " + _tabMFV + ".MFVDINI" + "\n"
-                + ",  " + _tabMFV + ".MFVDEND" + "\n"
-                + ",  " + _tabMFV + ".MFVSTAV" + "\n"
-                + ",  " + _tabMFH + ".MFHQTPR" + "\n"
-                + ",  " + _tabMFV + ".MFVQTSC" + "\n"
-
-                + ",  " + _tabMFV + ".MFVUTLM" + "\n"
-                + ",  " + _tabMFV + ".MFVAMPT" + "\n"
-                + ",  " + _tabMFV + ".MFVUTSE" + "\n"
-                + ",  " + _tabMFV + ".MFVASET" + "\n"
-                + ",  " + _tabMFV + ".MFVWRKC" + "\n"
-                + " FROM " + _tabMFH + "\n"
-                + " INNER JOIN " + _tabMFV + " ON " + "\n"
-                                 + _tabMFH + ".MFHTORD = " + _tabMFV + ".MFVTORD " + "\n"
-                       + " AND " + _tabMFH + ".MFHAORD = " + _tabMFV + ".MFVAORD " + "\n"
-                       + " AND " + _tabMFH + ".MFHPORD = " + _tabMFV + ".MFVPORD " + "\n"
-                + " WHERE " + _tabMFH + ".MFHSTAT = 'RI' " + "\n"     //sempre RI
-                + " and   " + _tabMFV + ".MFVSTAT = 'RI' " + "\n"     //sempre RI
-                + " and   " + _tabMFV + ".MFVSTAV <> 'CH' " + "\n"    //questo indica se la riga è chiusa
+            string _db= "x3." + dossier;
+            
+            string query = @"select 
+  H.MFGNUM_0
+, H.MFGFCY_0
+, H.YCYBCOD_0
+, H.YCYBTSK_0
+, I.ITMREF_0
+, I.MFGFCY_0
+, I.VCRNUMORI_0-- valori di As400 da modificare con i legami in fase di import in Sage
+, I.VCRLINORI_0-- valori di As400 da modificare con i legami in fase di import in Sage
+, H.CREDAT_0
+, H.MFGSTA_0   --MFGSTA 1=Confermato  2= Pianificato  3=Suggerito 4=Chiuso
+, H.STRDAT_0
+, H.ENDDAT_0
+, I.ITMSTA_0    -- 1= in attesa  2= in corso 3= saldato  4= Escluso
+, I.MFITRKFLG_0 -- 1= in attesa  4= in corso 5= saldato
+, I.EXTQTY_0  --qta prevista
+, I.CPLQTY_0  --qta prodotta
+, I.REJCPLQTY_0 -- qta scartata
+, I.TCLCOD_0
+, I.MFGLIN_0
+, M.ITMREF_0
+, M.RETQTY_0 --qta necessaria
+, O.SCOCOD_0 --flag contolavoro 1=no 2= strutturale 3= congiunturale
+--, M.BOMSEQ_0
+--, M.BOMQTY_0
+-- Buy Make o Decentrato
+      from " + _db + @".MFGHEAD H 
+inner join " + _db + @".MFGITM I on H.MFGNUM_0 = I.MFGNUM_0
+inner join " + _db + @".MFGMAT M on H.MFGNUM_0 = M.MFGNUM_0 and I.MFGLIN_0 = M.MFGLIN_0
+inner join " + _db + @".MFGOPE O on H.MFGNUM_0 = O.MFGNUM_0
+where
+M.MFGSTA_0 = 1 and M.MFGSTA_0 = 1 and I.MFGSTA_0 = 1 "
                 ;
 
             if (!string.IsNullOrWhiteSpace(codice_like))
             {
-                query += " and " + _tabMFH + ".MFHCART like '" + codice_like.Trim() + "'";
+                query += " and I.ITMREF_0 like '" + codice_like.Trim() + "'";
             }
 
-            query += " ORDER BY " 
-                + "  " + _tabMFH + ".MFHTORD," + "\n"
-                + "  " + _tabMFH + ".MFHAORD," + "\n"
-                + "  " + _tabMFH + ".MFHPORD" + "\n"
-                ;
+            query += " order by H.MFGNUM_0, I.ITMREF_0, M.BOMSEQ_0 ";
             return query;
         }
 
         public override void Init(object[] row)
         {
-            MFHTORD = getDBV<string>(row[0], "MFHTORD");
-            MFHAORD = getDBV<decimal>(row[1], "MFHAORD");
-            MFHPORD = getDBV<decimal>(row[2], "MFHPORD");
-            MFHTCOM = getDBV<string>(row[3], "MFHTCOM");
-            MFHACOM = getDBV<decimal>(row[4], "MFHACOM");
-            MFHPCOM = getDBV<decimal>(row[5], "MFHPCOM");
-            MFHSCOM = getDBV<decimal>(row[6], "MFHSCOM");
-            MFHCART = getDBV<string>(row[7], "MFHCART");
-            MFHQTRC = getDBV<decimal>(row[8], "MFHQTRC");
-            MFHDCRE = getDBV<decimal>(row[9], "MFHDCRE");
-            MFHSTAT = getDBV<string>(row[10], "MFHSTAT");
-            MFVDINI = getDBV<decimal>(row[11], "MFVDINI");
-            MFVDEND = getDBV<decimal>(row[12], "MFVDEND");
-            MFVSTAV = getDBV<string>(row[13], "MFVSTAV");
-            MFHQTPR = getDBV<decimal>(row[14], "MFHQTPR");
-            MFVQTSC = getDBV<decimal>(row[15], "MFVQTSC");
-
-            MFVUTLM = getDBV<string>(row[16], "MFVUTLM");
-            MFVAMPT = getDBV<decimal>(row[17], "MFVAMPT");
-            MFVUTSE = getDBV<string>(row[18], "MFVUTSE");
-            MFVASET = getDBV<decimal>(row[19], "MFVASET");
-
-            MFVWRKC = getDBV<string>(row[20], "MFVWRKC");
-
+            H_MFGNUM_0    = getDBV<string >(row[0],  "H_MFGNUM_0");
+            H_MFGFCY_0    = getDBV<string >(row[1],  "H_MFGFCY_0");
+            H_YCYBCOD_0   = getDBV<string >(row[2],  "H_YCYBCOD_0");
+            H_YCYBTSK_0   = getDBV<int    >(row[3],  "H_YCYBTSK_0");
+            I_ITMREF_0    = getDBV<string >(row[4],  "I_ITMREF_0");
+            I_MFGFCY_0    = getDBV<string >(row[5],  "I_MFGFCY_0");
+            I_VCRNUMORI_0 = getDBV<string >(row[6],  "I_VCRNUMORI_0");
+            I_VCRLINORI_0 = getDBV<int    >(row[7],  "I_VCRLINORI_0");
+            H_CREDAT_0    = getSageDate    (row[8],  "H_CREDAT_0");
+            H_MFGSTA_0    = getDBV<byte   >(row[9],  "H_MFGSTA_0");
+            H_STRDAT_0    = getSageDate    (row[10], "H_STRDAT_0");
+            H_ENDDAT_0    = getSageDate    (row[11], "H_ENDDAT_0");
+            I_ITMSTA_0    = getDBV<byte   >(row[12], "I_ITMSTA_0");
+            I_MFITRKFLG_0 = getDBV<byte   >(row[13], "I_MFITRKFLG_0");
+            I_EXTQTY_0    = getDBV<decimal>(row[14], "I_EXTQTY_0");
+            I_CPLQTY_0    = getDBV<decimal>(row[15], "I_CPLQTY_0");
+            I_REJCPLQTY_0 = getDBV<decimal>(row[16], "I_REJCPLQTY_0");
+            I_TCLCOD_0    = getDBV<string >(row[17], "I_TCLCOD_0");
+            I_MFGLIN_0    = getDBV<int    >(row[18], "I_MFGLIN_0");
+            M_ITMREF_0    = getDBV<string >(row[19], "M_ITMREF_0");
+            M_RETQTY_0    = getDBV<decimal>(row[20], "M_RETQTY_0");
+            O_SCOCOD_0    = getDBV<byte>   (row[21], "O_SCOCOD_0");
 
 
 
-            C_CODE                = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30);        //varchar         30                
+
+            C_CODE                = EscapeSQL(H_MFGNUM_0, 30);        //varchar         30                
             //ATTENZIONE il valore "000000000000" indica valore default per ordini a fabbisogno
-            C_CORDER_CODE         = EscapeSQL(MFHTCOM + MFHACOM.ToString("00") + MFHPCOM.ToString("000000") + MFHSCOM.ToString("0000"), 30);   //varchar 30  
-            C_ITEM_CODE           = EscapeSQL(MFHCART, 50);                                        //varchar         50                      
+            C_CORDER_CODE         = EscapeSQL(string.IsNullOrWhiteSpace(I_VCRNUMORI_0)? "00000000000000000000": I_VCRNUMORI_0 + I_VCRLINORI_0 , 30);   //varchar 30  
+            C_ITEM_CODE           = EscapeSQL(I_ITMREF_0, 50);                                        //varchar         50                      
             C_ITEM_PLANT          = EscapeSQL("ITS01", 20);                                        //varchar         20                      
-            C_M_B                 = get_C_M_B(MFVWRKC);//'M';                                                           //char             1     // B=buy D=decentrato M = make                
-            C_MRP_TYPE            = getMRP_type(MFHTCOM);                                          //char             1     //F=MTS make to stock (a fabbisogno)  C= MTO make to order (a commessa)                     
-            C_QTY                 = MFHQTRC;                                                       //numeric            
-            C_COMPL_QTY           = MFHQTPR;                                                       //numeric            
-            C_SCRAP_QTY           = MFVQTSC;                                                       //numeric            qta scartata
+            C_M_B                 = get_C_M_B(O_SCOCOD_0);                                    //char             1     // B=buy D=decentrato M = make                
+            C_MRP_TYPE            = getMRP_type(I_VCRNUMORI_0);                                          //char             1     //F=MTS make to stock (a fabbisogno)  C= MTO make to order (a commessa)                     
+            C_QTY                 = I_EXTQTY_0;                                                       //numeric            
+            C_COMPL_QTY           = I_CPLQTY_0;                                                       //numeric            
+            C_SCRAP_QTY           = I_REJCPLQTY_0;                                                       //numeric            qta scartata
             C_HOST_QTY            = 0;                                                             //numeric            
-            C_INSERT_DATE         = dateTime_fromDataAs400(MFHDCRE);                               //datetime           
-            C_HOST_STDATE         = dateTime_fromDataAs400(MFVDINI);                               //datetime           //data inizio           
-            C_HOST_DUEDATE        = MFVDINI> MFVDEND? dateTime_fromDataAs400(MFVDINI) : dateTime_fromDataAs400(MFVDEND);  //datetime  data fine      Qualche volta in As400 c'è data inizio maggiore di data fine; in tal caso le mettiamo uguali
+            C_INSERT_DATE         = H_CREDAT_0;                                                   //datetime           
+            C_HOST_STDATE         = H_STRDAT_0;                                                   //datetime           //data inizio           
+            C_HOST_DUEDATE        = H_STRDAT_0 > H_ENDDAT_0? H_STRDAT_0 :H_ENDDAT_0;  //datetime  data fine      Qualche volta in As400 c'è data inizio maggiore di data fine; in tal caso le mettiamo uguali
             C_PROMISE_DATE        = null;                                                          //datetime           
             C_ACT_STDATE          = null;                                                          //datetime           
             C_ACT_DUEDATE         = null;                                                          //datetime           
             C_SHOP_FLOOR_CODE     = EscapeSQL("", 20);                                             //varchar         20                      
-            C_STATUS              = MFVSTAV== "ST" ? 6 : 4;                                        //int  in Cyber 6 iniziato, 4 confermato e fattibile
+            C_STATUS              = I_MFITRKFLG_0 == 4 ? 6 : 4;                                        //int  in Cyber 6 iniziato, 4 confermato e fattibile  //IN SAGE  I_MFITRKFLG_0 -- 1= in attesa  4= in corso 5= saldato
             C_HOST_STATUS         = EscapeSQL("", 15);                                             //varchar         15                      
             C_HOST_CODE           = EscapeSQL("", 30);                                             //varchar         30                      
             C_ROUTING_CODE        = EscapeSQL("", 51);                                             //varchar         51                      
@@ -196,15 +191,15 @@ namespace SyncCyberPlan_lib
             C_USER_DATE04         = null;                                                          //datetime                           
             C_USER_DATE05         = null;                                                          //datetime 
         }
-        protected char get_C_M_B(string CDL_As400)
+        protected char get_C_M_B(byte O_SCOCOD_0)
         {
-            if (CDL_As400 == "CDLEXT")
+            if (O_SCOCOD_0 == 2 || O_SCOCOD_0==3)
                 return 'D';  //contolavoro
-            else if (CDL_As400 == "CDLINT")
+            else if (O_SCOCOD_0 == 1)
                 return 'M';  //make
             else
             {
-                Utils.SendMail_IT(Settings.GetSettings(), "Errore import OPR in CyberPlan: "+ C_CODE+" ha cdl in as400 diverso da CDLEXT/CDLINT","OPR As400");
+                Utils.SendMail_IT(Settings.GetSettings(), "Errore import OPR in CyberPlan;  O_SCOCOD_0= " + O_SCOCOD_0 + " non previsto","Import OPR -> Cyberplan");
                 return '?';
             }
         }
@@ -222,7 +217,7 @@ namespace SyncCyberPlan_lib
   FROM [CyberPlanFrontiera].[dbo].[CYB_ORDER] OPR
   full join [CyberPlanFrontiera].[dbo].[CYB_CORDER] SOH
   on OPR.C_CORDER_CODE= SOH.C_CODE
-  where OPR.C_CODE like 'OPR%' and OPR.C_CORDER_CODE not like '000000000000' and SOH.C_CODE is null ";
+  where (OPR.C_CODE like 'OPR%' or OPR.C_CODE like 'ODP%') and OPR.C_CORDER_CODE not like '000000000000' and SOH.C_CODE is null ";
 
             string testo_mail = "";
             DbDataReader dtr = cm.GetReaderSelectCommand(chk_query);
@@ -264,14 +259,6 @@ namespace SyncCyberPlan_lib
             }
 
 
-
-
-
-
-
-
-
-
             //
             //invio mail
             //
@@ -279,16 +266,16 @@ namespace SyncCyberPlan_lib
             Utils.SendMail_Plan(Settings.GetSettings(), testo_mail, "OPR");
         }
 
-        char getMRP_type(string MFHTCOM)
+        char getMRP_type(string ordinecommessa)
         {
             //F=MTS make to stock (a fabbisogno)  C= MTO make to order (a commessa)  
-            if (MFHTCOM.Trim() !=  "")
+            if (string.IsNullOrWhiteSpace(ordinecommessa))
             {
-                return 'C'; //ordine a commessa
+                return 'F';//ordine MRP a fabbisogno
             }
             else
             {
-                return 'F';//ordine MRP a fabbisogno
+                return 'C'; //ordine a commessa
             }
         }
     }

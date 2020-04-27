@@ -14,7 +14,7 @@ namespace SyncCyberPlan_lib
     /// </summary>
     public class ExpOrderOCL : ExpOrder
     {
-        public ExpOrderOCL():base("OCL")
+        public ExpOrderOCL():base("OCL", X3WSUtils.TipoImport.DADEFINIRE)
         {
         }
 

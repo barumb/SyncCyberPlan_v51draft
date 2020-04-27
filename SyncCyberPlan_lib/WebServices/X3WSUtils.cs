@@ -21,7 +21,8 @@ namespace SyncCyberPlan_lib
         public static string X3WS_HeaderXmlFile = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
         public static string X3WS_NewLine = " \r\n";
 
-        public static string X3WS_PublicName_ImpOpr = "YIMPOPR";
+        public static string X3WS_PublicName_ImportSubProgram = "YIMP_CYBER";
+        public enum TipoImport { DADEFINIRE=-1, OPR=1, DATAODV=2, EXPOPRAS400=3 };
 
         static public NetworkCredential GetCredential()
         {

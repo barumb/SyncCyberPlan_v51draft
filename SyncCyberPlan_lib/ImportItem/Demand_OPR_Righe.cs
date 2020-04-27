@@ -5,16 +5,20 @@ using System.Data;
 
 namespace SyncCyberPlan_lib
 {
-    public class Demand_OPR_RIGHE : Item
+    public class Demand_OPR_righe : Item
     {
-        public string  _MFCTORD;
-        public decimal _MFCAORD;
-        public decimal _MFCPORD;
-        public string  _MFCCART;
-        public string  _MFCCOMP;
-        public decimal _MFCQTRC;
-        public string  _MFCSTAT;
-        public string  _MFVWKCT; // I interno E esterno (conto lavoro)
+        public string MFGNUM_0;
+        public string MFGFCY_0;
+        //public string YCYBCOD_0;
+        //public int YCYBTSK_0;
+        public string ITMREF_0;
+        //public string TCLCOD_0;
+        public int MFGLIN_0;
+        public decimal RETQTY_0;
+        public string ITMREF_0_componente;
+        //public short BOMSEQ_0;
+        //public decimal BOMQTY_0;
+
 
         #region tabella output [CYB_DEMAND]
         public string   C_CORDER_CODE;                  //string
@@ -45,70 +49,93 @@ namespace SyncCyberPlan_lib
         public int      C_USER_COLOR01;                 //int 
         #endregion
 
-        public Demand_OPR_RIGHE(): base("CYB_DEMAND")
+        public Demand_OPR_righe(): base("CYB_DEMAND")
         {
         }
 
         public override string GetSelectQuery(bool mode, string dossier, string codice_like, string filtro)
         {
-            string __libreriaAs400 = dossier;
+            /* per test
+             SELECT  [MBM41LIB_M_MFC00PF righe OPR].MFCTORD
+                 ,[MBM41LIB_M_MFC00PF righe OPR].MFCAORD 
+                 ,[MBM41LIB_M_MFC00PF righe OPR].MFCPORD 
+                 ,[MBM41LIB_M_MFC00PF righe OPR].MFCCART 
+                 ,[MBM41LIB_M_MFC00PF righe OPR].MFCCOMP 
+                 ,[MBM41LIB_M_MFC00PF righe OPR].MFCQTRC 
+                 ,[MBM41LIB_M_MFC00PF righe OPR].MFCSTAT 
+                 ,[MBM41LIB_M_MFV00PF OPR data].MFVWKCT 
+                FROM [MBM41LIB_M_MFC00PF righe OPR] 
+                
+                INNER JOIN [MBM41LIB_M_MFV00PF OPR data] on 
+                     [MBM41LIB_M_MFV00PF OPR data].MFVTORD = [MBM41LIB_M_MFC00PF righe OPR].MFCTORD 
+                and  [MBM41LIB_M_MFV00PF OPR data].MFVAORD = [MBM41LIB_M_MFC00PF righe OPR].MFCAORD 
+                and  [MBM41LIB_M_MFV00PF OPR data].MFVPORD = [MBM41LIB_M_MFC00PF righe OPR].MFCPORD 
+                WHERE [MBM41LIB_M_MFC00PF righe OPR].MFCSTAT = 'RI' 
+                and  [MBM41LIB_M_MFV00PF OPR data].MFVSTAT = 'RI'  
+             * */
+            string _db = "x3." + dossier;
 
-            string _tabMFV = __libreriaAs400 + ".MFV00PF";
-            string _tabMFC = __libreriaAs400 + ".MFC00PF";
 
-            string query = "SELECT " + "\n"
-                + "   " + _tabMFC + ".MFCTORD" + "\n"
-                + ",  " + _tabMFC + ".MFCAORD" + "\n"
-                + ",  " + _tabMFC + ".MFCPORD" + "\n"
-                + ",  " + _tabMFC + ".MFCCART" + "\n"
-                + ",  " + _tabMFC + ".MFCCOMP" + "\n"
-                + ",  " + _tabMFC + ".MFCQTRC" + "\n"
-                + ",  " + _tabMFC + ".MFCSTAT" + "\n"
-                + ",  " + _tabMFV + ".MFVWKCT" + "\n"
-                + " FROM " + _tabMFC + "\n" 
+            string query = @"select 
+  H.MFGNUM_0
+, H.MFGFCY_0
+, H.YCYBCOD_0
+, H.YCYBTSK_0
+, I.ITMREF_0
+, I.TCLCOD_0
+, I.MFGLIN_0
+, M.RETQTY_0
+, M.ITMREF_0
+, M.BOMSEQ_0
+, M.BOMQTY_0
 
-                + " join " + _tabMFV + " on " 
-                + "      " + _tabMFV + ".MFVTORD = " + _tabMFC + ".MFCTORD " + "\n" 
-                + " and  " + _tabMFV + ".MFVAORD = " + _tabMFC + ".MFCAORD " + "\n" 
-                + " and  " + _tabMFV + ".MFVPORD = " + _tabMFC + ".MFCPORD " + "\n"
-                + " WHERE " + _tabMFC + ".MFCSTAT = 'RI' " + "\n"
-                + " and  " + _tabMFV + ".MFVSTAT = 'RI' " + "\n"     //sempre RI testata OPR
-                //+ " and MFCCOMP like  'WN0028-03' "
-                ;
+from " + _db + @".MFGHEAD H
+join " + _db + @".MFGITM I on H.MFGNUM_0 = I.MFGNUM_0
+join " + _db + @".MFGMAT M on H.MFGNUM_0 = M.MFGNUM_0 and I.MFGLIN_0 = M.MFGLIN_0
+where
+M.MFGSTA_0 = 1 and 
+M.MFGSTA_0 = 1 and 
+I.MFGSTA_0 = 1 "
+//and M.MFGFCY_0 = 'ITS01' "
+;
+//--MFGSTA 1 = Confermato  2 = Pianificato  3 = Suggerito 4 = Chiuso"
+
 
             if (!string.IsNullOrWhiteSpace(codice_like))
             {
+                //, I.ITMREF_0 composto
+                //, M.ITMREF_0 componente
                 //query += " and " + _tabMFC + ".MFCCART like '" + codice_like.Trim() + "'";
             }
 
-            query += " ORDER BY " 
-                + "  " + _tabMFC + ".MFCTORD," + "\n"
-                + "  " + _tabMFC + ".MFCAORD," + "\n"
-                + "  " + _tabMFC + ".MFCPORD" + "\n"
-                ;
+            query += " order by H.MFGNUM_0, I.ITMREF_0, M.BOMSEQ_0 ";
             return query;
         }
 
         public override void Init(object[] row)
         {
-            _MFCTORD = getDBV<string>(row[0], "MFCTORD");
-            _MFCAORD = getDBV<decimal>(row[1], "MFCAORD");
-            _MFCPORD = getDBV<decimal>(row[2], "MFCPORD");
-            _MFCCART = getDBV<string>(row[3], "MFCCART");
-            _MFCCOMP = getDBV<string>(row[4], "MFCCOMP");
-            _MFCQTRC = getDBV<decimal>(row[5], "MFCQTRC");
-            _MFCSTAT = getDBV<string>(row[6], "MFCSTAT");
-            _MFVWKCT = getDBV<string>(row[7], "MFVWKCT");
+            MFGNUM_0  = getDBV<string>(row[0], "MFGNUM_0");
+            MFGFCY_0  = getDBV<string>(row[1], "MFGFCY_0");
+            //YCYBCOD_0 = getDBV<string>(row[2], "YCYBCOD_0");
+            //YCYBTSK_0 = getDBV<int>(row[3], "YCYBTSK_0");
+            ITMREF_0  = getDBV<string>(row[4], "ITMREF_0");
+            //TCLCOD_0  = getDBV<string>(row[5], "TCLCOD_0");
+            MFGLIN_0  = (int)row[6];
+            RETQTY_0 = (decimal)row[7];
+
+            ITMREF_0_componente = getDBV<string>(row[8], "ITMREF_0_componente");
+            //BOMSEQ_0 = (short)row[9];
+            //BOMQTY_0 = (decimal)row[10];
 
 
 
-            C_CORDER_CODE = EscapeSQL("", 30); 
-            C_ORDER_CODE = EscapeSQL(_MFCTORD + _MFCAORD.ToString("00") + _MFCPORD.ToString("000000"),30);                   //string
-            C_ITEM_CODE = EscapeSQL(_MFCCOMP, 50);                     //string 
-            C_ITEM_PLANT = "ITS01";                   //string 
+            C_CORDER_CODE = EscapeSQL("", 30);
+            C_ORDER_CODE = EscapeSQL(MFGNUM_0 + MFGLIN_0.ToString("000000"),30);                   //string
+            C_ITEM_CODE = EscapeSQL(ITMREF_0_componente, 50);                     //string 
+            C_ITEM_PLANT = MFGFCY_0;                   //string 
             C_OPNUM = 0;                         //int 
             C_NSEQ = 0;                         //int 
-            C_QTY = _MFCQTRC;                     //decimal 
+            C_QTY = RETQTY_0;                     //decimal 
             C_WDW_QTY = 0;                       //decimal 
             C_M_B = ' ';                         //char 
             C_MRP_TYPE = ' ';                    //char 
@@ -116,7 +143,7 @@ namespace SyncCyberPlan_lib
             C_REF_CORDER_CODE = "";              //string 
             C_DUEDATE = null;                    //DateTime 
             C_WAREHOUSE_CODE = __MAGAZZINO_INTERNO;       //string 
-            C_USER_NOTE01 = EscapeSQL("Articolo da produrre: " +_MFCCART, 99);                  //string 
+            C_USER_NOTE01 = EscapeSQL("Articolo da produrre: " + ITMREF_0, 99);                  //string 
             C_USER_INT01 = 0;                    //int 
             C_USER_INT02 = 0;                    //int 
             C_USER_REAL01 = 0;                   //float 
@@ -196,7 +223,7 @@ namespace SyncCyberPlan_lib
 
         public override string GetID()
         {
-            return C_ORDER_CODE + C_ITEM_CODE + C_ITEM_PLANT + C_OPNUM + C_NSEQ;
+            return C_ORDER_CODE + "_" + C_ITEM_CODE + "_" + C_ITEM_PLANT + "_" + C_OPNUM + "_" + C_NSEQ;
     }
     }
 }

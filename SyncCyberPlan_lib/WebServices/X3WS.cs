@@ -174,13 +174,32 @@ namespace SyncCyberPlan_lib
             return _resultXML;
         }
 
-
-        public bool ImportOprFile(string nomeFile)
+        public bool ImportFile(X3WSUtils.TipoImport tipo, string nomeFile)
         {
+            return Call_X3WS(tipo, nomeFile);
+        }
+        public bool ExportMfgToAs400( int TaskNumber)
+        {
+            return Call_X3WS(X3WSUtils.TipoImport.EXPOPRAS400, TaskNumber.ToString());
+        }
+        public bool Call_X3WS(X3WSUtils.TipoImport tipo, string nomeFile)
+        {
+            /*
+             Language CODE ITA
+             Pool alias WSSAUROTEST
+             Public Name YIMP_CYBER
+
+            XML:
+<PARAM> 
+<FLD NAME="TIPO">OPR</FLD> 
+<FLD NAME="IMPFILE">OPR_task471_191114_042559.TXT</FLD> 
+</PARAM> 
+             */
             _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "  start...");
             CAdxResultXml XMLresult = new CAdxResultXml();
 
             List<string[]> KeyValue = new List<string[]>();
+            KeyValue.Add(new string[2] { "TIPO", ((int)tipo).ToString() });
             KeyValue.Add(new string[2] { "IMPFILE",nomeFile });
             //KeyValue.Add(new string[2] { "TIMESTAMP", timestamp });
             //KeyValue.Add(new string[2] { "MSGERR", "000"});
@@ -192,7 +211,7 @@ namespace SyncCyberPlan_lib
 </PARAM>
              */
             string XMLRequest = X3WSUtils.XMLBuildReq("PARAM", "FLD", KeyValue);
-            XMLresult = RunSubprog(X3WSUtils.X3WS_PublicName_ImpOpr, XMLRequest);
+            XMLresult = RunSubprog(X3WSUtils.X3WS_PublicName_ImportSubProgram, XMLRequest);
 
             
             //status
@@ -217,7 +236,7 @@ namespace SyncCyberPlan_lib
             {
                 foreach (var msg in XMLresult.messages)
                 {
-                    _logger.Info(msg.message);
+                    _logger.Info("WS message: " + msg.message);
                 }
             }            
             
@@ -236,6 +255,6 @@ namespace SyncCyberPlan_lib
             {
                 return false;
             }            
-        }
+        }        
     }
 }

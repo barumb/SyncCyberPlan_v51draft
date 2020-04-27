@@ -15,7 +15,7 @@ namespace SyncCyberPlan_lib
         protected int CORD_task_number;
         protected DateTime? CORD_C_PROMISE_DUEDATE;
 
-        public ExpCorder():base("ODVMRP")
+        public ExpCorder():base("ODVMRP", X3WSUtils.TipoImport.DATAODV)
         {
 
         }
@@ -28,7 +28,14 @@ namespace SyncCyberPlan_lib
 
         public override string getSageImportString()
         {
-            throw new NotImplementedException();
+            //IT001;IT001-ORE1710936;00022000;CVF080R3;0;0;0;7200;4019;20190923;N;ORE;17;10936;22
+            return
+                 "IT001"
+                + __SEP + CORD_C_CODE
+                + __SEP + "line"
+                + __SEP + string.Format("{0:ddMMyy}", CORD_C_PROMISE_DUEDATE)
+                ;
+                
         }
 
         protected override string GetSelectQuery(int TaskNumber)

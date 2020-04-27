@@ -9,6 +9,10 @@ using System.Collections.Generic;
 
 namespace Console
 {
+    /// <summary>
+    /// ImportItem : da Sage/As400 a CyberPLan
+    /// X3WS       : da CyberPLan  a Sage
+    /// </summary>
     public class Program
     {
         // inizializzo logger di questa classe
@@ -23,15 +27,18 @@ namespace Console
                 log4net.Config.XmlConfigurator.Configure();
                 Settings.WriteExampleConfig();
 
-#if DEBUG                
-                //Esegui("X3WS SAUROTEST MRP".Split(' '));
-                //return;
+#if DEBUG
+                Esegui(args);
+                //Esegui("OPRAS400".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));
+                //Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
+                return;
                  //EseguiTutto();
 
-                Esegui("FINALCHECK".Split(' '));
-                return;
-                //            Esegui("SAURO MBM41LIB_M DELETE ITM".Split(' '));
-                //Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+                //Esegui("FINALCHECK".Split(' '));                return;
+
+                //Esegui("SAUROTEST MBM41LIB_M DELETE ITM".Split(' '));
+                //Esegui("SAUROTEST MBM41LIB_M ALLTIME ITM".Split(' '));
                 return;
 
 
@@ -70,7 +77,7 @@ namespace Console
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
             ///
             ///
-
+            _logger.Info("START - argomenti: " + string.Join(" ", args) + " ------------------");
 #if !DEBUG
          try
          {
@@ -80,11 +87,11 @@ namespace Console
             bool _delete = false;
 
             //_logger.Info("START at " + DateTime.Now.ToString() + " ----------------argomenti: " + string.Join(" ", args) + " ------------------");
-            _logger.Info("START - argomenti: " + string.Join(" ", args) + " ------------------");
+            //_logger.Info("START - argomenti: " + string.Join(" ", args) + " ------------------");
             if (args[0].ToUpper() == "INIT_CYB")
             {
                 CYBER_qry.Init();
-                return;   
+                return;
             }
             else if (args[0].ToUpper() == "START")
             {
@@ -104,20 +111,27 @@ namespace Console
             else if (args[0].ToUpper() == "X3WS")
             {
                 help = true;
-                if (args.Length == 3)
+                if (args.Length == 4)
                 {
                     string dossier = args[1];
                     if (dossier == "SAURO" || dossier == "SAURODEV" || dossier == "SAUROTEST" || dossier == "SAUROINT")
                     {
                         string tmparg = args[2];
-                        if (tmparg == "MRP")
+                        string tmpcreaopr = args[3];
+                        if (tmparg == "MRP" && (tmpcreaopr == "CREAOPR=no" || tmpcreaopr == "CREAOPR=si"))
                         {
+                            tmpcreaopr = tmpcreaopr.Replace("CREAOPR=", "");
+                            bool creaopr = (tmpcreaopr.ToLower() == "si" ? true : false);
                             Export exp = new Export();
-                            exp.ExportAllTaskNumber(dossier);
+                            exp.ExportAllTaskNumber(dossier, creaopr);
                             return;
                         }
                     }
                 }
+            }
+            else if (args[0].ToUpper() == "OPRAS400")
+            {
+                OrdiniAcq_OPR_As400_FIRSTIMPORT.GetFileImport_YMFG_Sage();
             }
 
 
@@ -154,9 +168,13 @@ namespace Console
                     "SyncCyberPlan INIT_CYB  per inizializzare tabelle CyberPlan\n" +
                     "SyncCyberPlan FINALCHECK per far partire i controlli finali (solo in effettivo)\n\n" +
 
-                    "SyncCyberPlan X3WS DOSSIER [MRP|] per chiamate ai WebService di X3 \n" +
-                    "      MRP     scatena import da CyberPlan verso X3\n"                     
-                    
+                    "SyncCyberPlan X3WS DOSSIER [MRP|] CREAOPR=si/no per chiamate ai WebService di X3 \n" +
+                    "      MRP             scatena import da CyberPlan verso X3" +
+                    "      CREAOPR=si/no   con 'si' crea gli OPR che arrivano da as400 ma non esistono in Sage (per l'avvio)      \n\n" +
+
+                    "OPRAS400 per ottenere il file per l'import INIZIALE da As400, mette il file in YSAURO\\IMPEXP \n" + 
+                    "         solo da dati in effettivo (crea un file)"
+
                 );
             }
             else
@@ -291,22 +309,27 @@ namespace Console
                         sage.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
                         sage.WriteToCyberPlan<Attrezzature_ConfigPlas>(_mode_all, codicelike, "", _delete, "");
                         break;
+                    case "DISBAS": sage.WriteToCyberPlan<DistintaBase>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "SOH": sage.WriteToCyberPlan<OrdiniVen>(_mode_all, codicelike, "", _delete, ""); break;
 
 
                     //da as400                    
                     case "LOC": as400.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
-                    case "SOH": as400.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
+                    //case "SOH": as400.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
                     case "OPR":
-                        as400.WriteToCyberPlan<OrdiniAcq_As400_OPR>(_mode_all, codicelike, "", _delete, "");
-                        as400.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
+                        //as400.WriteToCyberPlan<OrdiniAcq_OPR_As400>(_mode_all, codicelike, "", _delete, "");
+sage.WriteToCyberPlan<OrdiniAcq_OPR>(_mode_all, codicelike, "", _delete, "");
+                        //as400.WriteToCyberPlan<Operations_As400>(_mode_all, codicelike, "", _delete, "");
+sage.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
                         break;
                     case "GIAC":
                         as400.WriteToCyberPlan<Giacenze_ORR00PF>(_mode_all, codicelike, "", _delete, "");
                         as400.WriteToCyberPlan<Giacenze_PQM00PF>(_mode_all, codicelike, "", _delete, ""); //interne
                         as400.WriteToCyberPlan<Giacenze_PQM00PF_esterne>(_mode_all, codicelike, "", _delete, "");
                         break;
-                    case "DISBAS": as400.WriteToCyberPlan<DistintaBase>(_mode_all, codicelike, "", _delete, ""); break;
-                    case "DEM": as400.WriteToCyberPlan<Demand_OPR_RIGHE>(_mode_all, codicelike, "", _delete, ""); break;
+                    //case "DISBAS": as400.WriteToCyberPlan<DistintaBase_As400>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "DEM": as400.WriteToCyberPlan<Demand_OPR_righe_As400>(_mode_all, codicelike, "", _delete, ""); break;
+//case "DEM": sage.WriteToCyberPlan<Demand_OPR_righe>(_mode_all, codicelike, "", _delete, ""); break;
 
 
                     default: _logger.Error(_cur_arg + ": tipo articolo non previsto"); return;

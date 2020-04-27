@@ -116,11 +116,11 @@ namespace SyncCyberPlan_lib
 
                     if (errore)
                     {
-                        Message.Subject = "[CyberPLan] ERRORE sincronizzazione (" + hostInfo.HostName + ")" + postTitolo;
+                        Message.Subject = "[CyberPLan->Sage] ERRORE sincronizzazione (" + hostInfo.HostName + ")" + postTitolo;
                     }
                     else
                     {
-                        Message.Subject = "[CyberPlan] problema da sistemare: " + postTitolo;
+                        Message.Subject = "[CyberPlan->Sage] problema da sistemare: " + postTitolo;
                     }
 
                     //((IPEndPoint)server.LocalEndpoint).Address.ToString() + " - " +  System.DateTime.Now + " - " + Msg;				
@@ -137,9 +137,10 @@ namespace SyncCyberPlan_lib
 
                           + Utils.NewLineMail() + Utils.NewLineMail() + Msg
                         ;
-
-                    Message.Bcc.Add(mailBCC); 
-
+                    if (!string.IsNullOrWhiteSpace(mailBCC))
+                    {
+                        Message.Bcc.Add(mailBCC);
+                    }
                     //for (int i = 0; i < localAddress.Length; i++)
                     //{
                     //    Message.Body += System.Environment.NewLine + "\t IP Address " + i + "-  " + localAddress[i].ToString();
@@ -154,7 +155,7 @@ namespace SyncCyberPlan_lib
                     //SmtpMail.SmtpServer = _MailServerSMTP;
                     //SmtpMail.Send(Message);				
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     //ToLog(true, "MAIL", "---" + " Exception From:" + e.Source + " Message:" + e.Message + "\n Messaggio CAMM : " + Msg);//e.ToString()
                     EventLog.WriteEntry("Exception Sync CyberPlan ", Msg);

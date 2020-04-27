@@ -44,22 +44,24 @@ namespace SyncCyberPlan_lib
         protected string         OPE_C_ATTREZZATURA   ;
         protected string         OPE_C_MACHINE        ;
         protected int            OPE_C_SEQUENCE       ;
-		
-        protected string         DEM_C_ORDER_CODE;
-        protected string         DEM_C_CORDER_CODE;
-        protected string         DEM_C_ITEM_CODE;
-        protected string         DEM_C_ITEM_PLANT;
-        protected int            DEM_C_OPNUM;
-        protected int            DEM_C_NSEQ;
-		protected int            DEM_task_number;
-        protected decimal        DEM_C_QTY;
-        protected decimal        DEM_C_WDW_QTY;
-        protected string         DEM_C_MRP_TYPE;
-        protected int            DEM_C_STATUS;
-        protected string         DEM_C_REF_CORDER_CODE;
-        protected DateTime?      DEM_C_DUEDATE;
 
-        public ExpOrder(string file_prefix) : base(file_prefix)
+        protected string         C_UOM;
+		
+        //protected string         DEM_C_ORDER_CODE;
+        //protected string         DEM_C_CORDER_CODE;
+        //protected string         DEM_C_ITEM_CODE;
+        //protected string         DEM_C_ITEM_PLANT;
+        //protected int            DEM_C_OPNUM;
+        //protected int            DEM_C_NSEQ;
+		//protected int            DEM_task_number;
+        //protected decimal        DEM_C_QTY;
+        //protected decimal        DEM_C_WDW_QTY;
+        //protected string         DEM_C_MRP_TYPE;
+        //protected int            DEM_C_STATUS;
+        //protected string         DEM_C_REF_CORDER_CODE;
+        //protected DateTime?      DEM_C_DUEDATE;
+
+        public ExpOrder(string file_prefix, X3WSUtils.TipoImport tipo) : base(file_prefix,  tipo)
         {
 
         }
@@ -101,20 +103,22 @@ namespace SyncCyberPlan_lib
             OPE_C_MACHINE          = getDBV<string>(row[30],  nameof(OPE_C_MACHINE));
             OPE_C_SEQUENCE         = getDBV<int>   (row[31],  nameof(OPE_C_SEQUENCE));
 
+            C_UOM                  = getDBV<string>(row[32],  nameof(C_UOM));
 
-            DEM_C_ORDER_CODE       = getDBV<string> (row[32], nameof(DEM_C_ORDER_CODE)); 
-            DEM_C_CORDER_CODE      = getDBV<string> (row[33], nameof(DEM_C_CORDER_CODE));
-            DEM_C_ITEM_CODE        = getDBV<string> (row[34], nameof(DEM_C_ITEM_CODE));
-            DEM_C_ITEM_PLANT       = getDBV<string> (row[35], nameof(DEM_C_ITEM_PLANT));
-            DEM_C_OPNUM            = getDBV<int>    (row[36], nameof(DEM_C_OPNUM));
-            DEM_C_NSEQ             = getDBV<int>    (row[37], nameof(DEM_C_NSEQ));
-            DEM_task_number        = getDBV<int>    (row[38], nameof(DEM_task_number));
-            DEM_C_QTY              = getDBV<decimal>(row[39], nameof(DEM_C_QTY));
-            DEM_C_WDW_QTY          = getDBV<decimal>(row[40], nameof(DEM_C_WDW_QTY));
-            DEM_C_MRP_TYPE         = getDBV<string> (row[41], nameof(DEM_C_MRP_TYPE));
-            DEM_C_STATUS           = getDBV<int>    (row[42], nameof(DEM_C_STATUS));
-            DEM_C_REF_CORDER_CODE  = getDBV<string> (row[43], nameof(DEM_C_REF_CORDER_CODE));
-            DEM_C_DUEDATE          = getSqlDate     (row[44], nameof(DEM_C_DUEDATE));
+
+            //DEM_C_ORDER_CODE       = getDBV<string> (row[32], nameof(DEM_C_ORDER_CODE)); 
+            //DEM_C_CORDER_CODE      = getDBV<string> (row[33], nameof(DEM_C_CORDER_CODE));
+            //DEM_C_ITEM_CODE        = getDBV<string> (row[34], nameof(DEM_C_ITEM_CODE));
+            //DEM_C_ITEM_PLANT       = getDBV<string> (row[35], nameof(DEM_C_ITEM_PLANT));
+            //DEM_C_OPNUM            = getDBV<int>    (row[36], nameof(DEM_C_OPNUM));
+            //DEM_C_NSEQ             = getDBV<int>    (row[37], nameof(DEM_C_NSEQ));
+            //DEM_task_number        = getDBV<int>    (row[38], nameof(DEM_task_number));
+            //DEM_C_QTY              = getDBV<decimal>(row[39], nameof(DEM_C_QTY));
+            //DEM_C_WDW_QTY          = getDBV<decimal>(row[40], nameof(DEM_C_WDW_QTY));
+            //DEM_C_MRP_TYPE         = getDBV<string> (row[41], nameof(DEM_C_MRP_TYPE));
+            //DEM_C_STATUS           = getDBV<int>    (row[42], nameof(DEM_C_STATUS));
+            //DEM_C_REF_CORDER_CODE  = getDBV<string> (row[43], nameof(DEM_C_REF_CORDER_CODE));
+            //DEM_C_DUEDATE          = getSqlDate     (row[44], nameof(DEM_C_DUEDATE));
         }
 
         protected override string GetSelectQuery(int TaskNumber)
@@ -153,25 +157,30 @@ namespace SyncCyberPlan_lib
       ,P.[C_ATTREZZATURA]
       ,P.[C_MACHINE]
       ,P.[C_SEQUENCE]
+      
+      ,I.[C_UOM] 
 
-      ,D.[C_CORDER_CODE]
-      ,D.[C_ORDER_CODE]
-      ,D.[C_ITEM_CODE]
-      ,D.[C_ITEM_PLANT]
-      ,D.[C_OPNUM]
-      ,D.[C_NSEQ]
-      ,D.[TASK_NUMBER]
-      ,D.[C_QTY]
-      ,D.[C_WDW_QTY]
-      ,D.[C_MRP_TYPE]
-      ,D.[C_STATUS]
-      ,D.[C_REF_CORDER_CODE]
-      ,D.[C_DUEDATE]
+     -- ,D.[C_CORDER_CODE]
+     -- ,D.[C_ORDER_CODE]
+     -- ,D.[C_ITEM_CODE]
+     -- ,D.[C_ITEM_PLANT]
+     -- ,D.[C_OPNUM]
+     -- ,D.[C_NSEQ]
+     -- ,D.[TASK_NUMBER]
+     -- ,D.[C_QTY]
+     -- ,D.[C_WDW_QTY]
+     -- ,D.[C_MRP_TYPE]
+     -- ,D.[C_STATUS]
+     -- ,D.[C_REF_CORDER_CODE]
+     -- ,D.[C_DUEDATE]
 
         from dbo.EXP_ORDER O
         join  dbo.EXP_OPERATION P on O.TASK_NUMBER=P.TASK_NUMBER and O.C_CODE = P.C_ORDER_CODE
-        join dbo.EXP_DEMAND D on O.TASK_NUMBER=D.TASK_NUMBER and O.C_CODE = D.C_ORDER_CODE
-        where O.TASK_NUMBER="+ TaskNumber + " " + WhereCondition() +
+     --   join dbo.EXP_DEMAND D on O.TASK_NUMBER=D.TASK_NUMBER and O.C_CODE = D.C_ORDER_CODE
+
+        join dbo.CYB_ITEM I on I.C_CODE=O.ORD_C_ITEM_CODE [C_ITEM_GROUP ]<>'__TOOL__'
+
+        where O.TASK_NUMBER=" + TaskNumber + " " + WhereCondition() +
             " order by O.TASK_NUMBER asc ";
 
             return ret;

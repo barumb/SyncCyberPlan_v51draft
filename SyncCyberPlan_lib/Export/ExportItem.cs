@@ -15,13 +15,15 @@ namespace SyncCyberPlan_lib
         protected readonly string __SEP = ";"; //separatore
         protected static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 
+        public X3WSUtils.TipoImport Tipo;
         protected string _file_prefix;
         protected string _dossier;
         protected DBHelper2 _db = null;
 
-        public ExportItem(string file_prefix)
+        public ExportItem(string file_prefix, X3WSUtils.TipoImport tipo)
         {
             _file_prefix = file_prefix;
+            Tipo = tipo;
             _db = DBHelper2.getCyberDBHelper();
         }
 
@@ -38,7 +40,7 @@ namespace SyncCyberPlan_lib
             string pathfile = null;
             string startedAt = DateTime.Now.ToString();
 
-            _logger.Info("Oggetto: " + this.GetType().ToString());
+            //_logger.Debug("Oggetto: " + this.GetType().ToString());
 
             string qry = GetSelectQuery(taskNumberToExport);
             DbDataReader dtr = _db.GetReaderSelectCommand(qry);
@@ -71,7 +73,14 @@ namespace SyncCyberPlan_lib
             //    Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net", message_error);
             //    //Utils.SendMail("it@sauro.net", "francesco.chiminazzo@sauro.net,enrico.lidacci@sauro.net", message_error);
             //}
-            _logger.Info("TaskNumber=" + taskNumberToExport + " - esportato file " + pathfile);
+            if (pathfile == null)
+            {
+                _logger.Info(this.GetType().Name + " TaskNumber=" + taskNumberToExport + " - nulla da esportare");
+            }
+            else
+            {
+                _logger.Info("TaskNumber=" + taskNumberToExport + " - esportato file " + pathfile);
+            }
 
             _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "  end");
             return pathfile;
