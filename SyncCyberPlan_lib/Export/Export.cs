@@ -43,10 +43,19 @@ namespace SyncCyberPlan_lib
             ExpCorder cord = new ExpCorder();
             ExpOrderOPR opr = new ExpOrderOPR(creaOprDaAs400);
 
+
+            // si importano gli opr dal tasknumber più piccolo al più grande in seguenza fino all afine o al primo errore di importazione
+
             bool res= true;
+           
+
             while (res)
             {
                 res = false;
+
+                bool flgImportOpr = true;
+                bool flgImportCOrd = true;
+
                 int? firstTaskNumber = ExportItem.GetMinTaskNumber(); 
                 if (firstTaskNumber.HasValue)
                 {
@@ -54,8 +63,8 @@ namespace SyncCyberPlan_lib
                     {
                         service = new X3WS(pool); //inizializzo il Ws solo se necessario
                     }
-                    res |= ExportTaskNumber(dossier, service, firstTaskNumber.Value, opr);
-                    res |= ExportTaskNumber(dossier, service, firstTaskNumber.Value, cord);
+                    flgImportOpr = ExportTaskNumber(dossier, service, firstTaskNumber.Value, opr);
+                    flgImportCOrd = ExportTaskNumber(dossier, service, firstTaskNumber.Value, cord);
 
                     service.ExportMfgToAs400(firstTaskNumber.Value);//export verso As400 dell'intero TaskNUmber
                 }
@@ -63,6 +72,9 @@ namespace SyncCyberPlan_lib
                 {
                     _logger.Info("Nessun TaskNumber da esportare");
                 }
+
+                // se c'è stato un errore di importazione mi fermo
+                res = flgImportCOrd && flgImportOpr;
             }
         }
         static protected bool ExportTaskNumber(string dossier, X3WS service, int taskNumberToExport, ExportItem expitm)

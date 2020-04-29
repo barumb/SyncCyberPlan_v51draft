@@ -36,7 +36,7 @@ namespace SyncCyberPlan_lib
 
         public string WriteToFile(string dossier, int taskNumberToExport) //where T : ExportItem, new()
         {
-            _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "  start...");
+            _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name +  " dossier=" + dossier + " NrTask=" + taskNumberToExport.ToString() + "    start...");
             string pathfile = null;
             string startedAt = DateTime.Now.ToString();
 

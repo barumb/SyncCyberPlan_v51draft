@@ -195,7 +195,7 @@ namespace SyncCyberPlan_lib
 <FLD NAME="IMPFILE">OPR_task471_191114_042559.TXT</FLD> 
 </PARAM> 
              */
-            _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + "  start...");
+            _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + " tipo=" + tipo.ToString() + " nomefile=" + nomeFile + "   start...");
             CAdxResultXml XMLresult = new CAdxResultXml();
 
             List<string[]> KeyValue = new List<string[]>();
@@ -211,6 +211,7 @@ namespace SyncCyberPlan_lib
 </PARAM>
              */
             string XMLRequest = X3WSUtils.XMLBuildReq("PARAM", "FLD", KeyValue);
+            _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + " X3webservice pubName:" + X3WSUtils.X3WS_PublicName_ImportSubProgram + "XMlrequest=" + XMLRequest + "   start...");
             XMLresult = RunSubprog(X3WSUtils.X3WS_PublicName_ImportSubProgram, XMLRequest);
 
             

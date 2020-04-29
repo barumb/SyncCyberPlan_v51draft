@@ -175,10 +175,10 @@ namespace SyncCyberPlan_lib
      -- ,D.[C_DUEDATE]
 
         from dbo.EXP_ORDER O
-        join  dbo.EXP_OPERATION P on O.TASK_NUMBER=P.TASK_NUMBER and O.C_CODE = P.C_ORDER_CODE
+        join  dbo.EXP_OPERATION P on (O.TASK_NUMBER=P.TASK_NUMBER and O.C_CODE = P.C_ORDER_CODE) 
      --   join dbo.EXP_DEMAND D on O.TASK_NUMBER=D.TASK_NUMBER and O.C_CODE = D.C_ORDER_CODE
 
-        join dbo.CYB_ITEM I on I.C_CODE=O.ORD_C_ITEM_CODE [C_ITEM_GROUP ]<>'__TOOL__'
+        join dbo.CYB_ITEM I on (I.C_CODE=O.C_ITEM_CODE AND I.[C_ITEM_GROUP ]<>'__TOOL__') 
 
         where O.TASK_NUMBER=" + TaskNumber + " " + WhereCondition() +
             " order by O.TASK_NUMBER asc ";
