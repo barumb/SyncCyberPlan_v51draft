@@ -292,7 +292,7 @@ and Q.SOQSEQ_0 = P.SOPSEQ_0
 
 WHERE
 Q.SOQSTA_0 <> 3
-AND P.YPRODBLK_0 < 2--0 non valorizzato   1 = non bloccato  2 = bloccato (non va schedulato)
+AND P.YPRODBLK_0 < 2 --0 non valorizzato   1 = non bloccato  2 = bloccato (non va schedulato)
 AND S.ORDSTA_0 = 1
 and S.SALFCY_0 = 'ITS01'
 order by S.SOHNUM_0

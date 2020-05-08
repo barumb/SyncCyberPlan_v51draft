@@ -219,7 +219,7 @@ namespace SyncCyberPlan_lib
 from " + _db + @".MFGHEAD H 
 inner join " + _db + @".MFGOPE O on H.MFGNUM_0= O.MFGNUM_0
 where 
-and H.MFGSTA_0<=2 ";  
+ H.MFGSTA_0<=2 ";  
 
             if (!string.IsNullOrWhiteSpace(codice_like))
             {

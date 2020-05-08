@@ -145,7 +145,12 @@ namespace SyncCyberPlan_lib
             //    codice_like = "%";
             //}
 
-            string qry = tmp.GetSelectQuery(mode_all, _libreria_dossier+"TEST", codice_like, filtro);
+            //string qry = tmp.GetSelectQuery(mode_all, _libreria_dossier+"TEST", codice_like, filtro);
+
+            _logger.Info("Oggetto: " + typeof(T).ToString().PadRight(60) + " Disab Blocco chifra suffisso TEST a " + _libreria_dossier );
+            string qry = tmp.GetSelectQuery(mode_all, _libreria_dossier , codice_like, filtro);
+
+
             DbDataReader dtr = GetReaderSelectCommand(qry);
             object[] row = new object[dtr.FieldCount];
 

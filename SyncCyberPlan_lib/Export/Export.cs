@@ -67,14 +67,16 @@ namespace SyncCyberPlan_lib
                     flgImportCOrd = ExportTaskNumber(dossier, service, firstTaskNumber.Value, cord);
 
                     service.ExportMfgToAs400(firstTaskNumber.Value);//export verso As400 dell'intero TaskNUmber
+
+                    // se c'è stato un errore di importazione mi fermo
+                    res = flgImportCOrd && flgImportOpr;
                 }
                 else
                 {
                     _logger.Info("Nessun TaskNumber da esportare");
                 }
 
-                // se c'è stato un errore di importazione mi fermo
-                res = flgImportCOrd && flgImportOpr;
+                
             }
         }
         static protected bool ExportTaskNumber(string dossier, X3WS service, int taskNumberToExport, ExportItem expitm)

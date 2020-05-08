@@ -51,8 +51,8 @@ namespace SyncCyberPlan_lib
 , H.YCYBTSK_0
 , I.ITMREF_0
 , I.MFGFCY_0
-, I.VCRNUMORI_0-- valori di As400 da modificare con i legami in fase di import in Sage
-, I.VCRLINORI_0-- valori di As400 da modificare con i legami in fase di import in Sage
+, I.VCRNUMORI_0 -- valori di As400 da modificare con i legami in fase di import in Sage
+, I.VCRLINORI_0 -- valori di As400 da modificare con i legami in fase di import in Sage
 , H.CREDAT_0
 , H.MFGSTA_0   --MFGSTA 1=Confermato  2= Pianificato  3=Suggerito 4=Chiuso
 , H.STRDAT_0

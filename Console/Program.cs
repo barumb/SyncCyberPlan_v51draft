@@ -1,4 +1,14 @@
-﻿///Programma per creazione file di import di Sage con articoli di As400
+﻿// esempio parametri di esecuzione
+//
+// test webservice
+// X3WS SAURODEV MRP CREAOPR=si
+//
+// test sync dati Cyberplan from AS400/X3
+// SAURO MBM41LIB_M ALLTIME LOC
+
+
+
+///Programma per creazione file di import di Sage con articoli di As400
 ///Gestisce TUTTI gli articoli che non siano Prodotti Finiti (no PF)
 ///
 ///
@@ -28,10 +38,11 @@ namespace Console
                 Settings.WriteExampleConfig();
 
 #if DEBUG
-                Esegui(args);
+                //Esegui(args);
                 //Esegui("OPRAS400".Split(' '));
                 //Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));
                 //Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
+                Esegui("TRG".Split(' '));
                 return;
                  //EseguiTutto();
 
@@ -133,7 +144,13 @@ namespace Console
             {
                 OrdiniAcq_OPR_As400_FIRSTIMPORT.GetFileImport_YMFG_Sage();
             }
-
+            else if (args[0].ToUpper() == "TRG")
+            {
+                //string targetTrigger = args[1].Trim().ToUpper();
+                string defTrgCheckFileMrp = "UPDATE S2TESTMRP.XMLDTRG SET DETRG='C'";
+                AS400HelperTrigger AS400Trg = new AS400HelperTrigger("S2TEMPMRP", defTrgCheckFileMrp);
+                AS400Trg.ExecuteTrigger();
+            }
 
             if (args.Length < 4 || help==true)
             {
