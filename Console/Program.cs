@@ -6,6 +6,9 @@
 // test sync dati Cyberplan from AS400/X3
 // SAURO MBM41LIB_M ALLTIME LOC
 
+// post event
+//$(SolutionDir)syncSourceOnDOCIT.cmd  \\sauro.dmn\doc\IT\ERP\Cyberplan\src\SyncCyberPlan_working
+
 
 
 ///Programma per creazione file di import di Sage con articoli di As400
@@ -41,7 +44,7 @@ namespace Console
                 //Esegui(args);
                 //Esegui("OPRAS400".Split(' '));
                 //Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));
-                //Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
+                Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
                 Esegui("TRG".Split(' '));
                 return;
                  //EseguiTutto();
@@ -146,10 +149,10 @@ namespace Console
             }
             else if (args[0].ToUpper() == "TRG")
             {
-                //string targetTrigger = args[1].Trim().ToUpper();
-                string defTrgCheckFileMrp = "UPDATE S2TESTMRP.XMLDTRG SET DETRG='C'";
-                AS400HelperTrigger AS400Trg = new AS400HelperTrigger("S2TEMPMRP", defTrgCheckFileMrp);
+                
+                AS400HelperTrigger AS400Trg = new AS400HelperTrigger("S2TESTMRP");
                 AS400Trg.ExecuteTrigger();
+                
             }
 
             if (args.Length < 4 || help==true)

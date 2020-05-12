@@ -18,21 +18,25 @@ namespace SyncCyberPlan_lib
     {
         OdbcConnection _conn;
         OdbcCommand _cmdDB;
-        string _libAS400;
+        OdbcDataReader _rd;
+        string _sqlReadTrg;
         string _defTrigger;
+        string _trgLibName;
         
         protected readonly string __SEP = ";"; //separatore
         
         protected static readonly ILog _logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name);
 
 
-        public AS400HelperTrigger(string pLibAs400,
-                                  string pTriggerCmdSql,
+        public AS400HelperTrigger(string pLibTrgAs400,
                                   string pConnString = @""
                                  )
         {
             _cmdDB = new OdbcCommand();
             _conn = new OdbcConnection();
+            _trgLibName = pLibTrgAs400.ToUpper().Trim();
+            _sqlReadTrg = @"Select CDKEY, DETRG FROM " + _trgLibName + ".XMLDTRG  ORDER BY DETRG DESC";
+
             if (pConnString.Trim() != "")
             {
                 _conn.ConnectionString = pConnString;
@@ -52,20 +56,15 @@ namespace SyncCyberPlan_lib
             _cmdDB = new OdbcCommand();
             _cmdDB.Connection = _conn;
             
-            _libAS400 = pLibAs400.Trim().ToUpper();
-            _defTrigger = pTriggerCmdSql;
             _cmdDB.CommandText = _defTrigger;
             _cmdDB.CommandType = System.Data.CommandType.Text;
         }
 
-        public void SetTrigger(string pDefTrigger)
-        {
-            _cmdDB.CommandText  = pDefTrigger;
-        
-        }
+       
 
-        public void ReadTrigger()
+        public int ReadTrigger()
         {
+            int result = -2;
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Lettura Tabella del Trigger");
 
             if (_conn.State != System.Data.ConnectionState.Open) OpenConnection();
@@ -73,10 +72,33 @@ namespace SyncCyberPlan_lib
             if (_conn.State != System.Data.ConnectionState.Open)
             {
                 _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + "!!!! IMPOSSIBILE APRIRE CONNESSIONE SU AS400 !!!!");
-                //return -1;
+                return -1;
             }
+
+            
+            _cmdDB.CommandText = _sqlReadTrg;
+            
+            _rd = _cmdDB.ExecuteReader();
+            if (_rd.HasRows)
+            {
+                _rd.Read(); //mi basta leggere il primo record se la tabella trigger non è vuota
+                            //recurero il valore della seconda colonna: DETRG
+
+                if (!int.TryParse(_rd.GetValue(1).ToString().Trim(), out result))
+                {   //NOn è stato possibile convertire in int. Imposto a 0 per reiniziare il conteggio 
+                    return result = 0;
+                }
+
+            }
+            else result = -1;
+
+            // se return  -2=IMpossibile aprire la connessione -1:Tabella tRigger vuota  0=trovato carattere letterale o 0. quindi si reinizia il conteggio 0-9
+            return result; 
+           
+
         }
 
+        
 
         public void OpenConnection()
         {
@@ -101,33 +123,48 @@ namespace SyncCyberPlan_lib
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---end---");
         }
 
-        public int ExecuteTrigger( int timeout=10)
+        public int ExecuteTrigger(int timeout = 10)
         {
+
             int res = -2;
-            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Attivazione trigger su AS400");
-            
-            if ( _conn.State!= System.Data.ConnectionState.Open) OpenConnection();
+            int _lastNrTrg = -2;
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Lettura Tabella del Trigger");
+
+            if (_conn.State != System.Data.ConnectionState.Open) OpenConnection();
 
             if (_conn.State != System.Data.ConnectionState.Open)
             {
                 _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + "!!!! IMPOSSIBILE APRIRE CONNESSIONE SU AS400 !!!!");
-                return -1;
+                //return -1;
             }
 
-            _cmdDB = _conn.CreateCommand( );
+            _lastNrTrg = this.ReadTrigger();
+            //Resetto il contatore. Mantengo 1 colonna
+            if (_lastNrTrg == 9) _lastNrTrg = 0;
+
+            _cmdDB = _conn.CreateCommand();
+            _cmdDB.CommandType = CommandType.Text;
+
+            if (_lastNrTrg == -1)
+            {
+                //Tabella trigger vuota. Inserisco il recordo
+                _cmdDB.CommandText = @"INSERT INTO  " + _trgLibName + @".XMLDTRG  (CDKEY, DETRG) VALUES ('1','" + (_lastNrTrg).ToString() + @"') ";
+            }
+            else
+            {
+                //Tabella trigger con almeno un record. Vado ad aggionare
+                _cmdDB.CommandText = @"UPDATE " + _trgLibName + @".XMLDTRG T  SET T.DETRG='" + (_lastNrTrg + 1).ToString() + @"' ";
+            }
             if (timeout >= 0)
             {
                 _cmdDB.CommandTimeout = timeout;
             }
-            _cmdDB.CommandType = CommandType.Text;
-            _cmdDB.CommandText = _defTrigger;
-            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Command created : " + _defTrigger);
 
             try
             {
                 res = _cmdDB.ExecuteNonQuery();
-                
-                if (res == -1 )
+
+                if (res == -1)
                 {
                     //rollback
                     _logger.Error("rollback query \n" + _defTrigger);
@@ -140,13 +177,15 @@ namespace SyncCyberPlan_lib
             }
             catch (Exception ex)
             {
+
                 _logger.Error("", ex);
                 throw ex;
             }
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " end---");
             return res;
-        }
 
+
+        }
 
 
     }
