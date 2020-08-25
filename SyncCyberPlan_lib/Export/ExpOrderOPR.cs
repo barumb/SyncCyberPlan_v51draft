@@ -50,9 +50,10 @@ namespace SyncCyberPlan_lib
 
             return
                 "A" +                                                              //
+
                 __SEP + "ITS01" +                                                  //
                 __SEP + "1" +                                                      //BOMALT
-                //__SEP + OPE_C_OPNUM +                                              //BOMOPE = openum
+                                                                                   //__SEP + OPE_C_OPNUM +                                              //BOMOPE = openum
                 __SEP + ORD_C_ITEM_CODE +                                          //
                 __SEP + string.Format("{0:ddMMyy}", ORD_C_STDATE) +                //
                 __SEP + string.Format("{0:ddMMyy}", ORD_C_DUEDATE) +               //
@@ -64,11 +65,14 @@ namespace SyncCyberPlan_lib
                 __SEP + getMFGSTA(ORD_C_CODE) +                                    //*4  //MFGSTA  2= Pianificato  1= Confermato
                 __SEP + getOrdineCommessa(ORD_C_CORDER_CODE) +                     //
                 __SEP + getRigaOrdineCommessa(ORD_C_CORDER_CODE) +                 //
+                __SEP + ORD_task_number +                                          // by umb per avere YCYBTSK
+                __SEP + getCyberCode(ORD_C_CODE) +                                 // by umb per avere YCYBCOD
+                __SEP + "" +                                                       // by umb per avere YAS4COD
                 "\nB" +                                                            //
                 __SEP + OPE_C_OPNUM +                                              //OPENUM
                 __SEP + "1" +                                                      //EXTWSTNBR, numero macchine, fisso 1
                 __SEP + C_UOM +                                                    //OPEUOM Unita di misura operazione, fisso PZ per ora
-                __SEP + "1"  +                                                     //OPESTUCOE coeff. tra Unità di misura operazione e UM articolo, 
+                __SEP + "1" +                                                     //OPESTUCOE coeff. tra Unità di misura operazione e UM articolo, 
                 __SEP + OPE_C_QTY +                                                //
                 __SEP + OPE_C_ATTREZZATURA +                                       //
                 __SEP + getMacchina(OPE_C_MACHINE, OPE_C_WORKCENTER_CODE) +        //
@@ -76,17 +80,21 @@ namespace SyncCyberPlan_lib
                 __SEP + string.Format("{0:ddMMyy}", OPE_C_DUEDATE) +               //
                 __SEP + OPE_C_SETUP_TIME / 60 +   //da secondi a minuti            //
                 __SEP + OPE_C_RUN_TIME / 60 +     //da secondi a minuti            //
-                // NON LO IMPORTA, NON C?é IN MASCHERA __SEP + getMFGSTA(ORD_C_CODE) +                                    //*4  //MFGSTA  2= Pianificato  1= Confermato (per le operazioni)
+                                                  // NON LO IMPORTA, NON C?é IN MASCHERA __SEP + getMFGSTA(ORD_C_CODE) +                                    //*4  //MFGSTA  2= Pianificato  1= Confermato (per le operazioni)
                 __SEP + "1" +                                                      //  1= NO contolavoro 2= contolavoro strtturale  3= CL congiunturale
+                __SEP + ORD_task_number +                                          // by umb per avere YCYBTSK
+                __SEP + getCyberCode(ORD_C_CODE) +                                                       // by umb per avere YCYBCOD
+                __SEP + "" +                                                       // by umb per avere YAS4COD
                 "\nC" +                                                            //
-                __SEP + getCyberCode(ORD_C_CODE) +                                 //
-                __SEP + ORD_task_number;                                           //
-                //MFGMAT non viene importata   "\nD" +
-                //MFGMAT non viene importata   //__SEP + DEM_MFGLIN +
-                //MFGMAT non viene importata   __SEP + DEM_C_NSEQ +
-                //MFGMAT non viene importata   __SEP + DEM_C_ITEM_CODE +
-                //MFGMAT non viene importata   __SEP + DEM_C_QTY +
-                //MFGMAT non viene importata   __SEP + (DEM_C_QTY/ORD_C_QTY) +  //qta base = qta di legame                
+                __SEP + ORD_task_number +                                          // by umb per avere YCYBTSK
+                __SEP + getCyberCode(ORD_C_CODE) +                                 // by umb per avere YCYBCOD
+                __SEP + "" ;                                                       // by umb per avere YAS4COD
+               //MFGMAT non viene importata   "\nD" +
+               //MFGMAT non viene importata   //__SEP + DEM_MFGLIN +
+               //MFGMAT non viene importata   __SEP + DEM_C_NSEQ +
+               //MFGMAT non viene importata   __SEP + DEM_C_ITEM_CODE +
+               //MFGMAT non viene importata   __SEP + DEM_C_QTY +
+               //MFGMAT non viene importata   __SEP + (DEM_C_QTY/ORD_C_QTY) +  //qta base = qta di legame                
                 ;
         }
         string getCICLO_UOM(string ITEM_UOM)

@@ -67,7 +67,8 @@ namespace SyncCyberPlan_lib
                     flgImportOpr = ExportTaskNumber(dossier, service, firstTaskNumber.Value, opr);
                     flgImportCOrd = ExportTaskNumber(dossier, service, firstTaskNumber.Value, cord);
                     
-                    //export verso As400 dell'intero TaskNUmber
+                    //export verso As400 dell'intero TaskNUmber  ???? MA HA SENSO?????????
+                    //il Ws di export esporta tutto non solo il task corrente!!!!!! 
                     service.ExportMfgToAs400(firstTaskNumber.Value);
 
                     // se c'è stato un errore di importazione mi fermo

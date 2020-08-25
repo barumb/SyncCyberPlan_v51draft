@@ -92,6 +92,8 @@ namespace SyncCyberPlan_lib
         protected string EscapeSQL(string field, int strlen)
         {
             string ret = "?";
+            // fixing. Code crash if field=""
+           
             if (field != null)
             {
                 ret = field.Replace("'", "''");  //escape del singolo apice ' : si mette due volte ''

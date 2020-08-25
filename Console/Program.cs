@@ -2,13 +2,16 @@
 //
 // test webservice
 // X3WS SAURODEV MRP CREAOPR=si
+// X3WS SAUROTEST MRP CREAOPR=si
 //
 // test sync dati Cyberplan from AS400/X3
 // SAURO MBM41LIB_M ALLTIME LOC
 
 // post event
 //$(SolutionDir)syncSourceOnDOCIT.cmd  \\sauro.dmn\doc\IT\ERP\Cyberplan\src\SyncCyberPlan_working
-
+//
+// argomento per attivare il trigger di importazione OPR da X3 sage
+// TRG
 
 
 ///Programma per creazione file di import di Sage con articoli di As400
@@ -42,10 +45,14 @@ namespace Console
 
 #if DEBUG
                 //Esegui(args);
+
                 //Esegui("OPRAS400".Split(' '));
                 //Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));
-                Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
-                Esegui("TRG".Split(' '));
+                //Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
+
+                Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+
+                //Esegui("TRG".Split(' '));  //avvia il Trigger di importazine OPR su As400 da Sage-X3
                 return;
                  //EseguiTutto();
 
@@ -138,7 +145,14 @@ namespace Console
                             bool creaopr = (tmpcreaopr.ToLower() == "si" ? true : false);
                             Export exp = new Export();
                             exp.ExportAllTaskNumber(dossier, creaopr);
-                            return;
+
+                            if (creaopr == true)
+                            {
+                              // se creo il file OPR x importazione in As400 allora lancio anche il trigger per l'elaborazione del file da AS400
+                              AS400HelperTrigger AS400Trg = new AS400HelperTrigger("S2TESTMRP");
+                              AS400Trg.ExecuteTrigger();
+                            }
+                                return;
                         }
                     }
                 }
@@ -149,6 +163,7 @@ namespace Console
             }
             else if (args[0].ToUpper() == "TRG")
             {
+                
                 
                 AS400HelperTrigger AS400Trg = new AS400HelperTrigger("S2TESTMRP");
                 AS400Trg.ExecuteTrigger();
@@ -337,10 +352,15 @@ namespace Console
                     case "LOC": as400.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
                     //case "SOH": as400.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
                     case "OPR":
-                        //as400.WriteToCyberPlan<OrdiniAcq_OPR_As400>(_mode_all, codicelike, "", _delete, "");
-sage.WriteToCyberPlan<OrdiniAcq_OPR>(_mode_all, codicelike, "", _delete, "");
-                        //as400.WriteToCyberPlan<Operations_As400>(_mode_all, codicelike, "", _delete, "");
-sage.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
+                        as400.WriteToCyberPlan<OrdiniAcq_OPR_As400>(_mode_all, codicelike, "", _delete, "");
+                        //Operazioni: OPR da AS400
+                        as400.WriteToCyberPlan<Operations_As400>(_mode_all, codicelike, "", _delete, "");
+                        
+                        break;
+                    case "OPRX3":
+                        sage.WriteToCyberPlan<OrdiniAcq_OPR>(_mode_all, codicelike, "", _delete, "");
+                        //Operazioni: OPR da DA SAGE
+                        sage.WriteToCyberPlan<Operations>(_mode_all, codicelike, "", _delete, "");
                         break;
                     case "GIAC":
                         as400.WriteToCyberPlan<Giacenze_ORR00PF>(_mode_all, codicelike, "", _delete, "");

@@ -159,12 +159,35 @@ namespace SyncCyberPlan_lib
 
             while (dtr.Read())
             {
+
+                //x debug
+                //if (i==34529)
+                //{
+                //    _logger.Info("i=" + i.ToString() );
+                    
+                //}
+
                 i++;
                 j++;
                 dtr.GetValues(row);
                 //tmp.Init__AddRow(row);
-                tmp.Init(row);
-                tmp.AddCyberRow();//tmp.GetRow(row);
+                try
+                {
+                    tmp.Init(row);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Info("I="+ i.ToString() + "Exception: " +ex.Message);
+                }
+
+                try
+                {
+                    tmp.AddCyberRow();//tmp.GetRow(row);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Info(ex.Message);
+                }
 
                 if (j % 1000 == 0)
                 {
@@ -284,7 +307,7 @@ namespace SyncCyberPlan_lib
         static int EseguiSuDBCyberPlan_Bulk(ref DBHelper2 cm, string tableName, DataTable dataTable)
         {
 #if DEBUG
-            return 1;
+            //return 1;
 #endif
             if (cm._connection.State != ConnectionState.Open)
             {

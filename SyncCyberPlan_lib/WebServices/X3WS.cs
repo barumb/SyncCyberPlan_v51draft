@@ -178,10 +178,14 @@ namespace SyncCyberPlan_lib
         {
             return Call_X3WS(tipo, nomeFile);
         }
-        public bool ExportMfgToAs400( int TaskNumber)
+        public bool ExportMfgToAs400( long TaskNumber)
         {
+            bool _status = false;
             _logger.Debug(this.GetType().Name + "." + System.Reflection.MethodBase.GetCurrentMethod().Name + " Export vs As400 TaskNumber " + TaskNumber.ToString() + " start...");
-            return Call_X3WS(X3WSUtils.TipoImport.EXPOPRAS400, TaskNumber.ToString());
+            _status =  Call_X3WS(X3WSUtils.TipoImport.EXPOPRAS400, TaskNumber.ToString());
+
+            return _status;
+
         }
         public bool Call_X3WS(X3WSUtils.TipoImport tipo, string nomeFile)
         {
