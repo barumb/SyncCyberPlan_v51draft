@@ -7,6 +7,7 @@ using log4net;
 using System.Data;
 using System.Data.Common;
 
+//
 namespace SyncCyberPlan_lib
 {
     public abstract class ExpOrder : ExportItem

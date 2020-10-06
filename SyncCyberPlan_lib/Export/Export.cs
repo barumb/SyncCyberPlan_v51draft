@@ -23,7 +23,7 @@ namespace SyncCyberPlan_lib
         /// Per questo vanno esportati un TaskNumber alla volta, nel giusto ordine (nel caso che per qualche motivo ci siano più task number presenti)
         /// </summary>
         /// <param name="dossier"></param>
-        public void ExportAllTaskNumber(string dossier, bool creaOprDaAs400)
+        public void ExportAllTaskNumber(string dossier, bool creaOprInAs400)
         {
             X3WS service = null;
             string pool = "";
@@ -41,7 +41,7 @@ namespace SyncCyberPlan_lib
 
             //tabelle di export di CyberPlan
             ExpCorder cord = new ExpCorder();
-            ExpOrderOPR opr = new ExpOrderOPR(creaOprDaAs400);
+            ExpOrderOPR opr = new ExpOrderOPR(creaOprInAs400);
 
 
             // si importano gli opr dal tasknumber più piccolo al più grande in seguenza fino all afine o al primo errore di importazione
@@ -56,23 +56,33 @@ namespace SyncCyberPlan_lib
                 bool flgImportOpr = true;
                 bool flgImportCOrd = true;
 
-                int? firstTaskNumber = ExportItem.GetMinTaskNumber(); 
-                if (firstTaskNumber.HasValue)
+                int? taskNumber = ExportItem.GetMinTaskNumber(); 
+                if (taskNumber.HasValue)
                 {
                     if (service == null)
                     {
                         service = new X3WS(pool); //inizializzo il Ws solo se necessario
                     }
                     //export Cyb vs Sage tramite WS
-                    flgImportOpr = ExportTaskNumber(dossier, service, firstTaskNumber.Value, opr);
-                    flgImportCOrd = ExportTaskNumber(dossier, service, firstTaskNumber.Value, cord);
-                    
-                    //export verso As400 dell'intero TaskNUmber  ???? MA HA SENSO?????????
-                    //il Ws di export esporta tutto non solo il task corrente!!!!!! 
-                    service.ExportMfgToAs400(firstTaskNumber.Value);
+                    flgImportOpr = ExportTaskNumber(dossier, service, taskNumber.Value, opr);
+                    flgImportCOrd = ExportTaskNumber(dossier, service, taskNumber.Value, cord);
 
                     // se c'è stato un errore di importazione mi fermo
                     res = flgImportCOrd && flgImportOpr;
+
+                    //export verso As400 del TaskNUmber + chimata al trigger per l'import
+                    if ((res == true) && (creaOprInAs400==true))
+                    {
+                        service.ExportMfgToAs400(taskNumber.Value);
+                        
+                        // Attivo il Trigger per scatenare l'import in AS400
+                        // se creo il file OPR x importazione in As400 allora lancio anche il trigger per l'elaborazione del file da AS400
+                        AS400HelperTrigger AS400Trg = new AS400HelperTrigger("S2TESTMRP");
+                        AS400Trg.ExecuteTrigger();
+                        
+                    }
+
+
                 }
                 else
                 {
@@ -81,6 +91,8 @@ namespace SyncCyberPlan_lib
 
                 
             }
+
+
         }
         static protected bool ExportTaskNumber(string dossier, X3WS service, int taskNumberToExport, ExportItem expitm)
         {

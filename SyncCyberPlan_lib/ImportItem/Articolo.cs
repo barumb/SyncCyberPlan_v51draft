@@ -317,9 +317,10 @@ namespace SyncCyberPlan_lib
             C_USER_REAL03                        = 0;                                // float	
             C_USER_REAL04                        = 0;                                // float	
             C_USER_REAL05                        = 0;                                // float	
+            // Fix per gestire casi YMRPTAG1 ="" che generava eccezione 
             C_USER_CHAR01                        = (char)EscapeSQL((YMRPTAG1_0 == "" ? " " : YMRPTAG1_0), 1)[0]; // char 1  Categoria pe morsetti / Frontalino Per WP
             C_USER_CHAR02                        = YPIEFLG_0==2?'P':' ';             // char 1  Piega o non piega per FILO
-            C_USER_CHAR03                        = FAMPEX;   //' '; //aggiornata successivamente da Articolo_caratteristiche() =getFAMP(ITMREF_0, ITMDES1_0);     // char 1
+            C_USER_CHAR03                        = FAMPEX;   //' '; //aggiornata successivamente da Articolo_caratteristiche() -> Update_FAMP(ref DBHelper2 cm)     // char 1
             C_USER_CHAR04                        = getSTH(TCLCOD_0,YMAT_0);          // char 1
             C_USER_CHAR05                        = ' ';                              // char 1
             C_USER_FLAG01                        = 0;                                // bit	

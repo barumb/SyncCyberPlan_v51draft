@@ -48,12 +48,12 @@ namespace Console
 
                 //Esegui("OPRAS400".Split(' '));
                 //Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));
-                //Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
+                Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
 
-                Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
 
                 //Esegui("TRG".Split(' '));  //avvia il Trigger di importazine OPR su As400 da Sage-X3
-                return;
+               
                  //EseguiTutto();
 
                 //Esegui("FINALCHECK".Split(' '));                return;
@@ -146,12 +146,13 @@ namespace Console
                             Export exp = new Export();
                             exp.ExportAllTaskNumber(dossier, creaopr);
 
-                            if (creaopr == true)
-                            {
-                              // se creo il file OPR x importazione in As400 allora lancio anche il trigger per l'elaborazione del file da AS400
-                              AS400HelperTrigger AS400Trg = new AS400HelperTrigger("S2TESTMRP");
-                              AS400Trg.ExecuteTrigger();
-                            }
+                            // non ha senso. il trigger importa sempre tutti i file che trova. Va gestito la creazione del file di export per as400
+                            //if (creaopr == true)
+                            //{
+                            //  // se creo il file OPR x importazione in As400 allora lancio anche il trigger per l'elaborazione del file da AS400
+                            //  AS400HelperTrigger AS400Trg = new AS400HelperTrigger("S2TESTMRP");
+                            //  AS400Trg.ExecuteTrigger();
+                            //}
                                 return;
                         }
                     }
@@ -206,6 +207,8 @@ namespace Console
                     "SyncCyberPlan X3WS DOSSIER [MRP|] CREAOPR=si/no per chiamate ai WebService di X3 \n" +
                     "      MRP             scatena import da CyberPlan verso X3" +
                     "      CREAOPR=si/no   con 'si' crea gli OPR che arrivano da as400 ma non esistono in Sage (per l'avvio)      \n\n" +
+
+                    "SyncCyberPlan TRG DOSSIER  attiva il trigger di importazione OPR da Sage \n\n" +
 
                     "OPRAS400 per ottenere il file per l'import INIZIALE da As400, mette il file in YSAURO\\IMPEXP \n" + 
                     "         solo da dati in effettivo (crea un file)"

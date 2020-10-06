@@ -159,6 +159,8 @@ namespace SyncCyberPlan_lib
             {
                 _cmdDB.CommandTimeout = timeout;
             }
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Definizione trigger:" + _cmdDB.CommandText);
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " Start trigger...");
 
             try
             {
@@ -178,7 +180,7 @@ namespace SyncCyberPlan_lib
             catch (Exception ex)
             {
 
-                _logger.Error("", ex);
+                _logger.Error("Trigger Exception \n", ex);
                 throw ex;
             }
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " end---");
