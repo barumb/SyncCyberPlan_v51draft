@@ -67,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Rigenera_DBFrontieraSAURO.bat" />
+    <None Include="Rigenera_DBFrontieraSAUROTEST.bat" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SyncCyberPlan_lib\SyncCyberPlan_lib.csproj">

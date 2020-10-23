@@ -163,10 +163,59 @@ namespace SyncCyberPlan_lib
                 //#endif
             }
         }
+
+        public static void SendMail_StatusMsg(Settings s ,  string postTitolo, string Msg , string Subject)
+        {
+            if (!string.IsNullOrWhiteSpace(Msg))
+            {
+                IPAddress[] localAddress = new IPAddress[0];
+                IPHostEntry hostInfo = new IPHostEntry();
+                String strHostName = "";
+                if (postTitolo == null) postTitolo = "";
+
+
+#if DEBUG
+                s.Mailto_pianificazione = "umberto.baratto@sauro.net";
+                s.Mailto_IT = "";
+#endif                
+                try
+                {
+                    // Get the local computer info.
+                    strHostName = Dns.GetHostName();
+                    hostInfo = Dns.GetHostEntry(strHostName);
+                    localAddress = hostInfo.AddressList;
+
+            
+                    MailMessage Message = new MailMessage(s.Mailfrom, s.Mailto_pianificazione);
+                    Message.Bcc.Add(s.Mailto_IT);
+
+                    Message.Subject = Subject;
+                    
+
+                    
+                    Message.Body =
+                          "Avviso da Sincronizzazione CyberPlan (" + System.DateTime.Now + " - " + hostInfo.HostName + ")"                    
+                          + Utils.NewLineMail() + Utils.NewLineMail() + Msg
+                        ;
+                                        
+                    SmtpClient client = new SmtpClient(s.ServerSmtp);
+                    client.Send(Message);
+                    
+                }
+                catch (Exception ex)
+                {
+                    //ToLog(true, "MAIL", "---" + " Exception From:" + e.Source + " Message:" + e.Message + "\n Messaggio CAMM : " + Msg);//e.ToString()
+                    EventLog.WriteEntry("Exception Sync CyberPlan ", Msg);
+                }
+                //#endif
+            }
+        }
         public static string NewLineMail()
         {
             //outlook se non ci sono spazi potrebbe tagliare gli a capo
             return "   " + System.Environment.NewLine;         
         }
+      
+
     }
 }

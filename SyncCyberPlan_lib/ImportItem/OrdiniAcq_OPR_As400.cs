@@ -31,7 +31,11 @@ namespace SyncCyberPlan_lib
         public decimal MFVASET; // tempo di setup
 
         public string MFVWRKC;  // centro di lavoro (Interno/esterno in as400)
+        
+        public string X3ORDNR;  // Numero ordine + di riferimento in X3
+        public int? X3ORDLN;   // Numero riga ordine di riferimento in X3
 
+        public string X3ORDNRLN; // riferimento all'ordine di vendita (Nr ord + Riga ordine) utilizzato per gli OPR
 
         public OrdiniAcq_OPR_As400(/*string YPOHTYP*/): base()
         {
@@ -44,7 +48,10 @@ namespace SyncCyberPlan_lib
 
             string _tabMFH = __libreriaAs400 + ".MFH00PF";
             string _tabMFV = __libreriaAs400 + ".MFV00PF";
+            string _tabVOO = __libreriaAs400 + ".VOOS00F";  // Tabella di transcodifica ordnine riga X3 -> Ordine riga As400
 
+
+            /* CON questa Query popolo con i dati di AS400. Devo invece usare le coordinate ordine di X3  tramite la tabella VOOS00F 
             string query = "SELECT " + "\n"
                 + "  " + _tabMFH + ".MFHTORD" + "\n"
                 + ",  " + _tabMFH + ".MFHAORD" + "\n"
@@ -77,16 +84,60 @@ namespace SyncCyberPlan_lib
                 + " and   " + _tabMFV + ".MFVSTAT = 'RI' " + "\n"     //sempre RI
                 + " and   " + _tabMFV + ".MFVSTAV <> 'CH' " + "\n"    //questo indica se la riga è chiusa
                 ;
+            */
+            /* Nuova versione che recupera il NR ordine e relativa riga di X3 tramite la tabella di relazione VOOS00F */
+            string query = "SELECT " + "\n"
+                + "   MFH.MFHTORD" + "\n"
+                + ",  MFH.MFHAORD" + "\n"
+                + ",  MFH.MFHPORD" + "\n"
+                + ",  MFH.MFHTCOM" + "\n"
+                + ",  MFH.MFHACOM" + "\n"
+                + ",  MFH.MFHPCOM" + "\n"
+                + ",  MFH.MFHSCOM" + "\n"
+                + ",  MFH.MFHCART" + "\n"
+                + ",  MFH.MFHQTRC" + "\n"
+                + ",  MFH.MFHDCRE" + "\n"
+                + ",  MFH.MFHSTAT" + "\n"
+                + ",  MFV.MFVDINI" + "\n"
+                + ",  MFV.MFVDEND" + "\n"
+                + ",  MFV.MFVSTAV" + "\n"
+                + ",  MFH.MFHQTPR" + "\n"
+                + ",  MFV.MFVQTSC" + "\n"
+
+                + ",  MFV.MFVUTLM" + "\n"
+                + ",  MFV.MFVAMPT" + "\n"
+                + ",  MFV.MFVUTSE" + "\n"
+                + ",  MFV.MFVASET" + "\n"
+                + ",  MFV.MFVWRKC" + "\n"
+                + ",  trim(X3.SOHNR) as X3ORDNR " + "\n"
+                + ",  int(X3.SOLNR) AS X3ORDLN " + "\n"
+               
+                + " FROM " + _tabMFH + " MFH \n"
+                + " INNER JOIN " + _tabMFV + " MFV ON " + "\n"
+                       + "     MFH.MFHTORD = MFV.MFVTORD " + "\n"
+                       + " AND MFH.MFHAORD = MFV.MFVAORD " + "\n"
+                       + " AND MFH.MFHPORD = MFV.MFVPORD " + "\n"
+                + " LEFT JOIN " + _tabVOO + " X3 ON " + "\n"
+                       + "     MFH.MFHTCOM = X3.TPOVE " + "\n"
+                       + " AND MFH.MFHACOM = X3.AAOVE " + "\n"
+                       + " AND MFH.MFHPCOM = X3.NROVE " + "\n"
+                       + " AND MFH.MFHSCOM = X3.LNOVE " + "\n"
+                       + " AND MFH.MFHACOM > 0 \n"
+                + " WHERE MFH.MFHSTAT = 'RI' " + "\n"     //sempre RI
+                + " and   MFV.MFVSTAT = 'RI' " + "\n"     //sempre RI
+                + " and   MFV.MFVSTAV <> 'CH' " + "\n"    //questo indica se la riga è chiusa
+                ;
+
 
             if (!string.IsNullOrWhiteSpace(codice_like))
             {
-                query += " and " + _tabMFH + ".MFHCART like '" + codice_like.Trim() + "'";
+                query += " and MFH.MFHCART like '" + codice_like.Trim() + "'";
             }
 
             query += " ORDER BY " 
-                + "  " + _tabMFH + ".MFHTORD," + "\n"
-                + "  " + _tabMFH + ".MFHAORD," + "\n"
-                + "  " + _tabMFH + ".MFHPORD" + "\n"
+                + " MFH.MFHTORD," + "\n"
+                + " MFH.MFHAORD," + "\n"
+                + " MFH.MFHPORD" + "\n"
                 ;
             return query;
         }
@@ -116,13 +167,24 @@ namespace SyncCyberPlan_lib
             MFVASET = getDBV<decimal>(row[19], "MFVASET");
 
             MFVWRKC = getDBV<string>(row[20], "MFVWRKC");
+            //20201023-it2adm>> Riferimento nrordine+nrriga di X3
+            X3ORDNR = getDBV<string>(row[21], "X3ORDNR");
+            X3ORDLN =getDBV<int>(row[22], "X3ORDLN");
+
+            X3ORDNRLN = "";
+
+            if ((!String.IsNullOrEmpty(X3ORDNR)) && (X3ORDLN!=null))
+            {
+                X3ORDNRLN = X3ORDNR + Convert.ToString(X3ORDLN).PadLeft(6, '0');
+            }
 
 
 
-
-            C_CODE                = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30);        //varchar         30                
+            C_CODE = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30);        //varchar         30                
             //ATTENZIONE il valore "000000000000" indica valore default per ordini a fabbisogno
-            C_CORDER_CODE         = EscapeSQL(MFHTCOM + MFHACOM.ToString("00") + MFHPCOM.ToString("000000") + MFHSCOM.ToString("0000"), 30);   //varchar 30  
+            C_CORDER_CODE = EscapeSQL(X3ORDNRLN, 30);   //varchar 30  
+            // Vecchia versione. Modificata da IT2adm 20201023
+            //C_CORDER_CODE         = EscapeSQL(MFHTCOM + MFHACOM.ToString("00") + MFHPCOM.ToString("000000") + MFHSCOM.ToString("0000"), 30);   //varchar 30  
             C_ITEM_CODE           = EscapeSQL(MFHCART, 50);                                        //varchar         50                      
             C_ITEM_PLANT          = EscapeSQL("ITS01", 20);                                        //varchar         20                      
             C_M_B                 = get_C_M_B(MFVWRKC);//'M';                                                           //char             1     // B=buy D=decentrato M = make                

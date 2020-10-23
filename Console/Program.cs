@@ -44,6 +44,8 @@ namespace Console
                 Settings.WriteExampleConfig();
 
 #if DEBUG
+                Esegui("SAURO MBM41LIB_M ALLTIME OPR ".Split(' '));
+                return;
                 //Esegui(args);
 
                 //Esegui("OPRAS400".Split(' '));
@@ -77,7 +79,7 @@ namespace Console
                 Esegui("SAURO MBM41LIB_M LAST=20 DISBAS".Split(' '));
 
 #else
-            Esegui(args);
+                Esegui(args);
 #endif
 
             }
@@ -116,11 +118,15 @@ namespace Console
             }
             else if (args[0].ToUpper() == "START")
             {
+                // Invio una mail di avviso INIZIO caricamento dati in frontiera Cyb"
+                Utils.SendMail_StatusMsg(Settings.GetSettings(),"Starting load data into Cyberplan", "STARTING LOAD DATA INTO CYBERPLAN from " + args[1].ToUpper(), "START UPLOADING");
                 CYBER_qry.SetStatus("Running");
                 return;
             }
             else if (args[0].ToUpper() == "STOP")
             {
+                // Invio una mail di avviso FINE caricamento dati in frontiera Cyb"
+                Utils.SendMail_StatusMsg(Settings.GetSettings(), "End load data into Cyberplan", "END LOAD DATA INTO CYBERPLAN from " + args[1].ToUpper(), "UPLOAD COMPLETED");
                 CYBER_qry.SetStatus("Completed");
                 return;
             }
@@ -372,7 +378,7 @@ namespace Console
                         break;
                     //case "DISBAS": as400.WriteToCyberPlan<DistintaBase_As400>(_mode_all, codicelike, "", _delete, ""); break;
                     case "DEM": as400.WriteToCyberPlan<Demand_OPR_righe_As400>(_mode_all, codicelike, "", _delete, ""); break;
-//case "DEM": sage.WriteToCyberPlan<Demand_OPR_righe>(_mode_all, codicelike, "", _delete, ""); break;
+                    //case "DEM": sage.WriteToCyberPlan<Demand_OPR_righe>(_mode_all, codicelike, "", _delete, ""); break;
 
 
                     default: _logger.Error(_cur_arg + ": tipo articolo non previsto"); return;
