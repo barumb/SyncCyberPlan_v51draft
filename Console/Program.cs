@@ -132,7 +132,7 @@ namespace Console
             }
             else if (args[0].ToUpper() == "FINALCHECK")
             {
-                CYBER_qry.FinalCheck();
+                CYBER_qry.FinalCheck(args[1].ToUpper().Trim());
                 return;
             }
             else if (args[0].ToUpper() == "X3WS")

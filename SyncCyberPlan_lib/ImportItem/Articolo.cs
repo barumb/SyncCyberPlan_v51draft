@@ -945,12 +945,13 @@ namespace SyncCyberPlan_lib
 
 
 
-            " WHERE I.ITMSTA_0=1 \n" +
-                " and I.ITMREF_0 not like 'WU%' \n" +
+            " WHERE I.ITMSTA_0=1 \n" 
+                + " and I.ITMREF_0 not like 'WU%' \n" 
                 //" and I.ITMREF_0 not like 'WWACQ%' \n" +
                 //" and I.ITMREF_0 not like 'WWVEN%' \n" +
                 //" and I.ITMREF_0 not like 'WWDPI%' \n" +
-                " and I.ITMREF_0 not like 'WW%' \n"
+                + " and I.ITMREF_0 not like 'WW%' \n"
+                + " and I.ITMREF_0 not like 'STG-__' \n" // Articoli inseriti da EnricoL/AndreaB per la gestione dei costi. Si riferiscono alla codifica del contolavoro Galvanico
             ;
 
             if (!string.IsNullOrWhiteSpace(codice_like))

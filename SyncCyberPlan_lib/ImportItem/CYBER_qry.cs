@@ -38,22 +38,33 @@ namespace SyncCyberPlan_lib
         }
 
 
-        static public void FinalCheck()
+        static public void FinalCheck(string dossier)
         {
-            FinalCheck_ARTICOLI_con_reparto_non_coerente();
-            FinalCheck_ATTR_senza_macchina();
+            FinalCheck_ARTICOLI_con_reparto_non_coerente( dossier);
+            FinalCheck_ATTR_senza_macchina(dossier);
             FinalCheck_PLAS_senza_cicli();
             FinalCheck_Ordini_di_Articoli_senza_cicli();
         }
-        static private void FinalCheck_ARTICOLI_con_reparto_non_coerente()
+        static private void FinalCheck_ARTICOLI_con_reparto_non_coerente( string dossier)
         {
-            DBHelper2 db = DBHelper2.getSageDBHelper("SAURO");
-            string command = @" select F.YWCR_0, F.ITMREF_0, AM.MACREP_0, AM.MAC_0 from SAURO.ITMFACILIT F
-join SAURO.ITMMASTER M on F.ITMREF_0=M.ITMREF_0
-left join SAURO.YPRDITM P on P.ITMREF_0=F.ITMREF_0 
-left join SAURO.YPRDAM AM on P.YATTCOD_0=AM.YCONATT_0
-where F.STOFCY_0='ITS01' and F.YWCR_0<>AM.MACREP_0 and MACREP_0<>'CL' and ITMSTA_0=1
-order by F.YWCR_0, AM.MACREP_0 ";
+//            DBHelper2 db = DBHelper2.getSageDBHelper("SAURO");
+//            string command = @" select F.YWCR_0, F.ITMREF_0, AM.MACREP_0, AM.MAC_0 from SAURO.ITMFACILIT F
+//join SAURO.ITMMASTER M on F.ITMREF_0=M.ITMREF_0
+//left join SAURO.YPRDITM P on P.ITMREF_0=F.ITMREF_0 
+//left join SAURO.YPRDAM AM on P.YATTCOD_0=AM.YCONATT_0
+//where F.STOFCY_0='ITS01' and F.YWCR_0<>AM.MACREP_0 and MACREP_0<>'CL' and ITMSTA_0=1
+//order by F.YWCR_0, AM.MACREP_0 ";
+
+            DBHelper2 db = DBHelper2.getSageDBHelper(dossier);
+            string command = @" select F.YWCR_0, F.ITMREF_0, AM.MACREP_0, AM.MAC_0 "
+                            + " from " + dossier + ".ITMFACILIT F "
+                            + " join " + dossier + ".ITMMASTER M on F.ITMREF_0=M.ITMREF_0 "
+                            + " left join " + dossier + ".YPRDITM P on P.ITMREF_0=F.ITMREF_0 "
+                            + " left join " + dossier + ".YPRDAM AM on P.YATTCOD_0=AM.YCONATT_0 "
+                            + " where F.STOFCY_0='ITS01' and F.YWCR_0<>AM.MACREP_0 and MACREP_0<>'CL' and ITMSTA_0=1 "
+                            + " order by F.YWCR_0, AM.MACREP_0 ";
+
+
 
             _logger.Info("start execution");
 
@@ -76,13 +87,23 @@ order by F.YWCR_0, AM.MACREP_0 ";
             Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "Articoli ATTIVI con reparto non coerente con reparto macchina");
             _logger.Info("end execution");
         }
-        static private void FinalCheck_ATTR_senza_macchina()
+        static private void FinalCheck_ATTR_senza_macchina( string dossier)
         {
-            DBHelper2 db = DBHelper2.getSageDBHelper("SAURO");
-            string command = @" select YATTCOD_0, YATTDES_0 from SAURO.YPRDATT A
-left join SAURO.YPRDCONF C on A.YATTCOD_0=C.YCONATT_0 and C.YCONENAFLG_0=2
-where A.YATTENAFLG_0=2 and C.YCONATT_0 is null
-order by YSTACOD_0 ";
+//            DBHelper2 db = DBHelper2.getSageDBHelper("SAURO");
+//            string command = @" select YATTCOD_0, YATTDES_0 from SAURO.YPRDATT A
+//left join SAURO.YPRDCONF C on A.YATTCOD_0=C.YCONATT_0 and C.YCONENAFLG_0=2
+//where A.YATTENAFLG_0=2 and C.YCONATT_0 is null
+//order by YSTACOD_0 ";
+
+            DBHelper2 db = DBHelper2.getSageDBHelper(dossier);
+            string command = @" select YATTCOD_0, YATTDES_0 from "
+                             + dossier +".YPRDATT A "
+                             + " left join " +dossier+".YPRDCONF C on A.YATTCOD_0=C.YCONATT_0 and C.YCONENAFLG_0=2 "
+                             + " where A.YATTENAFLG_0=2 and C.YCONATT_0 is null "
+                             + " order by YSTACOD_0 ";
+
+
+
 
             _logger.Info("start execution");
 

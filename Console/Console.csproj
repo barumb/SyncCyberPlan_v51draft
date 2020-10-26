@@ -23,7 +23,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.1.2016261207.%2a</ApplicationVersion>
+    <ApplicationVersion>1.1.2016261905.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -67,8 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Rigenera_DBFrontieraSAURO.bat" />
-    <None Include="Rigenera_DBFrontieraSAUROTEST.bat" />
+    <None Include="Rigenera_DBFrontieraSAURO.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Rigenera_DBFrontieraSAUROTEST.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SyncCyberPlan_lib\SyncCyberPlan_lib.csproj">

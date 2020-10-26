@@ -48,6 +48,6 @@ Console SAUROTEST MBM41LIB_M ALLTIME CIC
 
 
 Console INIT_CYB
-Console FINALCHECK
+Console FINALCHECK SAUROTEST
 Console STOP %~f0
 rem fine
