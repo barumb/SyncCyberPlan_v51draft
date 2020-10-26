@@ -171,7 +171,7 @@ namespace SyncCyberPlan_lib
             X3ORDNR = getDBV<string>(row[21], "X3ORDNR");
             X3ORDLN =getDBV<int>(row[22], "X3ORDLN");
 
-            X3ORDNRLN = "";
+            X3ORDNRLN = "000000000000";  //valore di default che indica ordini a fabbisogno
 
             if ((!String.IsNullOrEmpty(X3ORDNR)) && (X3ORDLN!=null))
             {

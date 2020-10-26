@@ -30,6 +30,8 @@ namespace SyncCyberPlan_lib
         public string  M_ITMREF_0;  
         public decimal M_RETQTY_0;       //--qta necessaria BOM
         public byte    O_SCOCOD_0;
+
+        public string X3ORDNRLN;
         //-- public short   M_BOMSEQ_0;  
         //-- public decimal M_BOMQTY_0;  
         //public string ;                 //-- Buy Make o Decentrato
@@ -112,12 +114,17 @@ M.MFGSTA_0 = 1 and M.MFGSTA_0 = 1 and I.MFGSTA_0 = 1 "
             M_RETQTY_0    = getDBV<decimal>(row[20], "M_RETQTY_0");
             O_SCOCOD_0    = getDBV<byte>   (row[21], "O_SCOCOD_0");
 
-
+            X3ORDNRLN = "";
+            if ((!String.IsNullOrEmpty(I_VCRNUMORI_0)) && (I_VCRLINORI_0 != null))
+            {
+                X3ORDNRLN = I_VCRNUMORI_0 + Convert.ToString(I_VCRLINORI_0).PadLeft(6, '0');
+            }
 
 
             C_CODE                = EscapeSQL(H_MFGNUM_0, 30);        //varchar         30                
             //ATTENZIONE il valore "000000000000" indica valore default per ordini a fabbisogno
-            C_CORDER_CODE         = EscapeSQL(string.IsNullOrWhiteSpace(I_VCRNUMORI_0)? "00000000000000000000": I_VCRNUMORI_0 + I_VCRLINORI_0 , 30);   //varchar 30  
+            //C_CORDER_CODE         = EscapeSQL(string.IsNullOrWhiteSpace(I_VCRNUMORI_0)? "00000000000000000000": I_VCRNUMORI_0 + I_VCRLINORI_0 , 30);   //varchar 30  
+            C_CORDER_CODE = EscapeSQL(string.IsNullOrWhiteSpace(I_VCRNUMORI_0) ? "00000000000000000000" : X3ORDNRLN, 30);   //varchar 30  
             C_ITEM_CODE           = EscapeSQL(I_ITMREF_0, 50);                                        //varchar         50                      
             C_ITEM_PLANT          = EscapeSQL("ITS01", 20);                                        //varchar         20                      
             C_M_B                 = get_C_M_B(O_SCOCOD_0);                                    //char             1     // B=buy D=decentrato M = make                
