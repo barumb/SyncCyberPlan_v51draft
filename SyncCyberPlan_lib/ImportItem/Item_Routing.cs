@@ -145,6 +145,7 @@ namespace SyncCyberPlan_lib
          and M.ITMREF_0 not like 'WWVEN%' 
          and M.ITMREF_0 not like 'WWDPI%' 
          and M.ITMREF_0 not like 'WWCIC%' 
+         and M.ITMREF_0 not like 'STG-%' 
 		 and M.ITMSTA_0=1 
 		 and M.PHAFLG_0=1
 		 and F.REOCOD_0<>2

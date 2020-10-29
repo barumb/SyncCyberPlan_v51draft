@@ -138,7 +138,7 @@ namespace Console
             else if (args[0].ToUpper() == "X3WS")
             {
                 help = true;
-                if (args.Length == 4)
+                if (args.Length == 5)
                 {
                     string dossier = args[1];
                     if (dossier == "SAURO" || dossier == "SAURODEV" || dossier == "SAUROTEST" || dossier == "SAUROINT")
