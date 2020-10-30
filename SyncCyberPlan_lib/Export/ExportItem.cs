@@ -52,7 +52,7 @@ namespace SyncCyberPlan_lib
             {
                 string timing = string.Format("{0:yyMMdd_hhmmss}", System.DateTime.Now);
                 //release
-                pathfile = @"S:\Sage\SAGEX3\folders\" + dossier + @"\YSAURO\IMPEXP\MRP\" + _file_prefix + "_task" + taskNumberToExport + "_" + timing + ".txt";
+                pathfile = @"\\srvx3app1\" + dossier + @"\IMPEXP\MRP\" + _file_prefix + "_task" + taskNumberToExport + "_" + timing + ".txt";
                 //debug
                 //pathfile = @"\\srvx3app1\S$\Sage\SAGEX3\folders\" + dossier + @"\YSAURO\IMPEXP\MRP\" + _file_prefix + "_task" + taskNumberToExport + "_" + timing + ".txt";
                 using (System.IO.StreamWriter fs = new System.IO.StreamWriter(pathfile, false))
