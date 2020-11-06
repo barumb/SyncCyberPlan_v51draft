@@ -808,7 +808,7 @@ namespace SyncCyberPlan_lib
             if (this.GetType().Name == "Articolo")
             {
                 __bulk_message += CheckArticoliContolavoro(sage);
-                Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, "contolavoro");
+                Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, sage.LibreriaDossier.ToUpper()+"=>"+"contolavoro");
             }
         }
 

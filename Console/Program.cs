@@ -44,7 +44,8 @@ namespace Console
                 Settings.WriteExampleConfig();
 
 #if DEBUG
-                Esegui("SAURO MBM41LIB_M ALLTIME OPR ".Split(' '));
+                Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
+                Esegui("SAURO MBM41LIB_M ALLTIME DISBAS".Split(' '));
                 return;
                 //Esegui(args);
 

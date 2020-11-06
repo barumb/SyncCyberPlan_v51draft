@@ -18,6 +18,10 @@ namespace SyncCyberPlan_lib
         public string  ORVSTAT; //stato ordine
 
 
+        public string X3ORDNR;  // Numero ordine + di riferimento in X3
+        public int? X3ORDLN;   // Numero riga ordine di riferimento in X3
+        public string X3ORDNRLN; // riferimento all'ordine di vendita (Nr ord + Riga ordine) utilizzato per gli OPR
+
         public Giacenze_ORR00PF(): base()
         {
         }
@@ -33,8 +37,20 @@ namespace SyncCyberPlan_lib
             ORRQACA = (decimal)row[6];
             ORVSTAT = getDBV<string>(row[7], "ORVSTAT");
 
+            //20201104-it2adm>> Riferimento nrordine+nrriga di X3
+            X3ORDNR = getDBV<string>(row[8], "X3ORDNR");
+            X3ORDLN = getDBV<int>(row[9], "X3ORDLN");
+            X3ORDNRLN = "000000000000";  //valore di default che indica ordini a fabbisogno
 
-            C_CODE = EscapeSQL(ORRTORD + ORRANNO.ToString("00") + ORRPROG.ToString("000000") + ORRNRIG.ToString("0000"), 30);                          //varchar  30
+            if ((!String.IsNullOrEmpty(X3ORDNR)) && (X3ORDLN != null))
+            {
+                X3ORDNRLN = X3ORDNR + Convert.ToString(X3ORDLN).PadLeft(6, '0');
+            }
+
+            //rif ord as400
+            //C_CODE = EscapeSQL(ORRTORD + ORRANNO.ToString("00") + ORRPROG.ToString("000000") + ORRNRIG.ToString("0000"), 30);                          //varchar  30
+            // rif ord X3
+            C_CODE = C_CORDER_CODE = EscapeSQL(X3ORDNRLN, 30);   //varchar 30  
             C_ITEM_CODE = EscapeSQL(ORRCART, 50);                         //varchar  50
             C_ITEM_PLANT = EscapeSQL("ITS01", 20);                        //varchar  20
             C_WAREHOUSE_CODE = EscapeSQL(__MAGAZZINO_INTERNO, 20);        //varchar  20
@@ -64,37 +80,74 @@ namespace SyncCyberPlan_lib
             string _tabORR = __libreriaAs400 + ".ORR00PF";
             string _tabORV = __libreriaAs400 + ".ORV00PF";
 
-            string sage_query = "SELECT "     + "\n"
-                + "  " + _tabORR + ".ORRTORD" + "\n"
-                + ", " + _tabORR + ".ORRANNO" + "\n"
-                + ", " + _tabORR + ".ORRPROG" + "\n"
-                + ", " + _tabORR + ".ORRNRIG" + "\n"
-                + ", " + _tabORR + ".ORRCART" + "\n"
-                + ", " + _tabORR + ".ORRSTAT" + "\n"
-                + ", " + _tabORR + ".ORRQACA" + "\n"
-                + ", " + _tabORV + ".ORVSTAT" + "\n"
-                    + " FROM " + _tabORV + "\n"
-                    + " INNER JOIN " + _tabORR + " ON " + "\n"
-                                  + _tabORV + ".ORVTORD = " + _tabORR + ".ORRTORD " + "\n"
-                        + " AND " + _tabORV + ".ORVANNO = " + _tabORR + ".ORRANNO " + "\n"
-                        + " AND " + _tabORV + ".ORVPROG = " + _tabORR + ".ORRPROG " + "\n"
-                    + " WHERE " + _tabORR + ".ORRSTAT ='RI' "
-                      //+ " and " + _tabORV + ".ORVSTAT ='RI' "
-                      //+ " and " + _tabORR + ".ORRTORD <> 'ORC' \n"
-                      + " and " + _tabORR + ".ORRQACA <> 0     \n"
-                      + " and " + _tabORR + ".ORRCART not like 'WU%'    \n"
-                    ;
-            
+            string _tabVOO = __libreriaAs400 + ".VOOS00F";  // Tabella di transcodifica ordnine riga X3 -> Ordine riga As400
+
+           // string sage_query = "SELECT "     + "\n"
+           //     + "  " + _tabORR + ".ORRTORD" + "\n"
+           //     + ", " + _tabORR + ".ORRANNO" + "\n"
+           //     + ", " + _tabORR + ".ORRPROG" + "\n"
+           //     + ", " + _tabORR + ".ORRNRIG" + "\n"
+           //     + ", " + _tabORR + ".ORRCART" + "\n"
+           //     + ", " + _tabORR + ".ORRSTAT" + "\n"
+           //     + ", " + _tabORR + ".ORRQACA" + "\n"
+           //     + ", " + _tabORV + ".ORVSTAT" + "\n"
+           //         + " FROM " + _tabORV + "\n"
+           //         + " INNER JOIN " + _tabORR + " ON " + "\n"
+           //                       + _tabORV + ".ORVTORD = " + _tabORR + ".ORRTORD " + "\n"
+           //             + " AND " + _tabORV + ".ORVANNO = " + _tabORR + ".ORRANNO " + "\n"
+           //             + " AND " + _tabORV + ".ORVPROG = " + _tabORR + ".ORRPROG " + "\n"
+           //         + " WHERE " + _tabORR + ".ORRSTAT ='RI' "
+           //           //+ " and " + _tabORV + ".ORVSTAT ='RI' "
+           //           //+ " and " + _tabORR + ".ORRTORD <> 'ORC' \n"
+           //           + " and " + _tabORR + ".ORRQACA <> 0     \n"
+           //           + " and " + _tabORR + ".ORRCART not like 'WU%'    \n"
+           //         ;
+           //
+
+
+            string sage_query = "SELECT " + "\n"
+            + "  ORR.ORRTORD" + "\n"
+            + ", ORR.ORRANNO" + "\n"
+            + ", ORR.ORRPROG" + "\n"
+            + ", ORR.ORRNRIG" + "\n"
+            + ", ORR.ORRCART" + "\n"
+            + ", ORR.ORRSTAT" + "\n"
+            + ", ORR.ORRQACA" + "\n"
+            + ", ORV.ORVSTAT" + "\n"
+            + ", trim(X3.SOHNR) AS X3ORDNR" + "\n"
+            + ", int(X3.SOLNR) AS X3ORDLN" + "\n"
+                + " FROM " + _tabORV + "  ORV \n"
+                + " INNER JOIN " + _tabORR + " ORR ON " + "\n"
+                    + "ORV.ORVTORD = ORR.ORRTORD " + "\n"
+                    + " AND ORV.ORVANNO = ORR.ORRANNO " + "\n"
+                    + " AND ORV.ORVPROG = ORR.ORRPROG " + "\n"
+                + " LEFT JOIN " + _tabVOO + " X3 ON \n"
+                + "ORR.ORRTORD = X3.TPOVE \n"
+                    + "AND ORR.ORRANNO = X3.AAOVE \n"
+                    + "AND ORR.ORRPROG = X3.NROVE \n"
+                    + "AND ORR.ORRNRIG = X3.LNOVE \n"
+                + " WHERE ORR.ORRSTAT ='RI' "
+                  //+ " and ORV.ORVSTAT ='RI' "
+                  //+ " and ORR.ORRTORD <> 'ORC' \n"
+                  + " AND ORR.ORRQACA <> 0     \n"
+                  + " AND ORR.ORRCART not like 'WU%'    \n"
+                  + " AND not(X3.SOHNR is null)     \n"
+
+                ;
+
+
+
+
             if (!string.IsNullOrWhiteSpace(codice_like))
             {
-                sage_query += " and " + _tabORR + ".ORRCART like '" + codice_like.Trim() + "'";
+                sage_query += " and ORR.ORRCART like '" + codice_like.Trim() + "'";
             }
             sage_query +=
-                      " order by "
-                      + _tabORR + ".ORRTORD desc," + "\n"
-                      + _tabORR + ".ORRANNO desc," + "\n"
-                      + _tabORR + ".ORRPROG desc," + "\n"
-                      + _tabORR + ".ORRNRIG desc " + "\n";
+                      "  order by "
+                      + "ORR.ORRTORD desc," + "\n"
+                      + "ORR.ORRANNO desc," + "\n"
+                      + "ORR.ORRPROG desc," + "\n"
+                      + "ORR.ORRNRIG desc " + "\n";
 
             return sage_query;
         }

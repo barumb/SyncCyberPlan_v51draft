@@ -64,8 +64,8 @@ namespace SyncCyberPlan_lib
                         service = new X3WS(pool); //inizializzo il Ws solo se necessario
                     }
                     //export Cyb vs Sage tramite WS
-                    flgImportOpr = ExportTaskNumber(dossier, service, taskNumber.Value, opr);
-                    flgImportCOrd = ExportTaskNumber(dossier, service, taskNumber.Value, cord);
+                    flgImportOpr = Export.ExportTaskNumber(dossier, service, taskNumber.Value, opr);
+                    flgImportCOrd = Export.ExportTaskNumber(dossier, service, taskNumber.Value, cord);
 
                     // se c'è stato un errore di importazione mi fermo
                     res = flgImportCOrd && flgImportOpr;

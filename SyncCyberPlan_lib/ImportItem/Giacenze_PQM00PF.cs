@@ -179,6 +179,7 @@ order by PQMCART
             string _tabORR = __libreriaAs400 + ".ORR00PF";
             string _tabORV = __libreriaAs400 + ".ORV00PF";
 
+
             //recupero totali accantonamenti per ogni articolo presente in ORR
             string query = "SELECT " 
                 + _tabORR + ".ORRCART, Sum( " + _tabORR + ".ORRQACA) AS QTAALLOC " 

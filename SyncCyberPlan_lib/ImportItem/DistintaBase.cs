@@ -237,7 +237,8 @@ and BOMSTRDAT_0 <=GETDATE() "
                     testo_mail += "codice =" + articolo + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + Utils.NewLineMail();
                 }
             }
-            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail,"BOM");
+            
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "BOM su Cyber");
         }
 
         protected void LastAction_RiferimentiFornitori(ref DBHelper2 cm)

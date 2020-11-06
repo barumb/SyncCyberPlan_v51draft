@@ -167,7 +167,7 @@ order by PQMCART
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, "giacenze As400 esterne");
+            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message,  sage.LibreriaDossier.ToUpper() + "=>" +"giacenze As400 esterne");
         }
 
     }

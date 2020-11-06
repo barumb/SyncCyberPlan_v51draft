@@ -133,6 +133,7 @@ namespace SyncCyberPlan_lib
             T tmp = new T();
             _logger.Info("Oggetto: " + typeof(T).ToString().PadRight(60) + " su tabella " + tmp._CP_tabella);
             DBHelper2 cm = DBHelper2.getCyberDBHelper();
+            
             if (delete)
             {
                 DBHelper2.EseguiSuDBCyberPlan(ref cm, tmp.GetDeletedAllQuery());
@@ -278,7 +279,7 @@ namespace SyncCyberPlan_lib
             SqlConnection conn = new SqlConnection();
                 conn.ConnectionString = @"Server=srvsql1,1433\MSSQLSERVER;Database=CyberPlanFrontiera;User Id=Cyberplan; Password=C18£3r:okboo;";
                 ret = new DBHelper2(conn);
-
+            
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   ended");
             return ret;
         }
