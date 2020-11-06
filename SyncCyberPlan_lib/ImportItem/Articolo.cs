@@ -774,6 +774,7 @@ namespace SyncCyberPlan_lib
             }
             else
             {
+                // Reparti considerati! Verificare se sono gestiti a codice in Cyberplan
                 if(
                     !(YWCR_0 == "ASSE" || YWCR_0 == "PLAS" || YWCR_0 == "CL" || YWCR_0 == "CTAPE" || 
                     YWCR_0 == "FILO" || YWCR_0 == "MORS" || YWCR_0 == "TERM" || YWCR_0 == "VITI" || YWCR_0 == "NOGES")
