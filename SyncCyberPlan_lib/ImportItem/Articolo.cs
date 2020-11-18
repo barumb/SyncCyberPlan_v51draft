@@ -504,14 +504,22 @@ namespace SyncCyberPlan_lib
                 ;
             }
             string ret = "";
+            // Meglio valutare 
             for (int i = 0; i < DEFLOC.Length; i++)
             {
                 if (LOCNUM[i] == 1) //LOCNUM 1=Ricevimento 2=Magazzino 3=Picking 6=Spedizione
                 {
-                    ret = DEFLOC[i];
-                    if (ret == "MAG01")
+                    ret = DEFLOC[i].Trim().ToUpper();
+                    //Originale 
+                    //if (ret == "MAG01")
+                    //    ret = __MAGAZZINO_INTERNO;
+                    //break;
+
+                    // Da modificare considerando la tipologia di locazione. Se interna va impostata a __MAGAZZINO_INTERNO
+                    if ((ret == "MAG01") || (ret == "MAGT00"))
                         ret = __MAGAZZINO_INTERNO;
                     break;
+
                 }
             }
             if (ret.Trim() == "")

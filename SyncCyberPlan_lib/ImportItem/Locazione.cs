@@ -60,24 +60,25 @@ namespace SyncCyberPlan_lib
             string _tabPQM = __libreriaAs400 + ".PQM00PF";
             string _tabTAB = __libreriaAs400 + ".TAB00PF";
 
-            string query = "SELECT " 
-                           + _tabTAB + ".TABCTAB " 
-                    + ", " + _tabTAB + ".TABSTAB " 
-                    + ", " + _tabTAB + ".TABDESC "
-                    + ", " + _tabTAB + ".TABDESI "
-                    + ", " + _tabTAB + ".TABDAGG "
-                    + ", " + _tabTAB + ".TABFLG1 "
-                    + ", " + _tabTAB + ".TABFLG2 "
-                    + ", " + _tabTAB + ".TABFLG3 "
-                    + ", " + _tabTAB + ".TABFLG4 "
-                    + " FROM " + _tabTAB
-                    + " WHERE " + _tabTAB + ".TABCTAB ='LOCZ' "
-                    + " ORDER BY " + _tabTAB + ".TABSTAB "
-                    ;
-
-            query = @" SELECT 'TABTAB' AS TABCTAB, '"+ __MAGAZZINO_INTERNO + @"' AS CODE, 'Magazzini interni' AS DESCR from " + _tabTAB 
-                +  " UNION "
-                + @" SELECT 'TABTAB' AS TABCTAB, '"+ __MAGAZZINO_ESTERNO + "' AS CODE, 'Magazzini esterni' AS DESCR from " + _tabTAB;
+            string query;
+            //query= "SELECT " 
+            //       + _tabTAB + ".TABCTAB " 
+            //+ ", " + _tabTAB + ".TABSTAB " 
+            //+ ", " + _tabTAB + ".TABDESC "
+            //+ ", " + _tabTAB + ".TABDESI "
+            //+ ", " + _tabTAB + ".TABDAGG "
+            //+ ", " + _tabTAB + ".TABFLG1 "
+            //+ ", " + _tabTAB + ".TABFLG2 "
+            //+ ", " + _tabTAB + ".TABFLG3 "
+            //+ ", " + _tabTAB + ".TABFLG4 "
+            //+ " FROM " + _tabTAB
+            //+ " WHERE " + _tabTAB + ".TABCTAB ='LOCZ' "
+            //+ " ORDER BY " + _tabTAB + ".TABSTAB "
+            //;
+            //
+            //query = @" SELECT 'TABTAB' AS TABCTAB, '"+ __MAGAZZINO_INTERNO + @"' AS CODE, 'Magazzini interni' AS DESCR from " + _tabTAB 
+            //    +  " UNION "
+            //    + @" SELECT 'TABTAB' AS TABCTAB, '"+ __MAGAZZINO_ESTERNO + "' AS CODE, 'Magazzini esterni' AS DESCR from " + _tabTAB;
 
 
             query = @" SELECT 'TABTAB' AS TABCTAB, '" + __MAGAZZINO_INTERNO + @"' AS CODE, 'Magazzini interni' AS DESCR from " + _tabTAB
