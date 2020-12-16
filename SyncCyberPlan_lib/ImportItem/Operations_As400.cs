@@ -86,7 +86,12 @@ namespace SyncCyberPlan_lib
             NRVIE = (int)getDBV<decimal>(row[25], "NRVIE");     //numero vie totali dell'articolo
 
 
-            C_ORDER_CODE              = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30); 
+            C_ORDER_CODE              = EscapeSQL(MFHTORD + MFHAORD.ToString("00") + MFHPORD.ToString("000000"), 30);
+            // debug
+            //if (C_ORDER_CODE.IndexOf("2337");
+            //{
+            //    int cccc = 0;
+            //}
             C_OPNUM                   = 10;
             C_DESCR                   = EscapeSQL("",30);
             C_QTY                     = MFHQTRC;
@@ -344,7 +349,7 @@ namespace SyncCyberPlan_lib
 
 
             //  versione di DEBUG
-            string query = " SELECT          "
+            string query = " SELECT  DISTINCT        "
                         + "    MFH.MFHTORD "
                         + "   ,MFH.MFHAORD "
                         + "   ,MFH.MFHPORD "
@@ -364,7 +369,7 @@ namespace SyncCyberPlan_lib
                         //+ "   ,MFV.MFVMACN -- Macchina As400 da Transcodifcare in X3 \n"
                         + "   ,ITF.YPRDMAC_0 AS MFVMACN "
                         //+ "   ,MFV.MFVCSTM  -- Attrezz As400 da Transcodifcare in X3 \n"
-                        + "   ,IPR.YATTCOD_0 AS MFVCSTM "
+                        + "   ,IIF(left(MFH.MFHCART,2) <>'WP',IPR.YATTCOD_0 ,left(MFV.MFVCSTM,6)) AS MFVCSTM "
                         + "   ,MFV.MFVWRKC   "
                         + "   ,MFV.MFVWKCT   "
                         + "   ,MFV.MFVUTLM   "
@@ -375,25 +380,26 @@ namespace SyncCyberPlan_lib
                         + "   ,PFH.NRVIE     "
                         + " FROM [P8DATA].[S21C986V].MBM41LIB_M.MFH00PF MFH \n"
                         + "   INNER JOIN [P8DATA].[S21C986V].[MBM41LIB_M].MFV00PF MFV ON \n"
-                        + "                    MFH.MFHTORD = MFV.MFVTORD              \n"
-                        + "                AND MFH.MFHAORD = MFV.MFVAORD              \n"
-                        + "                AND MFH.MFHPORD = MFV.MFVPORD              \n"
-                        + "   INNER JOIN [P8DATA].[S21C986V].MBM41LIB_M.RSHD00F  RSH ON \n"
-                        + "                    RSH.CDSTM = MFV.MFVCSTM                \n"
-                        + "   INNER JOIN [P8DATA].[S21C986V].MBM41LIB_M.PFHD00F PFH ON \n"
-                        + "                    PFH.CDART = MFH.MFHCART                \n"
+                        + "                    MFH.MFHTORD = MFV.MFVTORD                 \n"
+                        + "                AND MFH.MFHAORD = MFV.MFVAORD                 \n"
+                        + "                AND MFH.MFHPORD = MFV.MFVPORD                 \n"
+                        + "   INNER JOIN [P8DATA].[S21C986V].MBM41LIB_M.RSHD00F  RSH ON  \n"
+                        + "                    RSH.CDSTM = MFV.MFVCSTM                   \n"
+                        + "   INNER JOIN [P8DATA].[S21C986V].MBM41LIB_M.PFHD00F PFH ON   \n"
+                        + "                    PFH.CDART = MFH.MFHCART                   \n"
                         + "   INNER JOIN x3.SAURO.YPRDITM IPR  on                        \n"
-                        + "                    PFH.CDART = IPR.ITMREF_0               \n"
+                        + "                    PFH.CDART = IPR.ITMREF_0                  \n"
+                        + "                    AND IPR.YENAFLG_0=2                       \n"      // 1 articolo (TRANNE WP) ha 1 sola attrezzatura attiva !!!! 
                         + "   INNER JOIN x3.SAURO.YPRDATT ATX3 on                        \n"
-                        + "                    IPR.YATTCOD_0 = ATX3.YATTCOD_0         \n"
-                        + "                AND ATX3.YATTENAFLG_0 = 2                  \n"
+                        + "                    IPR.YATTCOD_0 = ATX3.YATTCOD_0            \n"
+                        + "                AND ATX3.YATTENAFLG_0 = 2                     \n"
                         + "   INNER JOIN x3.SAURO.ITMFACILIT ITF on                      \n"
-                        + "                    IPR.ITMREF_0 = ITF.ITMREF_0            \n"
-                        + "                AND ITF.STOFCY_0 = 'ITS01'                 \n"
-                        + " WHERE                                                     \n"
-                        + "       MFH.MFHSTAT =  'RI'                                 \n"   //--sempre RI
-                        + "   and MFV.MFVSTAT =  'RI'                                 \n"   //--sempre RI
-                        + "   and MFV.MFVSTAV <> 'CH'                                 \n"   //--questo indica se la riga è chiusa
+                        + "                    IPR.ITMREF_0 = ITF.ITMREF_0               \n"
+                        + "                AND ITF.STOFCY_0 = 'ITS01'                    \n"
+                        + " WHERE                                                        \n"
+                        + "       MFH.MFHSTAT =  'RI'                                    \n"   //--sempre RI
+                        + "   and MFV.MFVSTAT =  'RI'                                    \n"   //--sempre RI
+                        + "   and MFV.MFVSTAV <> 'CH'                                    \n"   //--questo indica se la riga è chiusa
                         + " ";
             
             if (!string.IsNullOrWhiteSpace(codice_like))
@@ -401,6 +407,11 @@ namespace SyncCyberPlan_lib
                 query += " and MFH.MFHCART like '" + codice_like.Trim() + "'";
             }
             
+            // SELEZIONE degli 
+
+
+
+
             
             query += " ORDER BY               "
                         + "    MFH.MFHTORD    "

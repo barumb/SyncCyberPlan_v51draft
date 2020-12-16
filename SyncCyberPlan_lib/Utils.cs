@@ -100,7 +100,7 @@ namespace SyncCyberPlan_lib
 
 
 #if DEBUG
-                MailTO = "francesco.chiminazzo@sauro.net";
+                MailTO = "umberto.baratto@sauro.net";
 #endif                
                 try
                 {
