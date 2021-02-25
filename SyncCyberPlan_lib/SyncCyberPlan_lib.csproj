@@ -67,6 +67,7 @@
     <Compile Include="Export\ExpOrder.cs" />
     <Compile Include="Export\Export.cs" />
     <Compile Include="Export\ExportItem.cs" />
+    <Compile Include="Export\FIXAS4DesArt.cs" />
     <Compile Include="ImportItem\OrdiniAcq_OPR_As400_FIRSTIMPORT.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="ImportItem\Demand_OPR_Righe.cs" />

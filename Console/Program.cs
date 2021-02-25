@@ -44,20 +44,24 @@ namespace Console
                 Settings.WriteExampleConfig();
 
 #if DEBUG
+                FIXAS4DesArt fixart = new FIXAS4DesArt("MBM41LIB_M", "SAURO");
+
+                fixart.UpdateAS400Desc();
+                return;
 
                 //Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
                 //Esegui("SAURO MBM41LIB_M ALLTIME DISBAS ".Split(' '));
                 //
                 //return;
 
-                Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
-                Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' ')); 
-                return;
+                //Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' ')); 
+                //return;
                 //Esegui(args);
 
                 //Esegui("OPRAS400".Split(' '));
                 //Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));
-                Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
+                //Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
 
                 //Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
 
@@ -183,8 +187,9 @@ namespace Console
                 AS400Trg.ExecuteTrigger();
                 
             }
+           
 
-            if (args.Length < 4 || help==true)
+                if (args.Length < 4 || help==true)
             {
                 _logger.Info("\n\n\nSintassi:\n" +
                     "SyncCyberPlan DOSSIER LIBRERIAAS400 DELETE|ALLTIME|LAST=N OGG [COD=CODICELIKE]\n\n" +   //parametri opzionali alla fine
