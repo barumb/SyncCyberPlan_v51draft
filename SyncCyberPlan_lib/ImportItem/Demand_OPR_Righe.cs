@@ -130,6 +130,7 @@ I.MFGSTA_0 = 1 "
 
 
             C_CORDER_CODE = EscapeSQL("", 30);
+            //TODO ????? Forse anche qui andrebbe inserita la trancodifica nr ordine per avere i riferimenti di X3 
             C_ORDER_CODE = EscapeSQL(MFGNUM_0 + MFGLIN_0.ToString("000000"),30);                   //string
             C_ITEM_CODE = EscapeSQL(ITMREF_0_componente, 50);                     //string 
             C_ITEM_PLANT = MFGFCY_0;                   //string 
@@ -142,6 +143,7 @@ I.MFGSTA_0 = 1 "
             C_STATUS = 0;                        //int 
             C_REF_CORDER_CODE = "";              //string 
             C_DUEDATE = null;                    //DateTime 
+            //TODO capire che locazione inserire. Interno va bene solo per SAURO, per ARESSK andrebbe FA080. Da determinare in base alla macchina o dalla distinta base
             C_WAREHOUSE_CODE = __MAGAZZINO_INTERNO;       //string 
             C_USER_NOTE01 = EscapeSQL("Articolo da produrre: " + ITMREF_0, 99);                  //string 
             C_USER_INT01 = 0;                    //int 

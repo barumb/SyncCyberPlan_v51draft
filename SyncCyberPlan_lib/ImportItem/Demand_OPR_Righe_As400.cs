@@ -26,7 +26,7 @@ namespace SyncCyberPlan_lib
 
             string _tabMFV = __libreriaAs400 + ".MFV00PF";
             string _tabMFC = __libreriaAs400 + ".MFC00PF";
-
+            //TODO ???? da inserire la transcodifica Nr ordine as400->X3???
             string query = "SELECT " + "\n"
                 + "   " + _tabMFC + ".MFCTORD" + "\n"
                 + ",  " + _tabMFC + ".MFCAORD" + "\n"

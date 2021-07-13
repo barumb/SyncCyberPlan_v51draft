@@ -165,7 +165,7 @@ namespace SyncCyberPlan_lib
             C_USER_CHAR03              = ' ';                                                    //char     1
             C_USER_CHAR04              = ' ';                                                    //char     1
             C_USER_CHAR05              = ' ';                                                    //char     1
-            C_USER_FLAG01              = 0;                                                      //bit      
+            C_USER_FLAG01              = (YMRPFLGC_0 == 1) ? 0: 1;                               //bit   usato per lo stato dell'ordine/riga(?) false=0=D-Da Confermare datare True=1=C=Confermato   
             C_USER_FLAG02              = 0;                                                      //bit      
             C_USER_STRING01            = EscapeSQL("", 29);                                      //varchar  29
             C_USER_STRING02            = EscapeSQL("", 29);                                      //varchar  29
@@ -274,9 +274,8 @@ S.SOHNUM_0
 ,Q.ORDDAT_0 
 ,Q.YMRPDATAC_0  --(CHIEDERE A BIASIN X SHIDAT)  (9)
 ,Q.DEMDLVDAT_0 
---,(11) ??
 ,Q.SOQSTA_0   
-,Q.YMRPFLGC_0 
+,Q.YMRPFLGC_0  --Conferma riga: 1=No=False, 2=SI=True 
 ,Q.CREUSR_0  
 ,S.ORDSTA_0 
 ,Q.YMRPFLGC_0

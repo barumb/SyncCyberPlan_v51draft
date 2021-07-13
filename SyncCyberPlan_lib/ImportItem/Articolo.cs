@@ -504,14 +504,22 @@ namespace SyncCyberPlan_lib
                 ;
             }
             string ret = "";
+            // Meglio valutare 
             for (int i = 0; i < DEFLOC.Length; i++)
             {
                 if (LOCNUM[i] == 1) //LOCNUM 1=Ricevimento 2=Magazzino 3=Picking 6=Spedizione
                 {
-                    ret = DEFLOC[i];
-                    if (ret == "MAG01")
+                    ret = DEFLOC[i].Trim().ToUpper();
+                    //Originale 
+                    //if (ret == "MAG01")
+                    //    ret = __MAGAZZINO_INTERNO;
+                    //break;
+
+                    // Da modificare considerando la tipologia di locazione. Se interna va impostata a __MAGAZZINO_INTERNO
+                    if ((ret == "MAG01") || (ret == "MAGT00"))
                         ret = __MAGAZZINO_INTERNO;
                     break;
+
                 }
             }
             if (ret.Trim() == "")
@@ -774,6 +782,7 @@ namespace SyncCyberPlan_lib
             }
             else
             {
+                // Reparti considerati! Verificare se sono gestiti a codice in Cyberplan
                 if(
                     !(YWCR_0 == "ASSE" || YWCR_0 == "PLAS" || YWCR_0 == "CL" || YWCR_0 == "CTAPE" || 
                     YWCR_0 == "FILO" || YWCR_0 == "MORS" || YWCR_0 == "TERM" || YWCR_0 == "VITI" || YWCR_0 == "NOGES")
@@ -808,7 +817,7 @@ namespace SyncCyberPlan_lib
             if (this.GetType().Name == "Articolo")
             {
                 __bulk_message += CheckArticoliContolavoro(sage);
-                Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, "contolavoro");
+                Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, sage.LibreriaDossier.ToUpper()+"=>"+"contolavoro");
             }
         }
 

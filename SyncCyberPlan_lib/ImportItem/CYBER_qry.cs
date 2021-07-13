@@ -42,8 +42,8 @@ namespace SyncCyberPlan_lib
         {
             FinalCheck_ARTICOLI_con_reparto_non_coerente( dossier);
             FinalCheck_ATTR_senza_macchina(dossier);
-            FinalCheck_PLAS_senza_cicli();
-            FinalCheck_Ordini_di_Articoli_senza_cicli();
+            FinalCheck_PLAS_senza_cicli(dossier);
+            FinalCheck_Ordini_di_Articoli_senza_cicli(dossier);
         }
         static private void FinalCheck_ARTICOLI_con_reparto_non_coerente( string dossier)
         {
@@ -84,7 +84,7 @@ namespace SyncCyberPlan_lib
                 testo_mail += articolo.PadRight(40) + " ha reparto " + reparto_articolo.PadRight(10) + " ma la macchina " + macchina.PadRight(20) + " ha reparto " + reparto_macchina+ Utils.NewLineMail();
             }
 
-            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "Articoli ATTIVI con reparto non coerente con reparto macchina");
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, dossier.ToUpper() + "=>" + "Articoli ATTIVI con reparto non coerente con reparto macchina");
             _logger.Info("end execution");
         }
         static private void FinalCheck_ATTR_senza_macchina( string dossier)
@@ -120,10 +120,10 @@ namespace SyncCyberPlan_lib
                 testo_mail += "attrezzatura senza macchine associate: " + attrezzatura.PadRight(40) + desc + Utils.NewLineMail();
             }
 
-            Utils.SendMail_Plan(Settings.GetSettings(), testo_mail, "Attrezzature ATTIVE senza macchine associate");
+            Utils.SendMail_Plan(Settings.GetSettings(), testo_mail, dossier.ToUpper() + "=>" + "Attrezzature ATTIVE senza macchine associate");
             _logger.Info("end execution");
         }
-        static private void FinalCheck_Ordini_di_Articoli_senza_cicli()
+        static private void FinalCheck_Ordini_di_Articoli_senza_cicli(string dossier)
         {
             DBHelper2 db = DBHelper2.getCyberDBHelper();
             string command = @"  Select C_CODE,C_CORDER_CODE,C_ITEM_CODE,C_M_B --,ope.C_OPNUM, ope.C_USER_STRING01 AS Attrezzatura, ope.C_USER_STRING02 as Macchina
@@ -164,10 +164,10 @@ namespace SyncCyberPlan_lib
                 }
             }
 
-            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "Ordini di articoli senza ciclo");
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, dossier.ToUpper() + "=>" + "Ordini di articoli senza ciclo");
             _logger.Info("end execution");
         }
-        static private void FinalCheck_PLAS_senza_cicli()
+        static private void FinalCheck_PLAS_senza_cicli(string dossier)
         {
             DBHelper2 db = DBHelper2.getCyberDBHelper();
             string command = @"SELECT
@@ -224,7 +224,7 @@ order by D.C_ITEM_CODE ";
             }
 
 
-            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "WP senza ciclo");
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, dossier.ToUpper() + "=>" + "WP senza ciclo");
             _logger.Info("end execution");
         }
     }

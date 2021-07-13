@@ -270,7 +270,7 @@ M.MFGSTA_0 = 1 and M.MFGSTA_0 = 1 and I.MFGSTA_0 = 1 "
             //invio mail
             //
 
-            Utils.SendMail_Plan(Settings.GetSettings(), testo_mail, "OPR");
+            Utils.SendMail_Plan(Settings.GetSettings(), testo_mail, sage.LibreriaDossier.ToUpper()+"=>" + "OPR");
         }
 
         char getMRP_type(string ordinecommessa)

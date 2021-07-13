@@ -145,6 +145,7 @@ namespace SyncCyberPlan_lib
          and M.ITMREF_0 not like 'WWVEN%' 
          and M.ITMREF_0 not like 'WWDPI%' 
          and M.ITMREF_0 not like 'WWCIC%' 
+         and M.ITMREF_0 not like 'STG-%' 
 		 and M.ITMSTA_0=1 
 		 and M.PHAFLG_0=1
 		 and F.REOCOD_0<>2
@@ -265,7 +266,7 @@ namespace SyncCyberPlan_lib
 
         public override void LastAction(ref DBHelper2 cm, DBHelper2 sage)
         {
-            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, "cicli");
+            Utils.SendMail_Plan(Settings.GetSettings(), __bulk_message, sage.LibreriaDossier.ToUpper()+"=>"+"cicli");
         }
     }
 }

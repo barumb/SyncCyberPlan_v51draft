@@ -39,7 +39,7 @@ namespace SyncCyberPlan_lib
             _YATTCOD_0    = getDBV<string>(row[0],"YATTCOD_0");
             _YATTDES_0    = getDBV<string>(row[1],"YATTDES_0");
             _QTY          = getDBV<short>( row[2],"QTY      ");
-            _YATTVIN_0    = getDBV<string>(row[3],"YATTVIN_0");
+            _YATTVIN_0    = getDBV<string>(row[3],"YATTVIN_0");               // codice attrezzatura vincolata 
 
             _YATTMAT_0     = getDBV<decimal>(row[4] , "YATTMAT_0    ");       //peso materozzza (PLAS)
             _YATTFLGPA66_0 = getDBV<byte>(   row[5] , "YATTFLGPA66_0");       //flag pa66 (PLAS)

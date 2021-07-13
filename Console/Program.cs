@@ -44,13 +44,24 @@ namespace Console
                 Settings.WriteExampleConfig();
 
 #if DEBUG
-                Esegui("SAURO MBM41LIB_M ALLTIME OPR ".Split(' '));
+                FIXAS4DesArt fixart = new FIXAS4DesArt("MBM41LIB_M", "SAURO");
+
+                fixart.UpdateAS400Desc();
                 return;
+
+                //Esegui("SAURO MBM41LIB_M DELETE DISBAS".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME DISBAS ".Split(' '));
+                //
+                //return;
+
+                //Esegui("SAURO MBM41LIB_M DELETE OPR".Split(' '));
+                //Esegui("SAURO MBM41LIB_M ALLTIME OPR".Split(' ')); 
+                //return;
                 //Esegui(args);
 
                 //Esegui("OPRAS400".Split(' '));
                 //Esegui("SAURO MBM41LIB_M ALLTIME SOH".Split(' '));
-                Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
+                //Esegui("X3WS SAUROTEST MRP CREAOPR=si".Split(' '));
 
                 //Esegui("SAURO MBM41LIB_M ALLTIME ITM".Split(' '));
 
@@ -138,7 +149,7 @@ namespace Console
             else if (args[0].ToUpper() == "X3WS")
             {
                 help = true;
-                if (args.Length == 4)
+                if (args.Length == 5)
                 {
                     string dossier = args[1];
                     if (dossier == "SAURO" || dossier == "SAURODEV" || dossier == "SAUROTEST" || dossier == "SAUROINT")
@@ -176,8 +187,9 @@ namespace Console
                 AS400Trg.ExecuteTrigger();
                 
             }
+           
 
-            if (args.Length < 4 || help==true)
+                if (args.Length < 4 || help==true)
             {
                 _logger.Info("\n\n\nSintassi:\n" +
                     "SyncCyberPlan DOSSIER LIBRERIAAS400 DELETE|ALLTIME|LAST=N OGG [COD=CODICELIKE]\n\n" +   //parametri opzionali alla fine
@@ -202,7 +214,7 @@ namespace Console
                     "      GIAC giacenze magazzino PQM00PF     da as400 a cyb\n" +
                     "      GIAC-ALL giacenze allocate ORR00PF  da as400 a cyb\n" +
                     "      DISBAS distinta base SPR00PF        da as400 a cyb\n" +
-                    "      DEM Fabbisogni OPR in corso MFC00PF da as400 a cyb\n" +
+                    "      D in corso MFC00PF da as400 a cyb\n" +
                     "COD = WP%  per ottenere un filtro sui codici\n" +
                     "\n" +
                     "SyncCyberPlan START     prima di iniziare sync tabelle CyberPlan\n" +
@@ -320,7 +332,7 @@ namespace Console
 
 
                 DBHelper2 as400 = DBHelper2.getAs400DBHelper(libreriaas400);
-                DBHelper2 sage = DBHelper2.getSageDBHelper(dossier);
+                DBHelper2 sage = DBHelper2.getSageDBHelper(dossier, libreriaas400);
                 DBHelper2 cyber = DBHelper2.getCyberDBHelper();
 
                 //SageTable_Manager sm = new SageTable_Manager(dossier);
@@ -349,7 +361,8 @@ namespace Console
                     case "POH-ODM": sage.WriteToCyberPlan<OrdiniAcq_ODM>(_mode_all, codicelike, "", _delete, ""); break;
                     //case "POH-OFA": sm.WriteToCyberPlan<OrdiniAcq_OFA>(_mode_all, codicelike, "", _delete, ""); break;
                     case "MAC": sage.WriteToCyberPlan<Macchina>(_mode_all, codicelike, "", _delete, ""); break;
-                    case "ATT": //sm.WriteToCyberPlan<Attrezzature_ASSE>(_mode_all, codicelike, "", _delete, "");
+                    case "ATT": 
+                         //sm.WriteToCyberPlan<Attrezzature_ASSE>(_mode_all, codicelike, "", _delete, "");
                         sage.WriteToCyberPlan<Attrezzature>(_mode_all, codicelike, "", _delete, "");
                         sage.WriteToCyberPlan<Attrezzature_ConfigPlas>(_mode_all, codicelike, "", _delete, "");
                         break;
@@ -361,10 +374,15 @@ namespace Console
                     case "LOC": as400.WriteToCyberPlan<Locazione>(_mode_all, codicelike, "", _delete, ""); break;
                     //case "SOH": as400.WriteToCyberPlan<OrdiniVen_as400>(_mode_all, codicelike, "", _delete, ""); break;
                     case "OPR":
-                        as400.WriteToCyberPlan<OrdiniAcq_OPR_As400>(_mode_all, codicelike, "", _delete, "");
-                        //Operazioni: OPR da AS400
-                        as400.WriteToCyberPlan<Operations_As400>(_mode_all, codicelike, "", _delete, "");
                         
+                        as400.WriteToCyberPlan<OrdiniAcq_OPR_As400>(_mode_all, codicelike, "", _delete, "");
+
+                        //Operazioni: OPR da AS400
+                        //as400.WriteToCyberPlan<Operations_As400>(_mode_all, codicelike, "", _delete, "");
+                        //Modificata la query di select per legare info di AS400 e x3. Si Recuperano i codici attrezza e macchina di X3 relativi a quelli in As400
+                        sage.WriteToCyberPlan<Operations_As400>(_mode_all, codicelike, "", _delete, "");
+                        
+
                         break;
                     case "OPRX3":
                         sage.WriteToCyberPlan<OrdiniAcq_OPR>(_mode_all, codicelike, "", _delete, "");
@@ -377,8 +395,9 @@ namespace Console
                         as400.WriteToCyberPlan<Giacenze_PQM00PF_esterne>(_mode_all, codicelike, "", _delete, "");
                         break;
                     //case "DISBAS": as400.WriteToCyberPlan<DistintaBase_As400>(_mode_all, codicelike, "", _delete, ""); break;
-                    case "DEM": as400.WriteToCyberPlan<Demand_OPR_righe_As400>(_mode_all, codicelike, "", _delete, ""); break;
-                    //case "DEM": sage.WriteToCyberPlan<Demand_OPR_righe>(_mode_all, codicelike, "", _delete, ""); break;
+                    case "DEM": 
+                            as400.WriteToCyberPlan<Demand_OPR_righe_As400>(_mode_all, codicelike, "", _delete, ""); break;
+                    //      sage.WriteToCyberPlan<Demand_OPR_righe>(_mode_all, codicelike, "", _delete, ""); break;
 
 
                     default: _logger.Error(_cur_arg + ": tipo articolo non previsto"); return;

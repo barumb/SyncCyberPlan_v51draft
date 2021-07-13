@@ -64,7 +64,8 @@ namespace SyncCyberPlan_lib
             C_COMPONENT_PLANT       = EscapeSQL("ITS01", 20);       // varchar     20
             C_OPNUM                 = 0;                            // int           
             C_NSEQ                  = BOMSEQ_0;                     // int           
-            C_PHANTOM               = YPHAFLG_0 == 'N' ? 0 : 1;     // bit           
+            // C_PHANTOM               = YPHAFLG_0 == 'N' ? 0 : 1;   A db ho 1=NO 2=SI, questo codice impostava in CYB che tutto era phantom!!!!!!!
+            C_PHANTOM = YPHAFLG_0 == 1 ? 0 : 1;     // bit           
             C_VAR_QTY               = (double)BOMQTY_0;             // real           
             C_SCRAP_TYPE            = ' ';                          // char        1
             C_PCT_SCRAP             = 0;                            // real           
@@ -237,7 +238,8 @@ and BOMSTRDAT_0 <=GETDATE() "
                     testo_mail += "codice =" + articolo + " ha come in Sage 'tipo proposta'=Produzione ma non ha distinta base" + Utils.NewLineMail();
                 }
             }
-            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail,"BOM");
+            
+            Utils.SendMail_Anag(Settings.GetSettings(), testo_mail, "BOM su Cyber");
         }
 
         protected void LastAction_RiferimentiFornitori(ref DBHelper2 cm)

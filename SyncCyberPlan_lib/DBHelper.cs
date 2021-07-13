@@ -24,6 +24,10 @@ namespace SyncCyberPlan_lib
 
         public string LibreriaDossier { get { return _libreria_dossier; } }
 
+
+        private string SrcLibAs400;
+        private string SrcDossierX3;
+
         // Server=myServerName\myInstanceName;Database=myDataBase;User Id=myUsername; Password=myPassword;
         public DBHelper2(DbConnection conn)
 		{
@@ -123,6 +127,8 @@ namespace SyncCyberPlan_lib
             return res;
         }
 
+
+
         public void WriteToCyberPlan<T>(bool mode_all, string codice_like, string filtro, bool delete, string option) where T : Item, new()
         {
             Item.ResetMailMessage();
@@ -133,6 +139,7 @@ namespace SyncCyberPlan_lib
             T tmp = new T();
             _logger.Info("Oggetto: " + typeof(T).ToString().PadRight(60) + " su tabella " + tmp._CP_tabella);
             DBHelper2 cm = DBHelper2.getCyberDBHelper();
+            
             if (delete)
             {
                 DBHelper2.EseguiSuDBCyberPlan(ref cm, tmp.GetDeletedAllQuery());
@@ -150,7 +157,7 @@ namespace SyncCyberPlan_lib
             _logger.Info("Oggetto: " + typeof(T).ToString().PadRight(60) + " Disab Blocco chifra suffisso TEST a " + _libreria_dossier );
             string qry = tmp.GetSelectQuery(mode_all, _libreria_dossier , codice_like, filtro);
 
-
+            
             DbDataReader dtr = GetReaderSelectCommand(qry);
             object[] row = new object[dtr.FieldCount];
 
@@ -231,6 +238,10 @@ namespace SyncCyberPlan_lib
             }
         }
 
+
+
+       
+
         public static DBHelper2 getSageDBHelper(string dossier)
         {
             DBHelper2 ret = null;
@@ -251,6 +262,24 @@ namespace SyncCyberPlan_lib
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   ended");
             return ret;
         }
+
+        public static DBHelper2 getSageDBHelper(string dossier, string libAS400)
+        {
+            
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " --- started");
+            DBHelper2 ret = getSageDBHelper(dossier);
+            if (!(ret == null))
+            {
+                ret.SrcDossierX3 = dossier;
+                ret.SrcLibAs400 = libAS400;
+            }
+
+            _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   ended");
+            return ret;
+        }
+
+
+
         public static DBHelper2 getAs400DBHelper(string libreria)
         {
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " --- started");
@@ -278,7 +307,7 @@ namespace SyncCyberPlan_lib
             SqlConnection conn = new SqlConnection();
                 conn.ConnectionString = @"Server=srvsql1,1433\MSSQLSERVER;Database=CyberPlanFrontiera;User Id=Cyberplan; Password=C18£3r:okboo;";
                 ret = new DBHelper2(conn);
-
+            
             _logger.Debug(System.Reflection.MethodBase.GetCurrentMethod().Name + " ---   ended");
             return ret;
         }
